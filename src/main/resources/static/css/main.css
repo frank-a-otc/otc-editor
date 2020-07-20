@@ -1,0 +1,93 @@
+html, body {
+    margin: 1px !important;
+    padding: 1px !important;
+}
+#header {
+	margin-top: 0px;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+	font-size: 25px;
+    font-weight: bold;
+	width: 100%;
+	height: 30px;
+	/* position: fixed; */
+}
+
+.box {
+    display: flex;
+	width: 100%;
+	margin-top: 0px;
+	color: #000000;
+}
+
+.columnHdr {
+	position: relative;
+}
+
+.leftDiv {
+	width: 50%;
+	height: 25px;
+	text-align: center;
+	background: #c4c5c6;
+}
+.rightDiv {
+	width: 50%;
+	height: 25px;
+	text-align: center;
+	background: #dddddd;
+}
+.pkgNType {
+	width: 5%;
+}
+.inpt {
+	width: 70%;
+}
+.btn {
+	width: 15%;
+	background: #c4c5c6;
+}
+.inptSingle {
+	width: 86%;
+}
+.otclScript {
+	width: 15%;
+}
+.otclScriptInpt {
+	width: 80%;
+}
+.txtArea {
+	width: 100%;
+	text-align: left;
+	min-height: 150px;
+	border: 2px solid #4CAF50;
+}
+.actions {
+	width: 20%;
+	background: #b2b2b2;
+}
+.actionBtn {
+	display: block;
+	margin : 0 auto;
+	background: #c4c5c6;
+	width: 140px;
+}
+
+/* #targetTree, #srcTree {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+} */
+
+.leftTree {
+	flex-grow: 1;
+	width: 50%;
+	height: 100%;
+	background: #c4c5c6;
+}
+.rightTree {
+	flex-grow: 1;
+	width: 50%;
+	height: 100%;
+	background: #dddddd;
+}
