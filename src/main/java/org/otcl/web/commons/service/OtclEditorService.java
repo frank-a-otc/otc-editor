@@ -10,8 +10,9 @@ package org.otcl.web.commons.service;
 import java.util.List;
 import java.util.Set;
 
-import org.otcl.common.engine.compiler.dto.OtclFileDto;
 import org.otcl.web.commons.dto.ClassMetadataDto;
+import org.otcl2.common.OtclConstants.TARGET_SOURCE;
+import org.otcl2.common.dto.OtclFileDto;
 
 public interface OtclEditorService {
 	
@@ -19,6 +20,8 @@ public interface OtclEditorService {
 	
 	OtclFileDto createOtclFileDto(String targetCls, String sourceCls, String otclInstructions, boolean reverse);
 	
-	List<ClassMetadataDto> createMembersHierarchy(String clsName);
+	List<ClassMetadataDto> createMembersHierarchy(String clsName, TARGET_SOURCE targetSource);
+
+	String createYaml(OtclFileDto otclFileDto);
 	
 }

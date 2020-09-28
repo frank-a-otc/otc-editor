@@ -7,7 +7,7 @@
 */
 package org.otcl.web.commons.exception;
 
-import org.otcl.common.exception.OtclException;
+import org.otcl2.common.exception.OtclException;
 
 public class OtclEditorException extends OtclException {
 

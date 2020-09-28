@@ -3,6 +3,8 @@
 		// OTCL-engine cannot handle Enums if non resolvable
 		// Use custom OTCL converters in such cases
 		
+		https://programminghints.com/2017/05/still-using-java-util-date-dont/
+		
 		Activities :
 		- 
 		Google analytics
@@ -11,6 +13,8 @@
 		Slack,
 		
 		Industry awards for OTCL
+		
+		Press releases in magazines
 		
 		Fix date format in PropertyConverterUtil using LocalDate.....
 		OTCL-script - executeOtclModule and executeOtclConvertor - collection on any one side is fine.
@@ -23,6 +27,11 @@
 		
 		Documentation - Elastic trees (Anchors)
 		Documentation - Elastic trees imbalances
+		Documentation - Clarity regarding pcdId used to retrieve from targetPCD and parentPCd which can 
+				be the same.
+		
+		Test on Java 9, 10 and 11.
+		Test from Command line.
 		
 		Compiler - check for array or collection should be based on field type rather than the notation.
 		
@@ -39,6 +48,7 @@
 		Test async mode.
 		Test createInstance - pojo with private constructor 
 		Test enum .
+		Test with primitives
 		
 		Remove public modifier in classes where required.
 	
@@ -58,7 +68,12 @@
 		Documentation - UI browser compatibility
 		
 		Documentation - requirements of the POJO.
+		Documentation - "When you look at the code, do not review the code-flow in isolation.
+		 		But look at it with consideration that it has to work in co-ordination with several 
+		 		individual pieces
 
+		Get ready for questions on - https://www.javacodegeeks.com/2013/10/java-object-to-object-mapper.html#:~:text=Lorentz%3A%20Lorentz%20is%20a%20generic,an%20object%20of%20another%20type.&text=Spring%20framework%3A%20Spring%20has%20an,transform%20Objects%20to%2Ffrom%20Strings.
+		
 		https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode
 		
 		OtclEngineImpl.

@@ -12,88 +12,79 @@
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
-	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
+	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css" />
 
 </head>
 
 <body>
 	<div id="header">
-		OTCL Editor
+		<img src="../images/logo.jpeg"/>OTCL Editor
 	</div>
 	<form id="otclEditor" action="createOtclFile" accept-charset="utf-8" method="post">
     	<input id="reverseOtclFile" name="reverseOtclFile" type="hidden" value="false">
 		<div class="box columnHdr">
-			<div class="leftDiv">
-				<label><u><b>To (Target)</b></u></label>
+			<div class="sourceDiv">
+				<label><u><b>From</b></u></label>
 			</div>
-			<div class="rightDiv">
-				<label><u><b>From (Source)</b></u></label>
+			<div class="targetDiv">
+				<label><u><b>To</b></u></label>
 			</div>
 		</div>
 		<div class="box">
-			<div class="leftDiv">
-				<label class="pkgNType">Package:</label>
-				<input id="targetPkgName" type="text" value="org.otcl.airlines.athena.dto" class="inpt"/>
-				<input id='fetchTarget' type='button' value="Fetch Types"  class="btn"/>
-			</div>
-			<div class="rightDiv">
-				<label class="pkgNType">Package:</label>
-				<input id="srcPkgName" type="text" value="org.otcl.airlines.kronos.dto" class="inpt"/>
+			<div class="sourceDiv">
+				<label class="pkgNType">Pkg/NS:</label>
+				<input id="srcPkgName" type="text" value="com.kronos.airlines.dto" class="inpt"/>
 				<input id='fetchSrc' type='button' value="Fetch Types"  class="btn"/>
+			</div>
+			<div class="targetDiv">
+				<label class="pkgNType">Pkg/NS:</label>
+				<input id="targetPkgName" type="text" value="com.athena.airlines.dto" class="inpt"/>
+				<input id='fetchTarget' type='button' value="Fetch Types"  class="btn"/>
 			</div>
 		</div>
 		
 		<div class="box">
-			<div class="leftDiv">
-				<label class="pkgNType">Types:</label>
-				<select type="select" id="targetClsNames" name="targetClsNames" class="inptSingle">
-			 	</select>
-			</div>
- 			<div class="rightDiv">
+ 			<div class="sourceDiv">
 				<label class="pkgNType">Types:</label>
 				<select type="select" id="srcClsNames" name="srcClsNames" class="inptSingle"> 
 				</select>
 			</div>
-		</div>
-		<div class="box">
-			<div class="leftDiv">
-				<label class="otclScript">Extensions:</label>
-				<select type="select" id="otclScriptType"  class="otclScriptInpt">
-					<option value="" selected="selected">Select template...</option>
-					<option value="setValue">setValue</option>
-					<option value="executeOtclConverter">executeOtclConverter</option>
-					<option value="executeOtclModule">executeOtclModule</option>
+			<div class="targetDiv">
+				<label class="pkgNType">Types:</label>
+				<select type="select" id="targetClsNames" name="targetClsNames" class="inptSingle">
 			 	</select>
 			</div>
-			<div class="rightDiv">
-				<label class="otclScript">OTCL Converter:</label>
-				<select type="select" id="converters" disabled="disabled"  class="otclScriptInpt"></select>
-			</div>	
 		</div>
 		<div class="box">
 			<textarea id="otclInstructions" name="otclInstructions" class="txtArea"></textarea>
 		</div>
 		<div class="box">
 			<div class="actions">
-				<input id="displayTree" type="button" value="Show Object Trees" class="actionBtn" >
+				<input id="showTree" type="button" value="Show Tree" class="actionBtn" >
 			</div>
 			<div class="actions">
-				<input id="createScript" type="button" value="Create OTCL Script" class="actionBtn" >
+				<label for="copy"><input id="copy" type="radio" value="Copy" name="command" class="actionBtn" >Copy</label>
 			</div>
 			<div class="actions">
-				<input id="reset" type="button" value="Reset OTCL Script" class="actionBtn" >
+				<label for="execute"><input id="execute" type="radio" value="Execute" name="command" class="actionBtn" >Execute</label>
 			</div>
 			<div class="actions">
-				<input id="createOtclFile" type="button" value="Create OTCL file" class="actionBtn" />
+				<input id="addScript" type="button" value="Add Script" class="actionBtn" >
 			</div>
 			<div class="actions">
-				<input id="createFlippedFile" type="button" value="Create swapped file" class="actionBtn" />
+				<input id="reset" type="button" value="Clear" class="actionBtn" >
+			</div>
+			<div class="actions">
+				<input id="createOtclFile" type="button" value="Create file" class="actionBtn" />
+			</div>
+			<div class="actions">
+				<input id="flipOtcl" type="button" value="Flip OTCL-chains" class="actionBtn" />
 			</div>
 		</div>
 		<div class="box">
-			<div id="targetTree" class="leftTree">&nbsp;
+			<div id="srcTree" class="sourceTree">&nbsp;
 			</div>
-			<div id="srcTree" class="rightTree">&nbsp;
+			<div id="targetTree" class="targetTree">&nbsp;
 			</div>
 		</div>
 	</form>
@@ -105,31 +96,17 @@
 	  <p>Cannot proceed - Nothing to save!</p>
 	</div>
 	<div id="rootOtclChain" title="Root OTCL-Chain" style="display: none">
-	  <p>Root OTCL-chain on either side cannot be selected to create OTCL-expression.</p>
-	</div>
-	<div id="sourceOtclChain" title="Source OTCL-Chain" style="display: none">
-	  <p>Source OTCL-chain not selected.</p>
+	  <p>Tree Root on any side cannot be selected to create OTCL-Script block!</p>
 	</div>
 	<div id="targetOtclChain" title="Target OTCL-Chain" style="display: none">
-	  <p>Target OTCL-chain not selected.</p>
+	  <p>Target OTCL-chain not selected!</p>
 	</div>
-	<div id="setValue" title="OTCL-Script::setValue" style="display: none">
-	  <p>Caution! Change '&lt;value-placeholder&gt;' in OTCL-script to desired value.</p>
-	</div>
-	<div id="executeOtclConverter" title="OTCL-Script::executeOtclConverter" style="display: none">
-	  <p>Warning! You have not selected a OTCL Converter! Replace '&lt;otclConverter-placeholder&gt;' with correct value.</p>
-	</div>
-	<div id="executeOtclModule" title="OTCL-Script::executeOtclModule" style="display: none">
-	  <p>Caution! Provide value for the '&lt;otclNamespace-placeholder(optional)&gt;' or remove entire line.</p>
-	</div>
+
 	<div id="singleSideCollectionOnly" title="OTCL-Script::Collections on one side Only" style="display: none">
 	  <p>For executeOtclConverter and executeOtclModule Otcl-scripts collections are allowed on any one side only.</p>
 	</div>
-	<div id="mapkeyOnLeaf" title="OTCL Chain::Mapkey on leaf" style="display: none">
-	  <p>OTCL-chain with Map-key token as leaf cannot have a map-key.</p>
-	</div>
 	<div id="multipleAnchors" title="OTCL Chain::Multiple Anchors" style="display: none">
-	  <p>OTCL-chain with multiple Anchors (^) invalid.</p>
+	  <p>OTCL-chain with multiple Anchors (^) is not valid.</p>
 	  <p id="otclChain" />
 	</div>
 </body>
