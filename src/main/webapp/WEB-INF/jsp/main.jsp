@@ -4,14 +4,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>OTCL Editor</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>OTCL Editor</title>
+	
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
-	<script type="text/javascript" src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+<!-- 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+ -->
+	<link href="<%=request.getContextPath()%>/jquery/dist/fixed/jquery.contextMenu.min.css" rel="stylesheet">
+	<link href="<%=request.getContextPath()%>/jquery/dist/jquery.contextMenuCommon.min.css" rel="stylesheet">
+	
+	<!-- <script src="/jquery/dist/jquery.min.js"></script> -->
+	<script src="<%=request.getContextPath()%>/jquery/dist/jquery-ui-position.min.js"></script>
+	<script src="<%=request.getContextPath()%>/jquery/dist/fixed/jquery.contextMenu.min.js"></script>
+	<script src="<%=request.getContextPath()%>/jquery/dist/jquery.contextMenuCommon.min.js"></script>
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+	
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css" />
 
 </head>
@@ -55,19 +70,15 @@
 			 	</select>
 			</div>
 		</div>
-		<div class="box">
-			<textarea id="otclInstructions" name="otclInstructions" class="txtArea"></textarea>
+		<div class="box" id="divTextArea">
+			<textarea id="otclInstructions" name="otclInstructions" class="txtArea context-menu-one"
+					placeholder="Right-click inside this text-area to select command-type."></textarea>
 		</div>
 		<div class="box">
 			<div class="actions">
 				<input id="showTree" type="button" value="Show Tree" class="actionBtn" >
 			</div>
-			<div class="actions">
-				<label for="copy"><input id="copy" type="radio" value="Copy" name="command" class="actionBtn" >Copy</label>
-			</div>
-			<div class="actions">
-				<label for="execute"><input id="execute" type="radio" value="Execute" name="command" class="actionBtn" >Execute</label>
-			</div>
+
 			<div class="actions">
 				<input id="addScript" type="button" value="Add Script" class="actionBtn" >
 			</div>
@@ -111,5 +122,6 @@
 	</div>
 </body>
 
-	<script type="text/javascript" src="<%=request.getContextPath()%>/js/main.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/main.js"></script>
+
 </html>

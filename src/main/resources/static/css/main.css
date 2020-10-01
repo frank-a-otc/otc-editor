@@ -57,16 +57,18 @@ html, body {
 	text-align: left;
 	min-height: 150px;
 	border: 2px solid #4CAF50;
+	resize: vertical; 
 }
+
 .actions {
-	width: 14%;
+	width: 20%;
 	background: #b2b2b2;
 }
 .actionBtn {
 	display: block;
 	margin : 0 auto;
 	background: #c4c5c6;
-	width: 100px;
+	width: 170px;
 }
 .targetTree {
 	flex-grow: 1;
@@ -79,4 +81,34 @@ html, body {
 	width: 50%;
 	height: 100%;
 	background: #dddddd;
+}
+
+
+/*   ----- TextArea context menu  */
+
+.custom-menu {
+    display: none;
+    z-index: 1000;
+    position: absolute;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    white-space: nowrap;
+    font-family: sans-serif;
+    background: #FFF;
+    color: #333;
+    border-radius: 5px;
+    padding: 0;
+}
+
+/* Each of the items in the list */
+.custom-menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+    list-style-type: none;
+    transition: all .3s ease;
+    user-select: none;
+}
+
+.custom-menu li:hover {
+    background-color: #DEF;
 }

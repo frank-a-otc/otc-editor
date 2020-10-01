@@ -152,7 +152,7 @@ public class OtclEditorUtil {
 		}
 		List<ClassMetadataDto> membersClassMetadataDtos = createClassMetadataDtos(null, null, clz, null, null,
 				recursionDepth, null);
-		String txt = clz.getName().concat(" (right-click for context-menu)");
+		String txt = clz.getName().concat(" - (right-click for context-menu)");
 		ClassMetadataDto classMetadataDto = ClassMetadataDto.newBuilder()
 			.addId(TARGET_SOURCE.TARGET == targetSource ? TARGET_ROOT : SOURCE_ROOT)
 			.addText(txt)

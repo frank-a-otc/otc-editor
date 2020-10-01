@@ -22,6 +22,7 @@ var executeCounter = 0;
 var selectMsg = "Select...";
 
 const CONSTANTS = {
+	ANCHOR: "anchor",
 	SOURCE_ROOT: "source-root",
 	TARGET_ROOT: "target-root",
 	GETTER: "getter",
@@ -171,32 +172,155 @@ $("#showTree").click(function() {
    });
 });
 
-function jstreeContextmenu($node) {
-	var otclChain = $node.id;
-	if (CONSTANTS.SOURCE_ROOT == otclChain) {
-		return sourceOverrideItems;
-	} else if (CONSTANTS.TARGET_ROOT == otclChain) {
-		return targetOverrideItems;
-	} else {
-	    if (map.has(otclChain)) {
-	    	anchorItems.anchor.label = "Anchor off"
-	    } else {
-	    	anchorItems.anchor.label = "Anchor on"
-	    }
-		if (otclChain.includes("]")) {
-			return anchorItems;
-		}
-	}
+
+var commandItems = {
+    "copy": {
+    	name: "Copy", 
+        type: 'radio', 
+        callback: function() {
+            console.log('clicked', this);
+            return true;
+        }
+    },
+    "execute": {
+    	name: "Execute", 
+        type: 'radio',
+        callback: function() {
+            console.log('clicked', this);
+            return true;
+        }
+   	}
+};
+
+var sourceOverrideItems = {
+    "getterItem": {
+    	name: "getter", 
+        type: 'checkbox', 
+        action : function (menuItem) {
+        	alert (menuItem.item.checked);
+        	if (menuItem.item.icon == false) {
+        		sourceMap.set(CONSTANTS.GETTER, getterTemplate);
+        	} else {
+        		sourceMap.delete(CONSTANTS.GETTER);
+        	}
+        }
+    },
+    'activateGetterInHelperItem' : {
+    	name: "activateGetterInHelperItem", 
+        type: 'checkbox', 
+        action : function (menuItem) { 
+        	if (menuItem.item.checked == false) {
+        		sourceMap.set(CONSTANTS.ACTIVATE_GETTER, activateGetterInHelperTemplate);
+        	} else {
+        		sourceMap.delete(CONSTANTS.ACTIVATE_GETTER);
+        	}
+        }
+    },
+    'dateFormatItem' : {
+    	name: "dateFormatItem", 
+        type: 'checkbox', 
+        action : function (menuItem) { 
+        	if (menuItem.item.icon == false) {
+        		sourceMap.set(CONSTANTS.DATE_FORMAT, dateFormatTemplate);
+        	} else {
+        		sourceMap.delete(CONSTANTS.DATE_FORMAT);
+        	}
+        }
+    }
+};
+
+var targetContextMenuItems = {
+    'getterItem' : {
+    	name: "getter", 
+        type: 'checkbox', 
+        action : function (menuItem) { 
+        	if (menuItem.item.icon == false) {
+        		targetMap.set(CONSTANTS.GETTER, getterTemplate);
+        	} else {
+        		targetMap.delete(CONSTANTS.GETTER);
+        	}
+        }
+    },
+    'activateGetterInHelperItem' : {
+    	name: "activateGetterInHelper", 
+        type: 'checkbox', 
+        action : function (menuItem) { 
+        	if (menuItem.item.icon == false) {
+        		targetMap.set(CONSTANTS.ACTIVATE_GETTER, activateGetterInHelperTemplate);
+        	} else {
+        		targetMap.delete(CONSTANTS.ACTIVATE_GETTER);
+        	}
+        }
+    },
+    'setterItem' : {
+    	name: "setter", 
+        type: 'checkbox', 
+        action : function (menuItem) { 
+        	if (menuItem.item.icon == false) {
+        		targetMap.set(CONSTANTS.SETTER, setterTemplate);
+        	} else {
+        		targetMap.delete(CONSTANTS.SETTER);
+        	}
+        }
+    },
+    'activateSetterInHelperItem' : {
+    	name: "activateSetterInHelper", 
+        type: 'checkbox', 
+        action : function (menuItem) { 
+        	if (menuItem.item.icon == false) {
+        		targetMap.set(CONSTANTS.ACTIVATE_SETTER, activateSetterInHelperTemplate);
+        	} else {
+        		targetMap.delete(CONSTANTS.ACTIVATE_SETTER);
+        	}
+        }
+    },
+    'concreteTypeItem' : {
+    	name: "concreteTypeItem", 
+        type: 'checkbox', 
+        action : function (menuItem) { 
+        	if (menuItem.item.icon == false) {
+        		targetMap.set(CONSTANTS.CONCRETE_TYPE, concreteTypeTemplate);
+        	} else {
+        		targetMap.delete(CONSTANTS.CONCRETE_TYPE);
+        	}
+        }
+    }
+//   	"anchor": {
+//   		name: "Anchor", 
+//        type: 'checkbox', 
+//        action: function (menuItem) { 
+//        	if (map.has(otclChain)) {
+//        		map.delete(otclChain);
+//        		menuItem.item.icon = false;
+//        	} else if (otclChain.includes("]")) {
+//            	menuItem.item.icon = 'images/tick.png';
+//	        	var lastIndexOf = otclChain.lastIndexOf("[<");
+//	        	if (lastIndexOf < 0) {
+//	        		lastIndexOf = otclChain.lastIndexOf("[");
+//	        	}
+//	        	var sourceOtclChain = otclChain.substring(0, lastIndexOf + 1);
+//	        	if (otclChain.charAt(lastIndexOf + 1) == "*") {
+//	        		targetOtclChain = otclChain.substring(lastIndexOf + 2);
+//	            } else {
+//	        		targetOtclChain = otclChain.substring(lastIndexOf + 1);
+//	            }
+//	        	var anchoredOtclChain = sourceOtclChain + "^" + targetOtclChain;
+//	        	map.set(otclChain, anchoredOtclChain);
+//	        }
+//		}
+//   	}
 };
 
 var anchorItems = {
    	"anchor": {
-   		"label": "Anchor",
-   		"icon" : false,
-	   	"action": function (obj) { 
-	        if (map.has(otclChain)) {
-	        	map.delete(otclChain);
-	        } else if (otclChain.includes("]")) {
+   		name: "Anchor", 
+        type: 'checkbox', 
+        action: function (menuItem) { 
+        	if (map.has(otclChain)) {
+        		map.delete(otclChain);
+        		menuItem.item.icon = false;
+        	} else if (otclChain.includes("]")) {
+            	menuItem.item.icon = 'images/tick.png';
 	        	var lastIndexOf = otclChain.lastIndexOf("[<");
 	        	if (lastIndexOf < 0) {
 	        		lastIndexOf = otclChain.lastIndexOf("[");
@@ -214,115 +338,75 @@ var anchorItems = {
    	}
 };
 
-var sourceOverrideItems = {
-    'getterItem' : {
-        'label' : 'getter',
-    	'icon' : false,
-        'action' : function (menuItem) {
-        	if (menuItem.item.icon == false) {
-        		menuItem.item.icon = 'images/tick.png';
-        		sourceMap.set(CONSTANTS.GETTER, getterTemplate);
-        	} else {
-        		menuItem.item.icon = false;
-        		sourceMap.delete(CONSTANTS.GETTER);
-        	}
-        }
-    },
-    'activateGetterInHelperItem' : {
-        'label' : 'activateGetterInHelper',
-    	'icon' : false,
-        'action' : function (menuItem) { 
-        	if (menuItem.item.icon == false) {
-        		menuItem.item.icon = 'images/tick.png';
-        		sourceMap.set(CONSTANTS.ACTIVATE_GETTER, activateGetterInHelperTemplate);
-        	} else {
-        		menuItem.item.icon = false;
-        		sourceMap.delete(CONSTANTS.ACTIVATE_GETTER);
-        	}
-        }
-    },
-    'dateFormatItem' : {
-        'label' : 'dateFormat',
-    	'icon' : false,
-        'action' : function (menuItem) { 
-        	if (menuItem.item.icon == false) {
-        		menuItem.item.icon = 'images/tick.png';
-        		sourceMap.set(CONSTANTS.DATE_FORMAT, dateFormatTemplate);
-        	} else {
-        		menuItem.item.icon = false;
-        		sourceMap.delete(CONSTANTS.DATE_FORMAT);
-        	}
-        }
-    }
+let contextMenuItems = JSON.parse(JSON.stringify(targetContextMenuItems));
+
+function jstreeContextmenu(node) {
+	var otclChain = node.id;
+//	alert (otclChain);
+	if (CONSTANTS.SOURCE_ROOT == otclChain) {
+	    $.contextMenuCommon({
+	        selector: '#srcTree', 
+	        autoHide: true,
+	        callback: function(key, options) {
+	            var m = "clicked: " + key;
+	            window.console && console.log(m) || alert(m); 
+	        },
+	        items: sourceOverrideItems
+	    });
+	} else {
+		var menuItems = [];
+		if (CONSTANTS.TARGET_ROOT == otclChain) {
+			menuItems = targetContextMenuItems; 
+		} else {
+			menuItems = anchorItems;
+		}
+	    $.contextMenuCommon({
+	        selector: '#targetTree', 
+	        autoHide: true,
+	        items: menuItems
+//	        build: function($triggerElement, e) {
+//	            return {
+//	                callback: function(){},
+//	                items: {
+//	                    menuItem: {name: "My on demand menu item"}
+//	                }
+//	        }
+//	    callback: function(key, options) {
+//	            var m = "clicked: " + key;
+//	            window.console && console.log(m) || alert(m); 
+//	            
+//	    		contextMenuItems = JSON.parse(JSON.stringify(targetContextMenuItems));
+//	    		if (CONSTANTS.TARGET_ROOT == otclChain) {
+//	    			delete contextMenuItems.anchor;
+//	    		} else {
+//	    			delete contextMenuItems.getterItem;
+//	    			delete contextMenuItems.activateGetterInHelperItem;
+//	    			delete contextMenuItems.setterItem;
+//	    			delete contextMenuItems.activateSetterInHelperItem;
+//	    			delete contextMenuItems.concreteTypeItem;
+//	    		}
+//	        },
+//	        items: contextMenuItems
+	    });
+	}
 };
 
-var targetOverrideItems = {
-    'getterItem' : {
-        'label' : 'getter',
-    	'icon' : false,
-        'action' : function (menuItem) { 
-        	if (menuItem.item.icon == false) {
-        		menuItem.item.icon = 'images/tick.png';
-        		targetMap.set(CONSTANTS.GETTER, getterTemplate);
-        	} else {
-        		menuItem.item.icon = false;
-        		targetMap.delete(CONSTANTS.GETTER);
-        	}
-        }
-    },
-    'setterItem' : {
-        'label' : 'setter',
-    	'icon' : false,
-        'action' : function (menuItem) { 
-        	if (menuItem.item.icon == false) {
-        		menuItem.item.icon = 'images/tick.png';
-        		targetMap.set(CONSTANTS.SETTER, setterTemplate);
-        	} else {
-        		menuItem.item.icon = false;
-        		targetMap.delete(CONSTANTS.SETTER);
-        	}
-        }
-    },
-    'activateGetterInHelperItem' : {
-        'label' : 'activateGetterInHelper',
-    	'icon' : false,
-        'action' : function (menuItem) { 
-        	if (menuItem.item.icon == false) {
-        		menuItem.item.icon = 'images/tick.png';
-        		targetMap.set(CONSTANTS.ACTIVATE_GETTER, activateGetterInHelperTemplate);
-        	} else {
-        		menuItem.item.icon = false;
-        		targetMap.delete(CONSTANTS.ACTIVATE_GETTER);
-        	}
-        }
-    },
-    'activateSetterInHelperItem' : {
-        'label' : 'activateSetterInHelper',
-    	'icon' : false,
-        'action' : function (menuItem) { 
-        	if (menuItem.item.icon == false) {
-        		menuItem.item.icon = 'images/tick.png';
-        		targetMap.set(CONSTANTS.ACTIVATE_SETTER, activateSetterInHelperTemplate);
-        	} else {
-        		menuItem.item.icon = false;
-        		targetMap.delete(CONSTANTS.ACTIVATE_SETTER);
-        	}
-        }
-    },
-    'concreteTypeItem' : {
-        'label' : 'concreteType',
-    	'icon' : false,
-        'action' : function (menuItem) { 
-        	if (menuItem.item.icon == false) {
-        		menuItem.item.icon = 'images/tick.png';
-        		targetMap.set(CONSTANTS.CONCRETE_TYPE, concreteTypeTemplate);
-        	} else {
-        		menuItem.item.icon = false;
-        		targetMap.delete(CONSTANTS.CONCRETE_TYPE);
-        	}
-        }
-    }
-};
+//$(function() {
+//    $.contextMenuCommon({
+//        selector: '#otclInstructions',  //'.context-menu-one', 
+//        autoHide: true,
+//        callback: function(key, options) {
+//            var m = "clicked: " + key;
+//            window.console && console.log(m) || alert(m); 
+//        },
+//        items: commandItems
+//    });
+//
+//    $('.context-menu-one').on('click', function(e){
+//        console.log('clicked', this);
+//    })    
+//});
+
 
 function fetchAndPopulateJstree(url) {
 	$('#srcTree').jstree("destroy").empty();
@@ -422,12 +506,11 @@ $("#addScript").click(function( event ) {
    	var scriptBlock = null;
 	if (CONSTANTS.CMD_COPY == command) {
 		copyCounter++;
-		scriptBlock = copyScriptTemplate.replace(idPlaceholder, "Copy-" + copyCounter);
+		scriptBlock = copyScriptTemplate.replace(idPlaceholder, "CPY" + copyCounter);
 	} else {
 		executeCounter++;
-		scriptBlock = executeScriptTemplate.replace(idPlaceholder, "Execute-" + executeCounter);
+		scriptBlock = executeScriptTemplate.replace(idPlaceholder, "EXE" + executeCounter);
 	}
-   	console.log(executeScriptTemplate);
 	if (sourceOtclChain == null) {
 		scriptBlock = scriptBlock.replace(fromPlaceholder, valuesTemplate);
 	} else {
@@ -438,15 +521,16 @@ $("#addScript").click(function( event ) {
 		var from = otclChainTemplate.replace(otclChainPlaceholder, sourceOtclChain);
 		scriptBlock = scriptBlock.replace(fromPlaceholder, from);
 	}
-   	console.log(scriptBlock);
 	if (sourceMap.has(CONSTANTS.GETTER) || sourceMap.has(CONSTANTS.ACTIVATE_GETTER) ||
 			sourceMap.has(CONSTANTS.DATE_FORMAT)) {
 		var overrides = overridesTemplate.replace(tokenPathPlaceholder, sourceOtclChain);
-		if (sourceMap.has(CONSTANTS.GETTER)) {
-			overrides += getterTemplate;
-		}
-		if (sourceMap.has(CONSTANTS.ACTIVATE_GETTER)) {
-			overrides += activateGetterInHelperTemplate;
+		if (sourceOtclChain != null) {
+			if (sourceMap.has(CONSTANTS.GETTER)) {
+				overrides += getterTemplate;
+			}
+			if (sourceMap.has(CONSTANTS.ACTIVATE_GETTER)) {
+				overrides += activateGetterInHelperTemplate;
+			}
 		}
 		if (sourceMap.has(CONSTANTS.DATE_FORMAT)) {
 			overrides += dateFormatTemplate;
@@ -455,7 +539,6 @@ $("#addScript").click(function( event ) {
 	} else {
 		scriptBlock = scriptBlock.replace(fromOverridesPlaceholder, "");
 	}
-   	console.log(scriptBlock);
 	// to
 	var to = otclChainTemplate.replace(otclChainPlaceholder, targetOtclChain);
 	scriptBlock = scriptBlock.replace(toPlaceholder, to);
@@ -483,7 +566,6 @@ $("#addScript").click(function( event ) {
 	} else {
 		scriptBlock = scriptBlock.replace(toOverridesPlaceholder, "");
 	}
-   	console.log(scriptBlock);
 
    	var otclInstructions = $("#otclInstructions");
    	var otclInstructionsValue = otclInstructions.val();
@@ -582,3 +664,48 @@ $("#flipOtcl").click(function() {
 	$("#otclEditor").submit();
 	$("#reverseOtclFile").val("false");
 });
+
+// ----- TextArea context menu
+
+//$("#divTextArea").bind("contextmenu", function (event) {
+//    
+//    // Avoid the real one
+//    event.preventDefault();
+//    
+//    // Show contextmenu
+//    $(".custom-menu").finish().toggle(100).
+//    
+//    // In the right position (the mouse)
+//    css({
+//        top: event.pageY + "px",
+//        left: event.pageX + "px"
+//    });
+//});
+//
+//
+//// If the document is clicked somewhere
+//$("#divTextArea").bind("mousedown", function (e) {
+//    
+//    // If the clicked element is not the menu
+//    if (!$(e.target).parents(".custom-menu").length > 0) {
+//        
+//        // Hide it
+//        $(".custom-menu").hide(100);
+//    }
+//});
+//
+//
+//// If the menu element is clicked
+//$(".custom-menu li").click(function(){
+//    
+//    // This is the triggered action name
+//    switch($(this).attr("data-action")) {
+//        
+//        // A case for each action. Your actions here
+//        case "first": alert("first"); break;
+//        case "second": alert("second"); break;
+//    }
+//  
+//    // Hide it AFTER the action was triggered
+//    $(".custom-menu").hide(100);
+//  });
