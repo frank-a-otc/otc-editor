@@ -8,18 +8,13 @@
 	<title>OTCL Editor</title>
 	
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link href="<%=request.getContextPath()%>/jquery/dist/fixed/jquery.contextMenu.min.css" rel="stylesheet">
+	<link href="<%=request.getContextPath()%>/jquery/dist/jquery.contextMenuCommon.min.css" rel="stylesheet">
+
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	
-<!-- 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
- -->
-	<link href="<%=request.getContextPath()%>/jquery/dist/fixed/jquery.contextMenu.min.css" rel="stylesheet">
-	<link href="<%=request.getContextPath()%>/jquery/dist/jquery.contextMenuCommon.min.css" rel="stylesheet">
-	
-	<!-- <script src="/jquery/dist/jquery.min.js"></script> -->
+	<!-- from https://anseki.github.io/jquery-contextmenu-common/ -->
 	<script src="<%=request.getContextPath()%>/jquery/dist/jquery-ui-position.min.js"></script>
 	<script src="<%=request.getContextPath()%>/jquery/dist/fixed/jquery.contextMenu.min.js"></script>
 	<script src="<%=request.getContextPath()%>/jquery/dist/jquery.contextMenuCommon.min.js"></script>
@@ -100,6 +95,7 @@
 		</div>
 	</form>
 
+<!--  error messages -->
 	<div id="typesNotSelected" title="Target/Source types" style="display: none">
 	  <p>Cannot proceed - please select both Target and Source types.</p>
 	</div>
@@ -120,6 +116,41 @@
 	  <p>OTCL-chain with multiple Anchors (^) is not valid.</p>
 	  <p id="otclChain" />
 	</div>
+
+	<div id="sourceType" title="Source-Type" style="display: none">
+	  <p>Please define value for &lt;&lt;sourceType&gt;&gt; in 'metadata: objectTypes: source:'.</p>
+	</div>
+	<div id="targetType" title="Target-Type" style="display: none">
+	  <p>Please define value for &lt;&lt;targetType&gt;&gt; in 'metadata: objectTypes: target:'.</p>
+	</div>
+	<div id="mainClassName" title="Main-Class Name" style="display: none">
+	  <p>Please define value for &lt;&lt;mainClassName&gt;&gt; in 'copy: or metadata: mainClassName:'.</p>
+	</div>
+	<div id="helperClassName" title="Helper-Class Name" style="display: none">
+	  <p>Please define value or remove line for &lt;&lt;helperClassName&gt;&gt; in 'copy: or metadata: helperClassName:'.</p>
+	</div>
+	<div id="factoryclass" title="Factory-Class Name" style="display: none">
+	  <p>Please define value for &lt;&lt;factoryclass&gt;&gt; in 'copy: or execute: factoryclass:'.</p>
+	</div>
+	<div id="getter" title="Getter-Name" style="display: none">
+	  <p>Please define value or remove line for &lt;&lt;getter&gt;&gt; in 'copy: or execute: getter:'.</p>
+	</div>
+	<div id="setter" title="Setter-Name" style="display: none">
+	  <p>Please define value or remove line for &lt;&lt;setter&gt;&gt; in 'copy: or execute: setter:'.</p>
+	</div>
+	<div id="dateFormat" title="Date-Format String" style="display: none">
+	  <p>Please define value or remove line for &lt;&lt;dateFormat&gt;&gt; in 'copy: or execute: dateFormat:'.</p>
+	</div>
+	<div id="concreteType" title="Concrete-Type" style="display: none">
+	  <p>Please define value or remove line for &lt;&lt;concreteType&gt;&gt; in 'copy: or execute: concreteType:'.</p>
+	</div>
+	<div id="otclConverter" title="OTCL-Converter" style="display: none">
+	  <p>Please define value or remove line for &lt;&lt;otclConverter&gt;&gt; in 'execute: otclConverter:'.</p>
+	</div>
+	<div id="otclNamespace" title="OTCL-Namespace" style="display: none">
+	  <p>Please define value or remove line for &lt;&lt;otclNamespace&gt;&gt; in 'execute: otclNamespace:'.</p>
+	</div>
+
 </body>
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/main.js"></script>

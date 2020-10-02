@@ -109,12 +109,14 @@ public class OtclEditorController {
 	}
 
 	@PostMapping(value=URL_CREATE_OTCLFILE)
-	public void createMapper(@RequestParam String sourceClsName, @RequestParam String targetClsName, 
-			@RequestParam String otclInstructions, @RequestParam boolean reverseOtclFile, HttpServletResponse response) {
-		String otclFileName = null;
+	public void createMapper(@RequestParam(name = "srcClsNames") String sourceClsName,
+			@RequestParam(name = "targetClsNames") String targetClsName, 
+			@RequestParam(name = "otclInstructions") String otclInstructions,
+			@RequestParam(name = "reverseOtclFile") boolean reverseOtclFile, HttpServletResponse response) {
 		response.setContentType("text/plain");
 	    ServletOutputStream out;
 		try {
+			String otclFileName = null;
 			if (reverseOtclFile) {
 				OtclFileDto otclFileDto = otclEditorService.createOtclFileDto(targetClsName, sourceClsName, 
 						otclInstructions, reverseOtclFile);
