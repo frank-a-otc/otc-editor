@@ -83,7 +83,7 @@ var valuesTemplate =
 
 var overridesTemplate = 
 	"    overrides:\r\n" +
-	"      - tokenPath: <<tokenPath>>\r\n";
+	"    - tokenPath: <<tokenPath>>\r\n";
 
 var concreteTypeTemplate = 
 	"        concreteType: <<concreteType>>\r\n";
