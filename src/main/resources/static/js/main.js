@@ -589,47 +589,47 @@ $("#otclEditor").submit(function(event) {
    	var otclInstructions = $("#otclInstructions");
    	var otclInstructionsValue = otclInstructions.val();
 
-   	if (!otclInstructionsValue.includes(sourceTypePlaceholder)) {
+   	if (otclInstructionsValue.includes(sourceTypePlaceholder)) {
 		showMsg($("#sourceType"));
 		return false;
 	}
-   	if (!otclInstructionsValue.includes(targetTypePlaceholder)) {
+   	if (otclInstructionsValue.includes(targetTypePlaceholder)) {
 		showMsg($("#targetType"));
 		return false;
 	}
-   	if (!otclInstructionsValue.includes(mainClassNamePlaceholder)) {
+   	if (otclInstructionsValue.includes(mainClassNamePlaceholder)) {
 		showMsg($("#mainClassName"));
 		return false;
 	}
-   	if (!otclInstructionsValue.includes(helperClassNamePlaceholder)) {
+   	if (otclInstructionsValue.includes(helperClassNamePlaceholder)) {
 		showMsg($("#helperClassName"));
 		return false;
 	}
-   	if (!otclInstructionsValue.includes(getterPlaceholder)) {
+   	if (otclInstructionsValue.includes(getterPlaceholder)) {
 		showMsg($("#getter"));
 		return false;
 	}
-   	if (!otclInstructionsValue.includes(setterPlaceholder)) {
+   	if (otclInstructionsValue.includes(setterPlaceholder)) {
 		showMsg($("#setter"));
 		return false;
 	}
-   	if (!otclInstructionsValue.includes(dateFormatPlaceholder)) {
+   	if (otclInstructionsValue.includes(dateFormatPlaceholder)) {
 		showMsg($("#dateFormat"));
 		return false;
 	}
-   	if (!otclInstructionsValue.includes(concreteTypePlaceholder)) {
+   	if (otclInstructionsValue.includes(concreteTypePlaceholder)) {
 		showMsg($("#concreteType"));
 		return false;
 	}
-   	if (!otclInstructionsValue.includes(otclConverterPlaceholder)) {
+   	if (otclInstructionsValue.includes(otclConverterPlaceholder)) {
 		showMsg($("#otclConverter"));
 		return false;
 	}
-   	if (!otclInstructionsValue.includes(otclNamespacePlaceholder)) {
+   	if (otclInstructionsValue.includes(otclNamespacePlaceholder)) {
 		showMsg($("#otclNamespace"));
 		return false;
 	}
-   	if (!otclInstructionsValue.includes(factoryclassPlaceholder)) {
+   	if (otclInstructionsValue.includes(factoryclassPlaceholder)) {
 		showMsg($("#factoryclass"));
 		return false;
 	}
