@@ -31,7 +31,6 @@
 		<img src="../images/logo.jpeg"/>OTCL Editor
 	</div>
 	<form id="otclEditor" action="createOtclFile" accept-charset="utf-8" method="post">
-    	<input id="reverseOtclFile" name="reverseOtclFile" type="hidden" value="false">
 		<div class="box columnHdr">
 			<div class="sourceDiv">
 				<label><u><b>From</b></u></label>
@@ -84,7 +83,7 @@
 				<input id="createOtclFile" type="button" value="Create file" class="actionBtn" />
 			</div>
 			<div class="actions">
-				<input id="flipOtcl" type="button" value="Flip OTCL-chains" class="actionBtn" />
+				<input id="flipOtcl" type="button" value="Flip OTCL" class="actionBtn" />
 			</div>
 		</div>
 		<div class="box">
@@ -149,6 +148,9 @@
 	</div>
 	<div id="otclNamespace" title="OTCL-Namespace" style="display: none">
 	  <p>Please define value or remove line for &lt;&lt;otclNamespace&gt;&gt; in 'execute: otclNamespace:'.</p>
+	</div>
+	<div id="infoLoss" title="Some info can be lost" style="display: none">
+	  <p>Some information can be lost.</p>
 	</div>
 
 </body>

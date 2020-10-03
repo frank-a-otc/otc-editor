@@ -50,7 +50,8 @@ public class OtclEditorController {
 	public static final String URL_FETCH_TARGET_JSTREE_HIERARCHY ="/fetchTargetJsTreeData";
 	public static final String URL_FETCH_JSTREE_HIERARCHY ="/fetchJsTreeData";
 	public static final String URL_CREATE_OTCLFILE ="/createOtclFile";
-		
+	public static final String URL_FLIP_OTCL ="/flipOtcl";
+	
 	@GetMapping("/")
 	public String showMapper() {
 		return URL_MAIN;
@@ -100,31 +101,23 @@ public class OtclEditorController {
 		}
 		if (targetClsName != null) {
 			if (mapFields == null) {
-				mapFields = fetchTargetJsTree(srcClsName);
+				mapFields = fetchTargetJsTree(targetClsName);
 			} else {
-				mapFields.putAll(fetchTargetJsTree(srcClsName));
+				mapFields.putAll(fetchTargetJsTree(targetClsName));
 			}
 		}
 		return mapFields;
 	}
 
 	@PostMapping(value=URL_CREATE_OTCLFILE)
-	public void createMapper(@RequestParam(name = "srcClsNames") String sourceClsName,
-			@RequestParam(name = "targetClsNames") String targetClsName, 
-			@RequestParam(name = "otclInstructions") String otclInstructions,
-			@RequestParam(name = "reverseOtclFile") boolean reverseOtclFile, HttpServletResponse response) {
+	public void createMapper(@RequestParam(name = "otclInstructions") String otclInstructions, HttpServletResponse response) {
 		response.setContentType("text/plain");
 	    ServletOutputStream out;
 		try {
-			String otclFileName = null;
-			if (reverseOtclFile) {
-				OtclFileDto otclFileDto = otclEditorService.createOtclFileDto(targetClsName, sourceClsName, 
-						otclInstructions, reverseOtclFile);
-				otclInstructions = otclEditorService.createYaml(otclFileDto);
-				otclFileName = otclFileDto.fileName;
-			} else {
-				otclFileName = OtclUtils.createOtclFileName(sourceClsName, targetClsName);
-			}
+			OtclFileDto otclFileDto = otclEditorService.createOtclFileDto(otclInstructions, false);
+			String sourceClsName  = otclFileDto.metadata.objectTypes.source; 
+			String targetClsName = otclFileDto.metadata.objectTypes.target;
+			String otclFileName = OtclUtils.createOtclFileName(sourceClsName, targetClsName);
 		    response.setHeader("Content-Disposition","attachment;filename=" + otclFileName);
 			out = response.getOutputStream();
 		    out.println(otclInstructions);
@@ -134,6 +127,13 @@ public class OtclEditorController {
 			LOGGER.error("", e);
 		}
         return;
+	}
+
+	@PostMapping(value=URL_FLIP_OTCL)
+	public @ResponseBody String flipOtcl(@RequestParam(name = "otclInstructions") String otclInstructions) {
+		OtclFileDto otclFileDto = otclEditorService.createOtclFileDto(otclInstructions, true);
+		otclInstructions = otclEditorService.createYaml(otclFileDto);
+		return otclInstructions;
 	}
 
 }

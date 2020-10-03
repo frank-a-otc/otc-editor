@@ -18,7 +18,7 @@ public interface OtclEditorService {
 	
 	Set<String> findTypeNamesInPackage(String basePackage);
 	
-	OtclFileDto createOtclFileDto(String targetCls, String sourceCls, String otclInstructions, boolean reverse);
+	OtclFileDto createOtclFileDto(String otclInstructions, boolean reverse);
 	
 	List<ClassMetadataDto> createMembersHierarchy(String clsName, TARGET_SOURCE targetSource);
 

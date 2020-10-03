@@ -82,8 +82,8 @@ var valuesTemplate =
 	"      - <<values>>";
 
 var overridesTemplate = 
-	"    overrides:\r\n" +
-	"    - tokenPath: <<tokenPath>>\r\n";
+	"      overrides:\r\n" +
+	"      - tokenPath: <<tokenPath>>\r\n";
 
 var concreteTypeTemplate = 
 	"        concreteType: <<concreteType>>\r\n";
@@ -442,13 +442,13 @@ $("#addScript").click(function( event ) {
    	if (targetNode[0]) {
    		if (targetNode[0].id == CONSTANTS.TARGET_ROOT) {
    			showMsg($("#rootOtclChain"));
-   			return false;
+   			return;
    		}
    		targetOtclChain = targetNode[0].id;
    	}
    	if (!targetOtclChain) {
 		showMsg($("#targetOtclChain"));
-		return false;
+		return;
 	}
 	var isValid = isAnchorsValid(targetOtclChain);
 	if (!isValid) {
@@ -470,7 +470,7 @@ $("#addScript").click(function( event ) {
    	if (srcNode && srcNode[0]) {
    		if (srcNode[0].id == CONSTANTS.SOURCE_ROOT) {
    			showMsg($("#rootOtclChain"));
-   			return false;
+   			return;
    		}
 	  	sourceOtclChain = srcNode[0].id;
    	}
@@ -582,10 +582,6 @@ $("#otclEditor").submit(function(event) {
 	if (!isTypesSelected) {
 		return;
 	}
-	$('<input />').attr('type', 'text')
-    	.attr('name', 'reverseOtclFile')
-    	.attr('value', $('reverseOtclFile').val());
-	
    	var otclInstructions = $("#otclInstructions");
    	var otclInstructionsValue = otclInstructions.val();
 
@@ -643,7 +639,7 @@ $("#createOtclFile").click(function() {
 	var otclInstructions = $("#otclInstructions").val();
 	if (!otclInstructions) {
 		showMsg($("#nothingToSave"));
-		return false;
+		return ;
 	}
 	$("#otclEditor").submit();
 });
@@ -653,25 +649,55 @@ $("#flipOtcl").click(function() {
 	if (!isTypesSelected) {
 		return;
 	}
-	var otclInstructions = $("#otclInstructions").val();
-	if (!otclInstructions) {
+	var otcl = $("#otclInstructions").val();
+	if (!otcl) {
 		showMsg($("#nothingToSave"));
-		return false;
+		return;
 	}
-	$("#reverseOtclFile").val("true");
-	$("#otclEditor").submit();
-	$("#reverseOtclFile").val("false");
+	var isTypesSelected = areTypesSelected();
+	if (!isTypesSelected) {
+		return;
+	}
+	$("#infoLoss").show();
+	$("#infoLoss").dialog({
+		resizable: false,
+	    modal: true,
+		buttons: {
+	        Ok: function() {
+	          $( this ).dialog( "close" );
+	      	var url = pageUrl.concat('flipOtcl');
+	    	$.post( url, { otclInstructions: otcl }).done(function( data ) {
+	      			$("#otclInstructions").val(data);
+	    	  	});
+		    	var srcPkgName = $('#srcPkgName').val();
+		    	var targetPkgName = $('#targetPkgName').val();
+		    	$('#srcPkgName').val(targetPkgName);
+		    	$('#targetPkgName').val(srcPkgName);
+	
+		    	var $srcClsNames = $("#srcClsNames > option").clone();
+		    	var $targetClsNames = $("#targetClsNames > option").clone();
+		    	$('#srcClsNames').empty();
+		    	$('#targetClsNames').empty();
+		    	$('#srcClsNames').append($targetClsNames);
+		    	$('#targetClsNames').append($srcClsNames);
+		    	
+		    	$('#srcTree').jstree("destroy").empty();
+		    	$('#targetTree').jstree("destroy").empty();
+	        }
+        }
+	});
 });
 
 function showMsg(msgElement) {
 	msgElement.show();
 	msgElement.dialog({
 		resizable: false,
+	    modal: true,
 		buttons: {
 	        Ok: function() {
 	          $( this ).dialog( "close" );
 	        }
         }
-	}).dialog("open");
+	});
 	return;
 }

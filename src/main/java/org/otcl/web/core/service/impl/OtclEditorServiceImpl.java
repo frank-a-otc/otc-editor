@@ -47,7 +47,7 @@ public class OtclEditorServiceImpl implements OtclEditorService {
 	public OtclEditorServiceImpl() {
 		YAMLFactory yamlFactory = new YAMLFactory();
 		yamlFactory.enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
-		ObjectMapper objectMapper = new ObjectMapper(yamlFactory);
+		objectMapper = new ObjectMapper(yamlFactory);
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
 		objectMapper.configure(SerializationFeature.INDENT_OUTPUT, false);
 	}
@@ -67,13 +67,15 @@ public class OtclEditorServiceImpl implements OtclEditorService {
 	}
 
 	@Override
-	public OtclFileDto createOtclFileDto(String targetCls, String sourceCls, String otclInstructions, boolean flip) {
+	public OtclFileDto createOtclFileDto(String otclInstructions, boolean flip) {
 		OtclFileDto otclFileDto = null;
 		try {
 			otclFileDto = objectMapper.readValue(otclInstructions, OtclFileDto.class);
 		} catch (JsonProcessingException e) {
 			throw new OtclEditorException("", e);
 		}
+		String targetCls = otclFileDto.metadata.objectTypes.target;
+		String sourceCls = otclFileDto.metadata.objectTypes.source;
 		if (flip) {
 			// create new OtclFileDto and flip values
 			OtclFileDto reverseOtclFileDto = new OtclFileDto();
@@ -153,7 +155,7 @@ public class OtclEditorServiceImpl implements OtclEditorService {
 					}
 				}
 			}
-			otclFileDto.fileName = OtclUtils.createOtclFileName(sourceCls, targetCls);
+			otclFileDto = reverseOtclFileDto;
 		} else {
 			otclFileDto.fileName = OtclUtils.createOtclFileName(targetCls, sourceCls);
 		}
