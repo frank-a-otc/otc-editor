@@ -63,11 +63,6 @@ public class OtclEditorController {
 		return lstClsName;
 	}
 
-	@GetMapping(value=URL_SHOWCONVERTERS, produces={"application/json;charset=UTF-8"})
-	public @ResponseBody List<String> getConvertors() {
-		return OtclConfig.getOtclConverters();
-	}
-	
 	@GetMapping(URL_FETCH_SOURCE_JSTREE_HIERARCHY)
 	public @ResponseBody Map<String, List<JstreeNodeInfo>> fetchSourceJsTree(@RequestParam(name = "srcClsName")
 			String srcClsName) {

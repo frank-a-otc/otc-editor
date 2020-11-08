@@ -106,7 +106,7 @@ public class OtclEditorServiceImpl implements OtclEditorService {
 								reverseOtclScript.copy.to.overrides.add(override);
 								override.tokenPath = sourceOverride.tokenPath;
 								override.getter = sourceOverride.getter;
-								override.activateGetterInHelper = sourceOverride.activateGetterInHelper;
+								override.getterHelper = sourceOverride.getterHelper;
 							}
 						} 
 						if (otclScript.copy.to.overrides != null) {
@@ -118,7 +118,7 @@ public class OtclEditorServiceImpl implements OtclEditorService {
 								reverseOtclScript.copy.from.overrides.add(override);
 								override.tokenPath = targetOverride.tokenPath;
 								override.getter = targetOverride.getter;
-								override.activateGetterInHelper = targetOverride.activateGetterInHelper;	
+								override.getterHelper = targetOverride.getterHelper;	
 							}
 						}
 					} else if (otclScript.execute != null) {
@@ -137,7 +137,7 @@ public class OtclEditorServiceImpl implements OtclEditorService {
 								reverseOtclScript.execute.target.overrides.add(override);
 								override.tokenPath = sourceOverride.tokenPath;
 								override.getter = sourceOverride.getter;
-								override.activateGetterInHelper = sourceOverride.activateGetterInHelper;
+								override.getterHelper = sourceOverride.getterHelper;
 							}
 						} 
 						if (otclScript.execute.target.overrides != null) {
@@ -149,7 +149,7 @@ public class OtclEditorServiceImpl implements OtclEditorService {
 								reverseOtclScript.execute.source.overrides.add(override);
 								override.tokenPath = targetOverride.tokenPath;
 								override.getter = targetOverride.getter;
-								override.activateGetterInHelper = targetOverride.activateGetterInHelper;	
+								override.getterHelper = targetOverride.getterHelper;	
 							}
 						}
 					}

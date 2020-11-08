@@ -1,7 +1,23 @@
 # OTCL editor
 
-		// OTCL-engine cannot handle Enums if non resolvable
-		// Use custom OTCL converters in such cases
+       Fix - Hashtable does not allow null value.
+       
+       Fix - enum of primitive types.
+       
+       Check override of "concreteType:" for normal tokens.
+       
+		Don't mandate source-type if whole otcl has only  'from: values'
+		
+		“${OTCL_HOME}\lib” - test with only .class files. 
+		
+		Change deployment logic to ".dep" files from “${OTCL_HOME}\bin” 
+		
+		Fix - GetSetTemplate and SetterTemplate has issues with date
+		
+		Testcases - getterHelper
+		
+		For collections, additionally check if the type is of interface type -
+			 Ex: whether interface List or Concrete-type ArrayLilst
 		
 		https://programminghints.com/2017/05/still-using-java-util-date-dont/
 		

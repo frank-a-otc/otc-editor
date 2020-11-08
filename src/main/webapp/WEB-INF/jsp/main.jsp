@@ -27,9 +27,11 @@
 </head>
 
 <body>
+
 	<div id="header">
-		<img src="../images/logo.jpeg"/>OTCL Editor
+		<img src="../images/logo.jpeg" class="logo"/>OTCL Script Editor
 	</div>
+
 	<form id="otclEditor" action="createOtclFile" accept-charset="utf-8" method="post">
 		<div class="box columnHdr">
 			<div class="sourceDiv">

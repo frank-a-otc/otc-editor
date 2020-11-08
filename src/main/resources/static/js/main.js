@@ -5,8 +5,8 @@ String.prototype.replaceAt=function(index, character) {
 var pageUrl = "";
 
 $(document).ready(function() {
-	var url = pageUrl.concat('showConverters');
-	getClassNames(url, 'converters');
+//	var url = pageUrl.concat('showConverters');
+//	getClassNames(url, 'converters');
 	$("#otclInstructions").val('');
 });
 
