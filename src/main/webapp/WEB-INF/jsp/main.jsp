@@ -7,6 +7,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>OTCL Editor</title>
 	
+	<link rel="icon" href="./images/otcl-logo.png">
+	
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<link href="<%=request.getContextPath()%>/jquery/dist/fixed/jquery.contextMenu.min.css" rel="stylesheet">
 	<link href="<%=request.getContextPath()%>/jquery/dist/jquery.contextMenuCommon.min.css" rel="stylesheet">
@@ -27,9 +29,8 @@
 </head>
 
 <body>
-
 	<div id="header">
-		<img src="../images/logo.jpeg" class="logo"/>OTCL Script Editor
+		<img class="logo" src="./images/otcl-logo.png">OTCL Script Editor
 	</div>
 
 	<form id="otclEditor" action="createOtclFile" accept-charset="utf-8" method="post">

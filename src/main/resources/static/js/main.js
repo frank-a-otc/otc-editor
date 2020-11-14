@@ -5,8 +5,6 @@ String.prototype.replaceAt=function(index, character) {
 var pageUrl = "";
 
 $(document).ready(function() {
-//	var url = pageUrl.concat('showConverters');
-//	getClassNames(url, 'converters');
 	$("#otclInstructions").val('');
 });
 
@@ -477,10 +475,12 @@ $("#addScript").click(function( event ) {
 	if (sourceOtclChain == null) {
 		scriptBlock = scriptBlock.replace(fromPlaceholder, valuesTemplate);
 	} else {
-    	var isValid = isValidCollections(targetOtclChain, sourceOtclChain);
-   		if (!isValid) {
-   			return;
-   		}
+		if (CONSTANTS.CMD_EXECUTE == command) {
+	    	var isValid = isValidCollections(targetOtclChain, sourceOtclChain);
+	   		if (!isValid) {
+	   			return;
+	   		}
+		}
 		var from = otclChainTemplate.replace(otclChainPlaceholder, sourceOtclChain);
 		scriptBlock = scriptBlock.replace(fromPlaceholder, from);
 	}

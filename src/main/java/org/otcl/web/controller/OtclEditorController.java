@@ -21,7 +21,6 @@ import org.otcl.web.commons.dto.JstreeNodeInfo;
 import org.otcl.web.commons.service.OtclEditorService;
 import org.otcl.web.commons.util.JsTreeNodeUtil;
 import org.otcl2.common.OtclConstants.TARGET_SOURCE;
-import org.otcl2.common.config.OtclConfig;
 import org.otcl2.common.dto.OtclFileDto;
 import org.otcl2.common.util.OtclUtils;
 import org.slf4j.Logger;
