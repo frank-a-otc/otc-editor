@@ -80,13 +80,13 @@
 				<input id="addScript" type="button" value="Add Script" class="actionBtn" >
 			</div>
 			<div class="actions">
-				<input id="reset" type="button" value="Clear" class="actionBtn" >
-			</div>
-			<div class="actions">
 				<input id="createOtclFile" type="button" value="Create file" class="actionBtn" />
 			</div>
 			<div class="actions">
 				<input id="flipOtcl" type="button" value="Flip OTCL" class="actionBtn" />
+			</div>
+			<div class="actions">
+				<input id="reset" type="button" value="Clear" class="actionBtn" >
 			</div>
 		</div>
 		<div class="box">

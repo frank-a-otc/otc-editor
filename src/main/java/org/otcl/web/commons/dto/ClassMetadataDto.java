@@ -1,5 +1,5 @@
 /**
-* Copyright (c) otcl2.org
+* Copyright (c) otclfoundation.org
 *
 * @author  Franklin Abel
 * @version 1.0
