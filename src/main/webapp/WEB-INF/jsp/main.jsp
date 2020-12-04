@@ -10,21 +10,22 @@
 	<link rel="icon" href="./images/otcl-logo.png">
 	
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<link href="<%=request.getContextPath()%>/jquery/dist/fixed/jquery.contextMenu.min.css" rel="stylesheet">
-	<link href="<%=request.getContextPath()%>/jquery/dist/jquery.contextMenuCommon.min.css" rel="stylesheet">
-
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	
-	<!-- from https://anseki.github.io/jquery-contextmenu-common/ -->
-	<script src="<%=request.getContextPath()%>/jquery/dist/jquery-ui-position.min.js"></script>
-	<script src="<%=request.getContextPath()%>/jquery/dist/fixed/jquery.contextMenu.min.js"></script>
-	<script src="<%=request.getContextPath()%>/jquery/dist/jquery.contextMenuCommon.min.js"></script>
+	<!-- from https://anseki.github.io/jquery-contextmenu-common/ -->	
+	<link href="jquery/dist/fixed/jquery.contextMenu.min.css" rel="stylesheet">
+	<link href="jquery/dist/jquery.contextMenuCommon.min.css" rel="stylesheet">
 	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+	<!-- <script src="jquery/dist/jquery.min.js"></script> -->
+	<script src="jquery/dist/jquery-ui-position.min.js"></script>
+	<script src="jquery/dist/fixed/jquery.contextMenu.min.js"></script>
+	<script src="jquery/dist/jquery.contextMenuCommon.min.js"></script>
+	
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
 	
-	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
 
 </head>
 
@@ -158,6 +159,7 @@
 
 </body>
 
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/main.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+
 
 </html>

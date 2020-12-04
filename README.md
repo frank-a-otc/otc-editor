@@ -1,8 +1,10 @@
 # OTCL editor
 
        Fix - Hashtable does not allow null value.
-       
+       Fix - check for concrete types of collections instead of just List.isAssignableFrom(...)
+       Fix, while assigning date, if it is assignable, then dont call teh date-converter.
        Fix - enum of primitive types.
+       Fix - otcleditor - right-click to anchor.
        
        Check override of "concreteType:" for normal tokens.
        
