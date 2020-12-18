@@ -5,6 +5,15 @@
        Fix, while assigning date, if it is assignable, then dont call teh date-converter.
        Fix - enum of primitive types.
        Fix - otcleditor - right-click to anchor.
+       Fix - compilation happening even if .dep and .class files are present
+	    Fix - requried in compileOtcl(File directory, String otclNamespace)
+	    		in code - if (!CommonUtils.isEmpty(compilationReport.otclNamespace)) {
+					depFileName = compilationReport.otclNamespace + "." + depFileName;
+					// this needs a fix
+				}
+	    
+	    
+	   Web-site - provide link to add user feedback about OTCL 
        
        Check override of "concreteType:" for normal tokens.
        

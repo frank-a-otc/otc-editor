@@ -37,11 +37,11 @@ var command = CONSTANTS.CMD_COPY;
 
 var headerTemplate = 
 	"metadata:\r\n" +
-	"  mainClassName: <<mainClassName>>\r\n" +
-	"  helper: <<helperClassName>>\r\n" +
 	"  objectTypes:\r\n" +
 	"    source: <<sourceType>>\r\n" +
 	"    target: <<targetType>>\r\n" +
+	"  mainClassName: <<mainClassName>>\r\n" +
+	"  helper: <<helperClassName>>\r\n" +
 	"otclScripts:\r\n";
 
 var copyScriptTemplate =
