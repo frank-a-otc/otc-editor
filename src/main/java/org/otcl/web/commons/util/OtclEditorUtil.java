@@ -233,7 +233,7 @@ public class OtclEditorUtil {
 		}
 		if (Map.class.isAssignableFrom(fieldType)) {
 			otclChain.append(OtclConstants.MAP_REF);
-		} else if (Collection.class.isAssignableFrom(fieldType)) {
+		} else if (Collection.class.isAssignableFrom(fieldType) || fieldType.isArray()) {
 			otclChain.append(OtclConstants.ARR_REF);
 		}
 		String otclId = otclChain.toString();

@@ -113,10 +113,10 @@
 	</div>
 
 	<div id="singleSideCollectionOnly" title="OTCL-Script::Collections on one side Only" style="display: none">
-	  <p>For executeOtclConverter and executeOtclModule Otcl-scripts collections are allowed on any one side only.</p>
+	  <p>Otcl-scripts collections are allowed on any one of executeOtclConverter and executeOtclModule only!</p>
 	</div>
 	<div id="multipleAnchors" title="OTCL Chain::Multiple Anchors" style="display: none">
-	  <p>OTCL-chain with multiple Anchors (^) is not valid.</p>
+	  <p>OTCL-chain with multiple Anchors (^) is not valid!</p>
 	  <p id="otclChain" />
 	</div>
 
@@ -141,9 +141,7 @@
 	<div id="setter" title="Setter-Name" style="display: none">
 	  <p>Please define value or remove line for &lt;&lt;setter&gt;&gt; in 'copy: or execute: setter:'.</p>
 	</div>
-	<div id="dateFormat" title="Date-Format String" style="display: none">
-	  <p>Please define value or remove line for &lt;&lt;dateFormat&gt;&gt; in 'copy: or execute: dateFormat:'.</p>
-	</div>
+
 	<div id="concreteType" title="Concrete-Type" style="display: none">
 	  <p>Please define value or remove line for &lt;&lt;concreteType&gt;&gt; in 'copy: or execute: concreteType:'.</p>
 	</div>

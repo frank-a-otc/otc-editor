@@ -125,3 +125,20 @@ html, body {
 .custom-menu li:hover {
     background-color: #DEF;
 }
+
+.data-title:before {
+    content: 'Overrides';
+    display: block;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    right: 0;
+    left: 0;
+    background: #DDD;
+    padding: 2px;
+    font-weight: bold;
+}
+
+.data-title :first-child {
+    margin-top: 20px;
+}

@@ -9,7 +9,7 @@ $(document).ready(function() {
 });
 
 
-let map = new Map();
+let anchorsMap = new Map();
 let sourceMap = new Map();
 let targetMap = new Map();
 
@@ -86,20 +86,17 @@ var overridesTemplate =
 var concreteTypeTemplate = 
 	"        concreteType: <<concreteType>>\r\n";
 
-var dateFormatTemplate = 
-	"        dateFormat: <<dateFormat>>\r\n";
-
 var setterTemplate = 
 	"        setter: <<setter>>\r\n";
 
 var getterTemplate = 
 	"        getter: <<getter>>\r\n";
 
-var activateSetterInHelperTemplate =
-	"        activateSetterInHelper: true\r\n";
+var setterHelperTemplate =
+	"        setterHelper: <<setterHelper>>\r\n";
 
-var activateGetterInHelperTemplate =
-	"        activateGetterInHelper: true\r\n";
+var getterHelperTemplate =
+	"        getterHelper: <<getterHelper>>\r\n";
 
 var idPlaceholder = "<<id>>";
 var sourceTypePlaceholder = "<<sourceType>>";
@@ -115,6 +112,8 @@ var mainClassNamePlaceholder = "<<mainClassName>>";
 var helperClassNamePlaceholder = "<<helperClassName>>";
 var getterPlaceholder = "<<getter>>";
 var setterPlaceholder = "<<setter>>";
+var getterHelperPlaceholder = "<<getterHelper>>";
+var setterHelperPlaceholder = "<<setterHelper>>";
 var dateFormatPlaceholder = "<<dateFormat>>";
 var concreteTypePlaceholder = "<<concreteType>>";
 var factoryclassPlaceholder = "<<factoryclass>>";
@@ -220,84 +219,31 @@ $(function() {
 var sourceOverrideItems = {
     "getterItem": {
     	name: "getter", 
-        type: 'checkbox', 
+        type: 'radio', 
         callback: function(key, options) {
         	if (sourceMap.has(CONSTANTS.GETTER)) {
         		sourceMap.delete(CONSTANTS.GETTER);
         	} else {
         		sourceMap.set(CONSTANTS.GETTER, getterTemplate);
         	}
+        	return false;
         }
     },
-    'activateGetterInHelperItem' : {
-    	name: "activateGetterInHelper", 
-        type: 'checkbox', 
+    'getterHelperItem' : {
+    	name: "getterHelper", 
+        type: 'radio', 
         callback: function(key, options) {
         	if (sourceMap.has(CONSTANTS.ACTIVATE_GETTER)) {
         		sourceMap.delete(CONSTANTS.ACTIVATE_GETTER);
         	} else {
-        		sourceMap.set(CONSTANTS.ACTIVATE_GETTER, activateGetterInHelperTemplate);
+        		sourceMap.set(CONSTANTS.ACTIVATE_GETTER, getterHelperTemplate);
         	}
-        }
-    },
-    'dateFormatItem' : {
-    	name: "dateFormat", 
-        type: 'checkbox', 
-        callback: function(key, options) {
-        	if (sourceMap.has(CONSTANTS.DATE_FORMAT)) {
-        		sourceMap.delete(CONSTANTS.DATE_FORMAT);
-        	} else {
-        		sourceMap.set(CONSTANTS.DATE_FORMAT, dateFormatTemplate);
-        	}
+        	return false;
         }
     }
 };
 
 var targetContextMenuItems = {
-    'getterItem' : {
-    	name: "getter", 
-        type: 'checkbox', 
-        callback: function(key, options) {
-        	if (targetMap.has(CONSTANTS.GETTER)) {
-        		targetMap.delete(CONSTANTS.GETTER);
-        	} else {
-        		targetMap.set(CONSTANTS.GETTER, getterTemplate);
-        	}
-        }
-    },
-    'activateGetterInHelperItem' : {
-    	name: "activateGetterInHelper", 
-        type: 'checkbox', 
-        callback: function(key, options) {
-        	if (targetMap.has(CONSTANTS.ACTIVATE_GETTER)) {
-        		targetMap.delete(CONSTANTS.ACTIVATE_GETTER);
-        	} else {
-        		targetMap.set(CONSTANTS.ACTIVATE_GETTER, activateGetterInHelperTemplate);
-        	}
-        }
-    },
-    'setterItem' : {
-    	name: "setter", 
-        type: 'checkbox', 
-        callback: function(key, options) {
-        	if (targetMap.has(CONSTANTS.SETTER)) {
-        		targetMap.delete(CONSTANTS.SETTER);
-        	} else {
-        		targetMap.set(CONSTANTS.SETTER, setterTemplate);
-        	}
-        }
-    },
-    'activateSetterInHelperItem' : {
-    	name: "activateSetterInHelper", 
-        type: 'checkbox', 
-        callback: function(key, options) {
-        	if (targetMap.has(CONSTANTS.ACTIVATE_SETTER)) {
-        		targetMap.delete(CONSTANTS.ACTIVATE_SETTER);
-        	} else {
-        		targetMap.set(CONSTANTS.ACTIVATE_SETTER, activateSetterInHelperTemplate);
-        	}
-        }
-    },
     'concreteTypeItem' : {
     	name: "concreteType", 
         type: 'checkbox', 
@@ -307,6 +253,59 @@ var targetContextMenuItems = {
         	} else {
         		targetMap.set(CONSTANTS.CONCRETE_TYPE, concreteTypeTemplate);
         	}
+        	return false;
+        }
+    },
+    'getterItem' : {
+    	name: "getter", 
+        type: 'radio', 
+        radio: "get",
+        callback: function(key, options) {
+        	if (targetMap.has(CONSTANTS.GETTER)) {
+        		targetMap.delete(CONSTANTS.GETTER);
+        	} else {
+        		targetMap.set(CONSTANTS.GETTER, getterTemplate);
+        	}
+        	return false;
+        }
+    },
+    'getterHelperItem' : {
+    	name: "getterHelper", 
+        type: 'radio', 
+        radio: "get",
+       callback: function(key, options) {
+        	if (targetMap.has(CONSTANTS.ACTIVATE_GETTER)) {
+        		targetMap.delete(CONSTANTS.ACTIVATE_GETTER);
+        	} else {
+        		targetMap.set(CONSTANTS.ACTIVATE_GETTER, getterHelperTemplate);
+        	}
+        	return false;
+        }
+    },
+    'setterItem' : {
+    	name: "setter", 
+        type: 'radio', 
+        radio: "set",
+        callback: function(key, options) {
+        	if (targetMap.has(CONSTANTS.SETTER)) {
+        		targetMap.delete(CONSTANTS.SETTER);
+        	} else {
+        		targetMap.set(CONSTANTS.SETTER, setterTemplate);
+        	}
+        	return false;
+       }
+    },
+    'setterHelperItem' : {
+    	name: "setterHelper", 
+        type: 'radio', 
+        radio: "set",
+        callback: function(key, options) {
+        	if (targetMap.has(CONSTANTS.ACTIVATE_SETTER)) {
+        		targetMap.delete(CONSTANTS.ACTIVATE_SETTER);
+        	} else {
+        		targetMap.set(CONSTANTS.ACTIVATE_SETTER, setterHelperTemplate);
+        	}
+        	return false;
         }
     }
 };
@@ -317,53 +316,63 @@ function jstreeContextmenu(node) {
 	    $.contextMenuCommon({
 	        selector: '#srcTree', 
 	        autoHide: true,
+	        className: 'data-title',
 	        callback: function(key, options) {
 	            var m = "clicked: " + key;
-	            window.console && console.log(m) || alert(m); 
+//	            window.console && console.log(m) || alert(m); 
 	        },
 	        items: sourceOverrideItems
 	    });
 	} else {
 		$.contextMenu('destroy', "#targetTree");
 		var menuItems;
+		var className = 'data-title';
 		if (CONSTANTS.TARGET_ROOT == otclChain) {
 			menuItems = targetContextMenuItems; 
 		} else {
-			if (!otclChain.includes("]")) {
+			if (!otclChain.endsWith("]")) {
 				return;
 	        }
+			var isChecked = false;
+			if (anchorsMap.has(otclChain)) {
+				isChecked = true;
+			}
 			var anchorItems = {
 			   	anchor: {
 			   		name: "Anchor", 
 			        type: 'checkbox', 
+			        selected: isChecked,
 			        callback: function(key, opt) { 
-			        	if (map.has(otclChain)) {
-			        		map.delete(otclChain);
-			        	} else if (otclChain.includes("]")) {
-				        	var lastIndexOf = otclChain.lastIndexOf("[<");
-				        	if (lastIndexOf < 0) {
-				        		lastIndexOf = otclChain.lastIndexOf("[");
-				        	}
-				        	var sourceOtclChain = otclChain.substring(0, lastIndexOf + 1);
-				        	if (otclChain.charAt(lastIndexOf + 1) == "*") {
-				        		targetOtclChain = otclChain.substring(lastIndexOf + 2);
-				            } else {
-				        		targetOtclChain = otclChain.substring(lastIndexOf + 1);
-				            }
-				        	var anchoredOtclChain = sourceOtclChain + "^" + targetOtclChain;
-				        	map.set(otclChain, anchoredOtclChain);
+			        	if (anchorsMap.has(otclChain)) {
+			        		anchorsMap.delete(otclChain);
+			        	} else if (otclChain.endsWith("]")) {
+			        		var subKey;
+			        		for (const [key, value] of anchorsMap.entries()) {
+			        	   		if (otclChain.startsWith(key) || key.startsWith(otclChain)) {
+			        	   			subKey = key;
+			        	   			break;
+			        	   		}
+			        	   	};
+			        	   	if (subKey) {
+			        	   		anchorsMap.delete(subKey);
+			        	   	}
+				        	var lastIndexOf = otclChain.lastIndexOf("[");
+				        	var anchoredOtclChain = otclChain.substring(0, lastIndexOf + 1) + "^" + otclChain.substring(lastIndexOf + 1);
+				        	anchorsMap.set(otclChain, anchoredOtclChain);
 				        }
 					}
 				}
 			};
 			menuItems = anchorItems;
+			className = '';
 		}
 		$.contextMenuCommon({
 	        selector: '#targetTree', 
 	        autoHide: true,
+	        className: className,
 	        callback: function(key, options) {
 	            var m = "clicked: " + key;
-	            window.console && console.log(m) || alert(m); 
+//	            window.console && console.log(m) || alert(m); 
 	        },
 	        items: menuItems
 	    });
@@ -448,6 +457,12 @@ $("#addScript").click(function( event ) {
 		showMsg($("#targetOtclChain"));
 		return;
 	}
+	for (const [key, value] of anchorsMap.entries()) {
+   		if (targetOtclChain.startsWith(key)) {
+   			targetOtclChain = targetOtclChain.replace(key, value);
+   			break;
+   		}
+   	};   	
 	var isValid = isAnchorsValid(targetOtclChain);
 	if (!isValid) {
 		return;
@@ -492,7 +507,7 @@ $("#addScript").click(function( event ) {
 				overrides += getterTemplate;
 			}
 			if (sourceMap.has(CONSTANTS.ACTIVATE_GETTER)) {
-				overrides += activateGetterInHelperTemplate;
+				overrides += getterHelperTemplate;
 			}
 		}
 		if (sourceMap.has(CONSTANTS.DATE_FORMAT)) {
@@ -517,10 +532,10 @@ $("#addScript").click(function( event ) {
 			overrides += setterTemplate;
 		}
 		if (targetMap.has(CONSTANTS.ACTIVATE_GETTER)) {
-			overrides += activateGetterInHelperTemplate;
+			overrides += getterHelperTemplate;
 		}
 		if (targetMap.has(CONSTANTS.ACTIVATE_SETTER)) {
-			overrides += activateSetterInHelperTemplate;
+			overrides += setterHelperTemplate;
 		}		
 		if (targetMap.has(CONSTANTS.CONCRETE_TYPE)) {
 			overrides += concreteTypeTemplate;
