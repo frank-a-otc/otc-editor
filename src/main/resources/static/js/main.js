@@ -217,15 +217,19 @@ $(function() {
 });
 
 var sourceOverrideItems = {
+    "none": {
+    	name: "None", 
+        type: 'radio', 
+        callback: function(key, options) {
+    		sourceMap.delete(CONSTANTS.GETTER);
+        	return false;
+        }
+    },
     "getterItem": {
     	name: "getter", 
         type: 'radio', 
         callback: function(key, options) {
-        	if (sourceMap.has(CONSTANTS.GETTER)) {
-        		sourceMap.delete(CONSTANTS.GETTER);
-        	} else {
-        		sourceMap.set(CONSTANTS.GETTER, getterTemplate);
-        	}
+    		sourceMap.set(CONSTANTS.GETTER, getterTemplate);
         	return false;
         }
     },
@@ -233,11 +237,7 @@ var sourceOverrideItems = {
     	name: "getterHelper", 
         type: 'radio', 
         callback: function(key, options) {
-        	if (sourceMap.has(CONSTANTS.ACTIVATE_GETTER)) {
-        		sourceMap.delete(CONSTANTS.ACTIVATE_GETTER);
-        	} else {
-        		sourceMap.set(CONSTANTS.ACTIVATE_GETTER, getterHelperTemplate);
-        	}
+    		sourceMap.set(CONSTANTS.GETTER, getterHelperTemplate);
         	return false;
         }
     }
@@ -256,16 +256,22 @@ var targetContextMenuItems = {
         	return false;
         }
     },
+    separator1: "-----",
+    "noneGetter": {
+    	name: "None", 
+        type: 'radio', 
+        radio: "get",
+        callback: function(key, options) {
+        	targetMap.delete(CONSTANTS.GETTER);
+        	return false;
+        }
+    },
     'getterItem' : {
     	name: "getter", 
         type: 'radio', 
         radio: "get",
         callback: function(key, options) {
-        	if (targetMap.has(CONSTANTS.GETTER)) {
-        		targetMap.delete(CONSTANTS.GETTER);
-        	} else {
-        		targetMap.set(CONSTANTS.GETTER, getterTemplate);
-        	}
+        	targetMap.set(CONSTANTS.GETTER, getterTemplate);
         	return false;
         }
     },
@@ -273,12 +279,19 @@ var targetContextMenuItems = {
     	name: "getterHelper", 
         type: 'radio', 
         radio: "get",
-       callback: function(key, options) {
-        	if (targetMap.has(CONSTANTS.ACTIVATE_GETTER)) {
-        		targetMap.delete(CONSTANTS.ACTIVATE_GETTER);
-        	} else {
-        		targetMap.set(CONSTANTS.ACTIVATE_GETTER, getterHelperTemplate);
-        	}
+        callback: function(key, options) {
+        	targetMap.set(CONSTANTS.GETTER, getterHelperTemplate);
+        	return false;
+        }
+    },
+    separator2: "-----",
+//    separator2: { "type": "cm_separator" },
+    "noneSetter": {
+    	name: "None", 
+        type: 'radio', 
+        radio: "set",
+        callback: function(key, options) {
+        	targetMap.delete(CONSTANTS.SETTER);
         	return false;
         }
     },
@@ -287,24 +300,16 @@ var targetContextMenuItems = {
         type: 'radio', 
         radio: "set",
         callback: function(key, options) {
-        	if (targetMap.has(CONSTANTS.SETTER)) {
-        		targetMap.delete(CONSTANTS.SETTER);
-        	} else {
-        		targetMap.set(CONSTANTS.SETTER, setterTemplate);
-        	}
+        	targetMap.set(CONSTANTS.SETTER, setterTemplate);
         	return false;
-       }
+        }
     },
     'setterHelperItem' : {
     	name: "setterHelper", 
         type: 'radio', 
         radio: "set",
         callback: function(key, options) {
-        	if (targetMap.has(CONSTANTS.ACTIVATE_SETTER)) {
-        		targetMap.delete(CONSTANTS.ACTIVATE_SETTER);
-        	} else {
-        		targetMap.set(CONSTANTS.ACTIVATE_SETTER, setterHelperTemplate);
-        	}
+        	targetMap.set(CONSTANTS.SETTER, setterHelperTemplate);
         	return false;
         }
     }
@@ -504,14 +509,11 @@ $("#addScript").click(function( event ) {
 		var overrides = overridesTemplate.replace(tokenPathPlaceholder, sourceOtclChain);
 		if (sourceOtclChain != null) {
 			if (sourceMap.has(CONSTANTS.GETTER)) {
-				overrides += getterTemplate;
+				overrides += sourceMap.get(CONSTANTS.GETTER);
 			}
-			if (sourceMap.has(CONSTANTS.ACTIVATE_GETTER)) {
-				overrides += getterHelperTemplate;
-			}
-		}
-		if (sourceMap.has(CONSTANTS.DATE_FORMAT)) {
-			overrides += dateFormatTemplate;
+//			if (sourceMap.has(CONSTANTS.ACTIVATE_GETTER)) {
+//				overrides += getterHelperTemplate;
+//			}
 		}
 		scriptBlock = scriptBlock.replace(fromOverridesPlaceholder, overrides);
 	} else {
@@ -526,17 +528,17 @@ $("#addScript").click(function( event ) {
 			targetMap.has(CONSTANTS.CONCRETE_TYPE)) {
 		var overrides = overridesTemplate.replace(tokenPathPlaceholder, targetOtclChain);
 		if (targetMap.has(CONSTANTS.GETTER)) {
-			overrides += getterTemplate;
+			overrides += targetMap.get(CONSTANTS.GETTER);
 		}
 		if (targetMap.has(CONSTANTS.SETTER)) {
-			overrides += setterTemplate;
+			overrides += targetMap.get(CONSTANTS.SETTER);
 		}
-		if (targetMap.has(CONSTANTS.ACTIVATE_GETTER)) {
-			overrides += getterHelperTemplate;
-		}
-		if (targetMap.has(CONSTANTS.ACTIVATE_SETTER)) {
-			overrides += setterHelperTemplate;
-		}		
+//		if (targetMap.has(CONSTANTS.ACTIVATE_GETTER)) {
+//			overrides += getterHelperTemplate;
+//		}
+//		if (targetMap.has(CONSTANTS.ACTIVATE_SETTER)) {
+//			overrides += setterHelperTemplate;
+//		}		
 		if (targetMap.has(CONSTANTS.CONCRETE_TYPE)) {
 			overrides += concreteTypeTemplate;
 		}

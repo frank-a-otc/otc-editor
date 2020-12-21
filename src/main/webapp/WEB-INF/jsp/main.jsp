@@ -106,7 +106,7 @@
 	  <p>Cannot proceed - Nothing to save!</p>
 	</div>
 	<div id="rootOtclChain" title="Root OTCL-Chain" style="display: none">
-	  <p>Tree Root on any side cannot be selected to create OTCL-Script block!</p>
+	  <p>Root-node on any side cannot be selected to create OTCL-Script block!</p>
 	</div>
 	<div id="targetOtclChain" title="Target OTCL-Chain" style="display: none">
 	  <p>Target OTCL-chain not selected!</p>
