@@ -142,3 +142,7 @@ html, body {
 .data-title :first-child {
     margin-top: 20px;
 }
+
+.selectedNodeColor {
+    color: red;
+}

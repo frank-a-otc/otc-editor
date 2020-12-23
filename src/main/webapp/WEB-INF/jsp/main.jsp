@@ -17,7 +17,6 @@
 	<link href="jquery/dist/fixed/jquery.contextMenu.min.css" rel="stylesheet">
 	<link href="jquery/dist/jquery.contextMenuCommon.min.css" rel="stylesheet">
 	
-	<!-- <script src="jquery/dist/jquery.min.js"></script> -->
 	<script src="jquery/dist/jquery-ui-position.min.js"></script>
 	<script src="jquery/dist/fixed/jquery.contextMenu.min.js"></script>
 	<script src="jquery/dist/jquery.contextMenuCommon.min.js"></script>
@@ -34,7 +33,7 @@
 		<img class="logo" src="./images/otcl-logo.png">OTCL Script Editor
 	</div>
 
-	<form id="otclEditor" action="createOtclFile" accept-charset="utf-8" method="post">
+	<form id="otclEditorForm" action="createOtclFile" accept-charset="utf-8" method="post">
 		<div class="box columnHdr">
 			<div class="sourceDiv">
 				<label><u><b>From</b></u></label>
@@ -121,35 +120,44 @@
 	</div>
 
 	<div id="sourceType" title="Source-Type" style="display: none">
-	  <p>Please define value for &lt;&lt;sourceType&gt;&gt; in 'metadata: objectTypes: source:'.</p>
+	  <p>Please define value for placeholder &lt;&lt;sourceType&gt;&gt; under 'metadata: objectTypes: source:'.</p>
 	</div>
 	<div id="targetType" title="Target-Type" style="display: none">
-	  <p>Please define value for &lt;&lt;targetType&gt;&gt; in 'metadata: objectTypes: target:'.</p>
+	  <p>Please define value for placeholder &lt;&lt;targetType&gt;&gt; under 'metadata: objectTypes: target:'.</p>
 	</div>
 	<div id="mainClassName" title="Main-Class Name" style="display: none">
-	  <p>Please define value for &lt;&lt;mainClassName&gt;&gt; in 'copy: or metadata: mainClassName:'.</p>
+	  <p>Please define value for placeholder &lt;&lt;mainClassName&gt;&gt; under 'copy: or metadata: mainClassName:'.</p>
 	</div>
 	<div id="helperClassName" title="Helper-Class Name" style="display: none">
-	  <p>Please define value or remove line for &lt;&lt;helperClassName&gt;&gt; in 'copy: or metadata: helperClassName:'.</p>
+	  <p>Please define value for placeholder or remove line for 'helper: &lt;&lt;helperClassName&gt;&gt;' parameter under metadata:' or remove line.</p>
 	</div>
 	<div id="factoryclass" title="Factory-Class Name" style="display: none">
-	  <p>Please define value for &lt;&lt;factoryclass&gt;&gt; in 'copy: or execute: factoryclass:'.</p>
+	  <p>Please define value for placeholder &lt;&lt;factoryclass&gt;&gt; under 'copy: or execute: factoryClassName:' or remove line.</p>
 	</div>
 	<div id="getter" title="Getter-Name" style="display: none">
-	  <p>Please define value or remove line for &lt;&lt;getter&gt;&gt; in 'copy: or execute: getter:'.</p>
+	  <p>Please define value for placeholder &lt;&lt;getter&gt;&gt; under 'copy: or execute: getter:' or remove line.</p>
 	</div>
 	<div id="setter" title="Setter-Name" style="display: none">
-	  <p>Please define value or remove line for &lt;&lt;setter&gt;&gt; in 'copy: or execute: setter:'.</p>
+	  <p>Please define value for placeholder &lt;&lt;setter&gt;&gt; under 'copy: or execute: setter:' or remove line.</p>
+	</div>
+	<div id="getterHelper" title="GetterHelper-Name" style="display: none">
+	  <p>Please define value for placeholder &lt;&lt;getterHelper&gt;&gt; under 'copy: or execute: getterHelper:' or remove line.</p>
+	</div>
+	<div id="setterHelper" title="SetterHelper-Name" style="display: none">
+	  <p>Please define value for placeholder &lt;&lt;setterHelper&gt;&gt; under 'copy: or execute: setterHelper:' or remove line.</p>
+	</div>
+	<div id="helperClassNotDefined" title="HelperClass-Name requried" style="display: none">
+	  <p>'helper:' parameter and value expected under 'metadata:' section due to presence of 'getterHelper:' / 'setterHelper:' in script-block(s).</p>
 	</div>
 
 	<div id="concreteType" title="Concrete-Type" style="display: none">
-	  <p>Please define value or remove line for &lt;&lt;concreteType&gt;&gt; in 'copy: or execute: concreteType:'.</p>
+	  <p>Please define value for placeholder &lt;&lt;concreteType&gt;&gt; under 'copy:' or 'execute:' - 'concreteType:' or remove line.</p>
 	</div>
 	<div id="otclConverter" title="OTCL-Converter" style="display: none">
-	  <p>Please define value or remove line for &lt;&lt;otclConverter&gt;&gt; in 'execute: otclConverter:'.</p>
+	  <p>Please define value for placeholder &lt;&lt;otclConverter&gt;&gt; under 'execute: otclConverter:' or remove line.</p>
 	</div>
 	<div id="otclNamespace" title="OTCL-Namespace" style="display: none">
-	  <p>Please define value or remove line for &lt;&lt;otclNamespace&gt;&gt; in 'execute: otclNamespace:'.</p>
+	  <p>Please define value for placeholder &lt;&lt;otclNamespace&gt;&gt; under 'execute: otclNamespace:' or remove line.</p>
 	</div>
 	<div id="infoLoss" title="Some info can be lost" style="display: none">
 	  <p>Some information can be lost.</p>

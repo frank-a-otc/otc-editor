@@ -120,6 +120,10 @@ var factoryclassPlaceholder = "<<factoryclass>>";
 var otclConverterPlaceholder = "<<otclConverter>>";
 var otclNamespacePlaceholder = "<<otclNamespace>>";
 
+var helperParam = "helper:";
+var getterHelperParam = "getterHelper:";
+var setterHelperParam = "setterHelper:";
+
 
 function getClassNames(url, eleName) {
 	$.ajax({
@@ -244,20 +248,35 @@ var sourceOverrideItems = {
 };
 
 var targetContextMenuItems = {
-    'concreteTypeItem' : {
-    	name: "concreteType", 
-        type: 'checkbox', 
+    "noSetter": {
+    	name: "None", 
+        type: 'radio', 
+        radio: "set",
         callback: function(key, options) {
-        	if (targetMap.has(CONSTANTS.CONCRETE_TYPE)) {
-        		targetMap.delete(CONSTANTS.CONCRETE_TYPE);
-        	} else {
-        		targetMap.set(CONSTANTS.CONCRETE_TYPE, concreteTypeTemplate);
-        	}
+        	targetMap.delete(CONSTANTS.SETTER);
+        	return false;
+        }
+    },
+    'setterItem' : {
+    	name: "setter", 
+        type: 'radio', 
+        radio: "set",
+        callback: function(key, options) {
+        	targetMap.set(CONSTANTS.SETTER, setterTemplate);
+        	return false;
+        }
+    },
+    'setterHelperItem' : {
+    	name: "setterHelper", 
+        type: 'radio', 
+        radio: "set",
+        callback: function(key, options) {
+        	targetMap.set(CONSTANTS.SETTER, setterHelperTemplate);
         	return false;
         }
     },
     separator1: "-----",
-    "noneGetter": {
+    "noGetter": {
     	name: "None", 
         type: 'radio', 
         radio: "get",
@@ -285,31 +304,15 @@ var targetContextMenuItems = {
         }
     },
     separator2: "-----",
-//    separator2: { "type": "cm_separator" },
-    "noneSetter": {
-    	name: "None", 
-        type: 'radio', 
-        radio: "set",
+    'concreteTypeItem' : {
+    	name: "concreteType", 
+        type: 'checkbox', 
         callback: function(key, options) {
-        	targetMap.delete(CONSTANTS.SETTER);
-        	return false;
-        }
-    },
-    'setterItem' : {
-    	name: "setter", 
-        type: 'radio', 
-        radio: "set",
-        callback: function(key, options) {
-        	targetMap.set(CONSTANTS.SETTER, setterTemplate);
-        	return false;
-        }
-    },
-    'setterHelperItem' : {
-    	name: "setterHelper", 
-        type: 'radio', 
-        radio: "set",
-        callback: function(key, options) {
-        	targetMap.set(CONSTANTS.SETTER, setterHelperTemplate);
+        	if (targetMap.has(CONSTANTS.CONCRETE_TYPE)) {
+        		targetMap.delete(CONSTANTS.CONCRETE_TYPE);
+        	} else {
+        		targetMap.set(CONSTANTS.CONCRETE_TYPE, concreteTypeTemplate);
+        	}
         	return false;
         }
     }
@@ -352,15 +355,17 @@ function jstreeContextmenu(node) {
 			        		anchorsMap.delete(otclChain);
 			        	} else if (otclChain.endsWith("]")) {
 			        		var subKey;
-			        		for (const [key, value] of anchorsMap.entries()) {
-			        	   		if (otclChain.startsWith(key) || key.startsWith(otclChain)) {
-			        	   			subKey = key;
+			        		for (const [k, v] of anchorsMap.entries()) {
+			        	   		if (otclChain.startsWith(k) || k.startsWith(otclChain)) {
+			        	   			subKey = k;
 			        	   			break;
 			        	   		}
 			        	   	};
 			        	   	if (subKey) {
 			        	   		anchorsMap.delete(subKey);
 			        	   	}
+//			        	   	console.log(node.text);
+//			        	   	$("#" + node.id + " > a").addClass('selectedNodeColor');
 				        	var lastIndexOf = otclChain.lastIndexOf("[");
 				        	var anchoredOtclChain = otclChain.substring(0, lastIndexOf + 1) + "^" + otclChain.substring(lastIndexOf + 1);
 				        	anchorsMap.set(otclChain, anchoredOtclChain);
@@ -423,7 +428,7 @@ function fetchAndPopulateJstree(url) {
 	        		'core': {
 	        			'data': response.targetFieldNames
 	        		},
-	        		"plugins": ["contextmenu"],
+	        		"plugins": ["contextmenu", "themes", "ui", "types"],
 	        		"contextmenu": {
 	        			"items": jstreeContextmenu
 	        		}
@@ -475,10 +480,10 @@ $("#addScript").click(function( event ) {
    	var scriptBlock = null;
 	if (CONSTANTS.CMD_COPY == command) {
 		copyCounter++;
-		scriptBlock = copyScriptTemplate.replace(idPlaceholder, "CPY" + copyCounter);
+		scriptBlock = copyScriptTemplate.replace(idPlaceholder, "CP" + copyCounter);
 	} else {
 		executeCounter++;
-		scriptBlock = executeScriptTemplate.replace(idPlaceholder, "EXE" + executeCounter);
+		scriptBlock = executeScriptTemplate.replace(idPlaceholder, "XE" + executeCounter);
 	}
     var srcNode;
 	var sourceOtclChain;
@@ -504,22 +509,18 @@ $("#addScript").click(function( event ) {
 		var from = otclChainTemplate.replace(otclChainPlaceholder, sourceOtclChain);
 		scriptBlock = scriptBlock.replace(fromPlaceholder, from);
 	}
-	if (sourceMap.has(CONSTANTS.GETTER) || sourceMap.has(CONSTANTS.ACTIVATE_GETTER) ||
-			sourceMap.has(CONSTANTS.DATE_FORMAT)) {
+	if (sourceMap.has(CONSTANTS.GETTER)) {
 		var overrides = overridesTemplate.replace(tokenPathPlaceholder, sourceOtclChain);
 		if (sourceOtclChain != null) {
 			if (sourceMap.has(CONSTANTS.GETTER)) {
 				overrides += sourceMap.get(CONSTANTS.GETTER);
 			}
-//			if (sourceMap.has(CONSTANTS.ACTIVATE_GETTER)) {
-//				overrides += getterHelperTemplate;
-//			}
 		}
 		scriptBlock = scriptBlock.replace(fromOverridesPlaceholder, overrides);
 	} else {
 		scriptBlock = scriptBlock.replace(fromOverridesPlaceholder, "");
 	}
-	// to
+	// ---- to
 	var to = otclChainTemplate.replace(otclChainPlaceholder, targetOtclChain);
 	scriptBlock = scriptBlock.replace(toPlaceholder, to);
 	
@@ -532,13 +533,7 @@ $("#addScript").click(function( event ) {
 		}
 		if (targetMap.has(CONSTANTS.SETTER)) {
 			overrides += targetMap.get(CONSTANTS.SETTER);
-		}
-//		if (targetMap.has(CONSTANTS.ACTIVATE_GETTER)) {
-//			overrides += getterHelperTemplate;
-//		}
-//		if (targetMap.has(CONSTANTS.ACTIVATE_SETTER)) {
-//			overrides += setterHelperTemplate;
-//		}		
+		}	
 		if (targetMap.has(CONSTANTS.CONCRETE_TYPE)) {
 			overrides += concreteTypeTemplate;
 		}
@@ -594,7 +589,7 @@ $("#reset").click(function() {
 	executeCounter = 0;
 });
 
-$("#otclEditor").submit(function(event) {
+$("#otclEditorForm").submit(function(event) {
 	var isTypesSelected = areTypesSelected();
 	if (!isTypesSelected) {
 		return;
@@ -626,8 +621,18 @@ $("#otclEditor").submit(function(event) {
 		showMsg($("#setter"));
 		return false;
 	}
-   	if (otclInstructionsValue.includes(dateFormatPlaceholder)) {
-		showMsg($("#dateFormat"));
+   	if (otclInstructionsValue.includes(getterHelperPlaceholder)) {
+		showMsg($("#getterHelper"));
+		return false;
+	}
+   	if (otclInstructionsValue.includes(getterHelperParam) || otclInstructionsValue.includes(setterHelperParam)) {
+   		if (!otclInstructionsValue.includes(helperParam)) {
+   			showMsg($("#helperClassNotDefined"));
+   			return false;
+   		}
+	}
+   	if (otclInstructionsValue.includes(setterHelperPlaceholder)) {
+		showMsg($("#setterHelper"));
 		return false;
 	}
    	if (otclInstructionsValue.includes(concreteTypePlaceholder)) {
@@ -658,7 +663,7 @@ $("#createOtclFile").click(function() {
 		showMsg($("#nothingToSave"));
 		return ;
 	}
-	$("#otclEditor").submit();
+	$("#otclEditorForm").submit();
 });
 
 $("#flipOtcl").click(function() {
