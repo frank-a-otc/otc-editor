@@ -11,8 +11,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.otcl.web.commons.dto.ClassMetadataDto;
-import org.otcl2.common.OtclConstants.TARGET_SOURCE;
-import org.otcl2.common.dto.OtclFileDto;
+import org.otcl2.common.OtclConstants;
+import org.otcl2.common.dto.otcl.OtclFileDto;
+
 
 public interface OtclEditorService {
 	
@@ -20,7 +21,7 @@ public interface OtclEditorService {
 	
 	OtclFileDto createOtclFileDto(String otclInstructions, boolean reverse);
 	
-	List<ClassMetadataDto> createMembersHierarchy(String clsName, TARGET_SOURCE targetSource);
+	List<ClassMetadataDto> createMembersHierarchy(String clsName, OtclConstants.TARGET_SOURCE targetSource);
 
 	String createYaml(OtclFileDto otclFileDto);
 	

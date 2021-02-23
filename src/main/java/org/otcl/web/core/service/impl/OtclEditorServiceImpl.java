@@ -18,14 +18,12 @@ import org.otcl.web.commons.exception.OtclEditorException;
 import org.otcl.web.commons.service.OtclEditorService;
 import org.otcl.web.commons.util.OtclEditorUtil;
 import org.otcl2.common.OtclConstants.TARGET_SOURCE;
-import org.otcl2.common.dto.OtclFileDto;
-import org.otcl2.common.dto.OtclFileDto.Copy;
-import org.otcl2.common.dto.OtclFileDto.Copy.Source;
-import org.otcl2.common.dto.OtclFileDto.Execute;
-import org.otcl2.common.dto.OtclFileDto.Metadata;
-import org.otcl2.common.dto.OtclFileDto.Metadata.ObjectTypes;
-import org.otcl2.common.dto.OtclFileDto.OtclScript;
-import org.otcl2.common.dto.OtclFileDto.Target;
+import org.otcl2.common.dto.otcl.OtclFileDto;
+import org.otcl2.common.dto.otcl.OtclFileDto.Execute;
+import org.otcl2.common.dto.otcl.OtclFileDto.OtclCommand;
+import org.otcl2.common.dto.otcl.OverrideDto;
+import org.otcl2.common.dto.otcl.SourceDto;
+import org.otcl2.common.dto.otcl.TargetDto;
 import org.otcl2.common.util.OtclUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -79,74 +77,74 @@ public class OtclEditorServiceImpl implements OtclEditorService {
 		if (flip) {
 			// create new OtclFileDto and flip values
 			OtclFileDto reverseOtclFileDto = new OtclFileDto();
-			reverseOtclFileDto.metadata = new Metadata();
-			reverseOtclFileDto.metadata.mainClassName = otclFileDto.metadata.mainClassName;
+			reverseOtclFileDto.metadata = new OtclFileDto.Metadata();
+			reverseOtclFileDto.metadata.entryClassName = otclFileDto.metadata.entryClassName;
 			reverseOtclFileDto.metadata.helper = otclFileDto.metadata.helper;
-			reverseOtclFileDto.metadata.objectTypes = new ObjectTypes(); 
+			reverseOtclFileDto.metadata.objectTypes = new OtclFileDto.Metadata.ObjectTypes(); 
 			reverseOtclFileDto.metadata.objectTypes.source = otclFileDto.metadata.objectTypes.target;
 			reverseOtclFileDto.metadata.objectTypes.target = otclFileDto.metadata.objectTypes.source;
-			reverseOtclFileDto.otclScripts = new ArrayList<>();
-			for (OtclScript otclScript : otclFileDto.otclScripts) {
-				OtclScript reverseOtclScript = new OtclScript();
-				reverseOtclFileDto.otclScripts.add(reverseOtclScript);
+			reverseOtclFileDto.otclCommands = new ArrayList<>();
+			for (OtclFileDto.OtclCommand otclScript : otclFileDto.otclCommands) {
+				OtclCommand flippedOtclScript = new OtclCommand();
+				reverseOtclFileDto.otclCommands.add(flippedOtclScript);
 				if (otclScript.copy != null) {
-					reverseOtclScript.copy = new Copy();
-					reverseOtclScript.copy.id = otclScript.copy.id;
+					flippedOtclScript.copy = new OtclFileDto.Copy();
+					flippedOtclScript.copy.id = otclScript.copy.id;
 					if (otclScript.copy.from.otclChain != null) {
-						reverseOtclScript.copy.to = new Target();
-						reverseOtclScript.copy.to.otclChain = otclScript.copy.from.otclChain;
-						reverseOtclScript.copy.from = new Source();
-						reverseOtclScript.copy.from.otclChain = otclScript.copy.to.otclChain;
+						flippedOtclScript.copy.to = new TargetDto();
+						flippedOtclScript.copy.to.otclChain = otclScript.copy.from.otclChain;
+						flippedOtclScript.copy.from = new OtclFileDto.Copy.Source();
+						flippedOtclScript.copy.from.otclChain = otclScript.copy.to.otclChain;
 						if (otclScript.copy.from.overrides != null) {
-							if (reverseOtclScript.copy.to.overrides == null) {
-								reverseOtclScript.copy.to.overrides = new ArrayList<>();
+							if (flippedOtclScript.copy.to.overrides == null) {
+								flippedOtclScript.copy.to.overrides = new ArrayList<>();
 							}
-							for (OtclFileDto.Override sourceOverride : otclScript.copy.from.overrides) {
-								Target.Override override = new Target.Override();
-								reverseOtclScript.copy.to.overrides.add(override);
+							for (OverrideDto sourceOverride : otclScript.copy.from.overrides) {
+								TargetDto.Override override = new TargetDto.Override();
+								flippedOtclScript.copy.to.overrides.add(override);
 								override.tokenPath = sourceOverride.tokenPath;
 								override.getter = sourceOverride.getter;
 								override.getterHelper = sourceOverride.getterHelper;
 							}
 						} 
 						if (otclScript.copy.to.overrides != null) {
-							if (reverseOtclScript.copy.from.overrides == null) {
-								reverseOtclScript.copy.from.overrides = new ArrayList<>();
+							if (flippedOtclScript.copy.from.overrides == null) {
+								flippedOtclScript.copy.from.overrides = new ArrayList<>();
 							}
-							for (Target.Override targetOverride : otclScript.copy.to.overrides) {
-								OtclFileDto.Override override = new OtclFileDto.Override();
-								reverseOtclScript.copy.from.overrides.add(override);
+							for (TargetDto.Override targetOverride : otclScript.copy.to.overrides) {
+								OverrideDto override = new OverrideDto();
+								flippedOtclScript.copy.from.overrides.add(override);
 								override.tokenPath = targetOverride.tokenPath;
 								override.getter = targetOverride.getter;
 								override.getterHelper = targetOverride.getterHelper;	
 							}
 						}
 					} else if (otclScript.execute != null) {
-						reverseOtclScript.execute = new Execute();
-						reverseOtclScript.execute.id = otclScript.execute.id;
-						reverseOtclScript.execute.target = new Target();
-						reverseOtclScript.execute.target.otclChain = otclScript.execute.source.otclChain;
-						reverseOtclScript.execute.source = new Execute.Source();
-						reverseOtclScript.execute.source.otclChain = otclScript.execute.target.otclChain;
+						flippedOtclScript.execute = new Execute();
+						flippedOtclScript.execute.id = otclScript.execute.id;
+						flippedOtclScript.execute.target = new TargetDto();
+						flippedOtclScript.execute.target.otclChain = otclScript.execute.source.otclChain;
+						flippedOtclScript.execute.source = new SourceDto();
+						flippedOtclScript.execute.source.otclChain = otclScript.execute.target.otclChain;
 						if (otclScript.execute.source.overrides != null) {
-							if (reverseOtclScript.execute.target.overrides == null) {
-								reverseOtclScript.execute.target.overrides = new ArrayList<>();
+							if (flippedOtclScript.execute.target.overrides == null) {
+								flippedOtclScript.execute.target.overrides = new ArrayList<>();
 							}
-							for (OtclFileDto.Override sourceOverride : otclScript.execute.source.overrides) {
-								Target.Override override = new Target.Override();
-								reverseOtclScript.execute.target.overrides.add(override);
+							for (OverrideDto sourceOverride : otclScript.execute.source.overrides) {
+								TargetDto.Override override = new TargetDto.Override();
+								flippedOtclScript.execute.target.overrides.add(override);
 								override.tokenPath = sourceOverride.tokenPath;
 								override.getter = sourceOverride.getter;
 								override.getterHelper = sourceOverride.getterHelper;
 							}
 						} 
 						if (otclScript.execute.target.overrides != null) {
-							if (reverseOtclScript.execute.source.overrides == null) {
-								reverseOtclScript.execute.source.overrides = new ArrayList<>();
+							if (flippedOtclScript.execute.source.overrides == null) {
+								flippedOtclScript.execute.source.overrides = new ArrayList<>();
 							}
-							for (Target.Override targetOverride : otclScript.execute.target.overrides) {
-								OtclFileDto.Override override = new OtclFileDto.Override();
-								reverseOtclScript.execute.source.overrides.add(override);
+							for (TargetDto.Override targetOverride : otclScript.execute.target.overrides) {
+								OverrideDto override = new OverrideDto();
+								flippedOtclScript.execute.source.overrides.add(override);
 								override.tokenPath = targetOverride.tokenPath;
 								override.getter = targetOverride.getter;
 								override.getterHelper = targetOverride.getterHelper;	
@@ -157,7 +155,7 @@ public class OtclEditorServiceImpl implements OtclEditorService {
 			}
 			otclFileDto = reverseOtclFileDto;
 		} else {
-			otclFileDto.fileName = OtclUtils.createOtclFileName(targetCls, sourceCls);
+			otclFileDto.fileName = OtclUtils.createOtclFileName(sourceCls, targetCls);
 		}
 		return otclFileDto;
 	}

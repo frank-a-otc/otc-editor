@@ -30,16 +30,24 @@
 
 <body>
 	<div id="header">
-		<img class="logo" src="./images/otcl-logo.png">OTCL Script Editor
+		<a href="https://otclfoundation.org"  title="https://otclfoundation.org" id="otclFoundation" class="no-style">
+			<img id="logo" src="./images/otcl-logo.png">
+			<i><label title="https://otclfoundation.org">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTCL Foundation.
+				</label>
+			</i>
+		</a>
+		<label id="pageTitle">OTCL Editor</label>
+		<label id="contactUs">contact@otclfoundation.org&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 	</div>
-
+	
 	<form id="otclEditorForm" action="createOtclFile" accept-charset="utf-8" method="post">
 		<div class="box columnHdr">
 			<div class="sourceDiv">
-				<label><u><b>From</b></u></label>
+				<label><u><b>From / Source</b></u></label>
 			</div>
 			<div class="targetDiv">
-				<label><u><b>To</b></u></label>
+				<label><u><b>To / Target</b></u></label>
 			</div>
 		</div>
 		<div class="box">
@@ -77,7 +85,7 @@
 			</div>
 
 			<div class="actions">
-				<input id="addScript" type="button" value="Add Script" class="actionBtn" >
+				<input id="addScript" type="button" value="Add OTCL Block" class="actionBtn" >
 			</div>
 			<div class="actions">
 				<input id="createOtclFile" type="button" value="Create file" class="actionBtn" />
@@ -112,27 +120,19 @@
 	</div>
 
 	<div id="singleSideCollectionOnly" title="OTCL-Script::Collections on one side Only" style="display: none">
-	  <p>Otcl-scripts collections are allowed on any one of executeOtclConverter and executeOtclModule only!</p>
+	  <p>Collections are allowed only in any one of the chains for executeOtclConverter and executeOtclModule!</p>
 	</div>
 	<div id="multipleAnchors" title="OTCL Chain::Multiple Anchors" style="display: none">
 	  <p>OTCL-chain with multiple Anchors (^) is not valid!</p>
 	  <p id="otclChain" />
 	</div>
 
-	<div id="sourceType" title="Source-Type" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;sourceType&gt;&gt; under 'metadata: objectTypes: source:'.</p>
-	</div>
-	<div id="targetType" title="Target-Type" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;targetType&gt;&gt; under 'metadata: objectTypes: target:'.</p>
-	</div>
-	<div id="mainClassName" title="Main-Class Name" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;mainClassName&gt;&gt; under 'copy: or metadata: mainClassName:'.</p>
-	</div>
 	<div id="helperClassName" title="Helper-Class Name" style="display: none">
 	  <p>Please define value for placeholder or remove line for 'helper: &lt;&lt;helperClassName&gt;&gt;' parameter under metadata:' or remove line.</p>
 	</div>
-	<div id="factoryclass" title="Factory-Class Name" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;factoryclass&gt;&gt; under 'copy: or execute: factoryClassName:' or remove line.</p>
+
+	<div id="values" title="'values' property" style="display: none">
+	  <p>Please replace 'from: &lt;&lt;values&gt;&gt;' parameter with values.</p>
 	</div>
 	<div id="getter" title="Getter-Name" style="display: none">
 	  <p>Please define value for placeholder &lt;&lt;getter&gt;&gt; under 'copy: or execute: getter:' or remove line.</p>
@@ -147,7 +147,7 @@
 	  <p>Please define value for placeholder &lt;&lt;setterHelper&gt;&gt; under 'copy: or execute: setterHelper:' or remove line.</p>
 	</div>
 	<div id="helperClassNotDefined" title="HelperClass-Name requried" style="display: none">
-	  <p>'helper:' parameter and value expected under 'metadata:' section due to presence of 'getterHelper:' / 'setterHelper:' in script-block(s).</p>
+	  <p>'helper:' parameter and value expected under 'metadata:' when 'getterHelper:' / 'setterHelper:' in defined.</p>
 	</div>
 
 	<div id="concreteType" title="Concrete-Type" style="display: none">
@@ -160,12 +160,12 @@
 	  <p>Please define value for placeholder &lt;&lt;otclNamespace&gt;&gt; under 'execute: otclNamespace:' or remove line.</p>
 	</div>
 	<div id="infoLoss" title="Some info can be lost" style="display: none">
-	  <p>Some information can be lost.</p>
+	  <p>Some information can be lost due to some unsupported parameters under from / source which may have to be updated manually.</p>
 	</div>
 
 </body>
 
-	<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
 
 
 </html>

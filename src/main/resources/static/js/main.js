@@ -24,10 +24,9 @@ const CONSTANTS = {
 	TARGET_ROOT: "target-root",
 	GETTER: "getter",
 	SETTER: "setter",
-	ACTIVATE_GETTER: "activateGetter",
-	ACTIVATE_SETTER: "activateSetter",
+	GETTER_HELPER: "getterHelper",
+	SETTER_HELPER: "setterHelper",
 	CONCRETE_TYPE: "concreteType",
-	DATE_FORMAT: "dateFormat",
 	CMD_COPY: "Copy",
 	CMD_EXECUTE: "Execute"
 };
@@ -40,9 +39,9 @@ var headerTemplate =
 	"  objectTypes:\r\n" +
 	"    source: <<sourceType>>\r\n" +
 	"    target: <<targetType>>\r\n" +
-	"  mainClassName: <<mainClassName>>\r\n" +
+	"  entryClassName: <<entryClassName>>\r\n" +
 	"  helper: <<helperClassName>>\r\n" +
-	"otclScripts:\r\n";
+	"otclCommands:\r\n";
 
 var copyScriptTemplate =
 	"- copy:\r\n" +
@@ -102,13 +101,15 @@ var idPlaceholder = "<<id>>";
 var sourceTypePlaceholder = "<<sourceType>>";
 var targetTypePlaceholder = "<<targetType>>";
 var fromPlaceholder = "<<from>>";
+var valuesPlaceholder = "<<values>>";
+
 var toPlaceholder = "<<to>>";
 var otclChainPlaceholder = "<<otclChain>>";
 var tokenPathPlaceholder = "<<tokenPath>>";
 var fromOverridesPlaceholder = "      <<fromOverrides>>\r\n";
 var toOverridesPlaceholder = "      <<toOverrides>>\r\n";
 
-var mainClassNamePlaceholder = "<<mainClassName>>";
+var entryClassNamePlaceholder = "<<entryClassName>>";
 var helperClassNamePlaceholder = "<<helperClassName>>";
 var getterPlaceholder = "<<getter>>";
 var setterPlaceholder = "<<setter>>";
@@ -214,10 +215,7 @@ $(function() {
         },
         items: commandItems
     });
-
-    $('.context-menu-one').on('click', function(e){
-        console.log('clicked', this);
-    })    
+ 
 });
 
 var sourceOverrideItems = {
@@ -443,16 +441,6 @@ function fetchAndPopulateJstree(url) {
    	return true;
 }
 
-function areTypesSelected() {
-	var srcClsName = $('#srcClsNames').val();
-	var targetClsName = $('#targetClsNames').val();
-	if (!srcClsName || !targetClsName) {
-		showMsg($("#typesNotSelected"));
-   		return false;
-	}
-	return true;
-}
-
 $("#addScript").click(function( event ) {
     var targetNode = $('#targetTree').jstree(true).get_selected(true);
    	var targetOtclChain;
@@ -477,13 +465,24 @@ $("#addScript").click(function( event ) {
 	if (!isValid) {
 		return;
 	}
+   	var otclInstructions = $("#otclInstructions");
+   	var otclInstructionsValue = otclInstructions.val();
+   	
+   	if (otclInstructionsValue.trim() == "") {
+   		copyCounter = 0;
+   		executeCounter = 0;
+   	}
    	var scriptBlock = null;
 	if (CONSTANTS.CMD_COPY == command) {
 		copyCounter++;
-		scriptBlock = copyScriptTemplate.replace(idPlaceholder, "CP" + copyCounter);
+		var scriptId = "CP" + copyCounter;
+		scriptBlock = copyScriptTemplate.replace(idPlaceholder, scriptId);
+		scriptBlock = scriptBlock.replace(factoryclassPlaceholder, scriptId);
 	} else {
 		executeCounter++;
-		scriptBlock = executeScriptTemplate.replace(idPlaceholder, "XE" + executeCounter);
+		var scriptId = "XE" + executeCounter;
+		scriptBlock = executeScriptTemplate.replace(idPlaceholder, scriptId);
+		scriptBlock = scriptBlock.replace(factoryclassPlaceholder, scriptId);
 	}
     var srcNode;
 	var sourceOtclChain;
@@ -524,10 +523,10 @@ $("#addScript").click(function( event ) {
 	var to = otclChainTemplate.replace(otclChainPlaceholder, targetOtclChain);
 	scriptBlock = scriptBlock.replace(toPlaceholder, to);
 	
-	if (targetMap.has(CONSTANTS.GETTER) || targetMap.has(CONSTANTS.ACTIVATE_GETTER) ||
-			targetMap.has(CONSTANTS.SETTER) || targetMap.has(CONSTANTS.ACTIVATE_SETTER) ||
+	if (targetMap.has(CONSTANTS.GETTER) || targetMap.has(CONSTANTS.GETTER_HELPER) ||
+			targetMap.has(CONSTANTS.SETTER) || targetMap.has(CONSTANTS.SETTER_HELPER) ||
 			targetMap.has(CONSTANTS.CONCRETE_TYPE)) {
-		var overrides = overridesTemplate.replace(tokenPathPlaceholder, targetOtclChain);
+		var overrides = overridesTemplate.replace(tokenPathPlaceholder, targetOtclChain.replace('^', ''));
 		if (targetMap.has(CONSTANTS.GETTER)) {
 			overrides += targetMap.get(CONSTANTS.GETTER);
 		}
@@ -542,13 +541,29 @@ $("#addScript").click(function( event ) {
 		scriptBlock = scriptBlock.replace(toOverridesPlaceholder, "");
 	}
 
-   	var otclInstructions = $("#otclInstructions");
-   	var otclInstructionsValue = otclInstructions.val();
-   	
    	if (otclInstructionsValue.trim() == "") {
    		var sourceType = $("#srcClsNames").val();
    		var targetType = $("#targetClsNames").val();
-   		var header = headerTemplate.replace(sourceTypePlaceholder, sourceType).replace(targetTypePlaceholder, targetType);
+   		var entryClsName = "";
+    	var lastIndexOf = 0;
+    	if (sourceType) {
+			if (sourceType.includes(".")) {
+	    		lastIndexOf = sourceType.lastIndexOf(".");
+	    		entryClsName = sourceType.substring(lastIndexOf + 1);
+	    	} else {
+	    		entryClsName = sourceType;
+	    	}
+		}
+    	entryClsName = entryClsName.concat("To");
+    	if (targetType.includes(".")) {
+    		lastIndexOf = targetType.lastIndexOf(".");
+    		entryClsName = entryClsName.concat(targetType.substring(lastIndexOf + 1));
+    	} else {
+    		entryClsName = entryClsName.concat(targetType);
+    	}
+   		var header = headerTemplate.replace(sourceTypePlaceholder, sourceType)
+							.replace(targetTypePlaceholder, targetType)
+							.replace(entryClassNamePlaceholder, entryClsName);
    		otclInstructionsValue = header;
    		otclInstructions.val(header);
    	} else {
@@ -590,27 +605,15 @@ $("#reset").click(function() {
 });
 
 $("#otclEditorForm").submit(function(event) {
-	var isTypesSelected = areTypesSelected();
-	if (!isTypesSelected) {
-		return;
-	}
    	var otclInstructions = $("#otclInstructions");
    	var otclInstructionsValue = otclInstructions.val();
 
-   	if (otclInstructionsValue.includes(sourceTypePlaceholder)) {
-		showMsg($("#sourceType"));
-		return false;
-	}
-   	if (otclInstructionsValue.includes(targetTypePlaceholder)) {
-		showMsg($("#targetType"));
-		return false;
-	}
-   	if (otclInstructionsValue.includes(mainClassNamePlaceholder)) {
-		showMsg($("#mainClassName"));
-		return false;
-	}
    	if (otclInstructionsValue.includes(helperClassNamePlaceholder)) {
 		showMsg($("#helperClassName"));
+		return false;
+	}
+   	if (otclInstructionsValue.includes(valuesPlaceholder)) {
+		showMsg($("#values"));
 		return false;
 	}
    	if (otclInstructionsValue.includes(getterPlaceholder)) {
@@ -647,16 +650,13 @@ $("#otclEditorForm").submit(function(event) {
 		showMsg($("#otclNamespace"));
 		return false;
 	}
-   	if (otclInstructionsValue.includes(factoryclassPlaceholder)) {
-		showMsg($("#factoryclass"));
-		return false;
-	}
 });
 
 $("#createOtclFile").click(function() {
-	var isTypesSelected = areTypesSelected();
-	if (!isTypesSelected) {
-		return;
+	var targetClsName = $('#targetClsNames').val();
+	if (!targetClsName) {
+		showMsg($("#typesNotSelected"));
+   		return false;
 	}
 	var otclInstructions = $("#otclInstructions").val();
 	if (!otclInstructions) {
@@ -667,18 +667,20 @@ $("#createOtclFile").click(function() {
 });
 
 $("#flipOtcl").click(function() {
-	var isTypesSelected = areTypesSelected();
-	if (!isTypesSelected) {
-		return;
-	}
 	var otcl = $("#otclInstructions").val();
 	if (!otcl) {
 		showMsg($("#nothingToSave"));
 		return;
 	}
-	var isTypesSelected = areTypesSelected();
-	if (!isTypesSelected) {
-		return;
+	var srcClsName = $('#srcClsNames').val();
+	if (!srcClsName) {
+		showMsg($("#typesNotSelected"));
+   		return false;
+	}
+	var targetClsName = $('#targetClsNames').val();
+	if (!targetClsName) {
+		showMsg($("#typesNotSelected"));
+   		return false;
 	}
 	$("#infoLoss").show();
 	$("#infoLoss").dialog({

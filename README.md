@@ -1,6 +1,9 @@
 # OTCL editor
 
+		
        Fix - Hashtable does not allow null value.
+       Fix - resolve concurrent access of map and list in Indexer just in case it is running 
+       		multi-threaded environment.
        Fix - check for concrete types of collections instead of just List.isAssignableFrom(...)
        Fix, while assigning date, if it is assignable, then dont call teh date-converter.
        Fix - enum of primitive types.
@@ -11,7 +14,10 @@
 					depFileName = compilationReport.otclNamespace + "." + depFileName;
 					// this needs a fix
 				}
+	    Fix - validate overrides: concreteType: isAssignable
 	    
+	    
+	    Mapping frameworks performance - https://www.baeldung.com/java-performance-mapping-frameworks
 	    
 	   Web-site - provide link to add user feedback about OTCL 
        
@@ -99,7 +105,12 @@
 		 		But look at it with consideration that it has to work in co-ordination with several 
 		 		individual pieces
 
-		Get ready for questions on - https://www.javacodegeeks.com/2013/10/java-object-to-object-mapper.html#:~:text=Lorentz%3A%20Lorentz%20is%20a%20generic,an%20object%20of%20another%20type.&text=Spring%20framework%3A%20Spring%20has%20an,transform%20Objects%20to%2Ffrom%20Strings.
+		List of most object-mappers - https://stackoverflow.com/questions/1432764/any-tool-for-java-object-to-object-mapping
+		
+		Get ready for questions on -
+			https://www.javacodegeeks.com/2013/10/java-object-to-object-mapper.html
+
+			https://www.javacodegeeks.com/2013/10/java-object-to-object-mapper.html#:~:text=Lorentz%3A%20Lorentz%20is%20a%20generic,an%20object%20of%20another%20type.&text=Spring%20framework%3A%20Spring%20has%20an,transform%20Objects%20to%2Ffrom%20Strings.
 		
 		https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode
 		
@@ -129,3 +140,35 @@
 		- 
 		
 		Clean up DTOs and code.
+		
+
+
+Jmapper		-	http://jmapper-framework.github.io/jmapper-core/
+
+MapStruct	-	https://mapstruct.org/
+
+Dozer		-	https://github.com/DozerMapper/dozer/
+
+Orika		-	https://github.com/orika-mapper/orika
+
+Selma		-	http://www.selma-java.org/
+
+ModelMapper	-	http://modelmapper.org/
+
+Moo			-	https://github.com/geoffreywiseman/Moo
+
+Nomin		-	http://nomin.sourceforge.net/
+
+omapper 	-	https://code.google.com/archive/p/omapper/wikis/Home.wiki
+
+Smooks		-	https://www.smooks.org/index
+
+Morph		-	http://morph.sourceforge.net/
+
+Transmorph 	-	https://github.com/cchabanois/transmorph
+
+EZMorph		-	http://ezmorph.sourceforge.net/
+
+OTOM		-	https://www.javacodegeeks.com/2013/10/java-object-to-object-mapper.html
+
+CommonConvert	-	http://commons.apache.org/dormant/convert/
