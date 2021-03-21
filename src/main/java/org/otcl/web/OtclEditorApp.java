@@ -15,15 +15,15 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages= {"org.otcl.web.controller"})
-public class OtclWebApplication extends SpringBootServletInitializer {
+public class OtclEditorApp extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OtclWebApplication.class, args);
+		SpringApplication.run(OtclEditorApp.class, args);
 	}
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(OtclWebApplication.class);
+		return builder.sources(OtclEditorApp.class);
 	}
 
 }

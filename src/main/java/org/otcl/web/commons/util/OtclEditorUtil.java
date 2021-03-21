@@ -111,11 +111,6 @@ public class OtclEditorUtil {
 				} catch (IOException | ClassNotFoundException ex) {
 					LOGGER.warn("", ex);
 				} finally {
-//					try {
-//						clzLoader.close();
-//					} catch (IOException e) {
-//						LOGGER.warn("Problem closing ClassLoader!", e);
-//					}
 					try {
 						jarFile.close();
 					} catch (IOException e) {
@@ -137,19 +132,11 @@ public class OtclEditorUtil {
 		} catch (ClassNotFoundException ex) {
 			LOGGER.warn(ex.getMessage());
 		} finally {
-//			try {
-//				clzLoader.close();
-//			} catch (IOException e) {
-//				LOGGER.warn(e.getMessage());
-//			}
 		}
 		return createClassMetadataDtos(clz, targetSource);		
 	}
 	
 	private static List<ClassMetadataDto> createClassMetadataDtos(Class<?> clz, TARGET_SOURCE targetSource) {
-		if (targetSource == null) {
-//			throw new 
-		}
 		List<ClassMetadataDto> membersClassMetadataDtos = createClassMetadataDtos(null, null, clz, null, null,
 				recursionDepth, null);
 		String txt = clz.getName().concat(" - (right-click for context-menu)");

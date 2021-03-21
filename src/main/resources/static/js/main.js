@@ -689,8 +689,11 @@ $("#flipOtcl").click(function() {
 		buttons: {
 	        Ok: function() {
 	          $( this ).dialog( "close" );
-	      	var url = pageUrl.concat('flipOtcl');
-	    	$.post( url, { otclInstructions: otcl }).done(function( data ) {
+	      		var url = pageUrl.concat('flipOtcl');
+		    	var entryClzName = $('#srcPkgName').val();
+		    	var newEntryClzName = targetClsName + "To" + srcClsName;
+		    	otcl = otcl.replace(entryClzName, newEntryClzName);
+	    		$.post( url, { otclInstructions: otcl }).done(function( data ) {
 	      			$("#otclInstructions").val(data);
 	    	  	});
 		    	var srcPkgName = $('#srcPkgName').val();
@@ -707,7 +710,10 @@ $("#flipOtcl").click(function() {
 		    	
 		    	$('#srcTree').jstree("destroy").empty();
 		    	$('#targetTree').jstree("destroy").empty();
-	        }
+	        },
+			Cancel: function() {
+				return;
+			}
         }
 	});
 });
