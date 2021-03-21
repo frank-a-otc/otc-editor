@@ -1,0 +1,166 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>OTCL Editor</title>
+	
+	<link rel="icon" href="./images/otcl-logo.png">
+
+	<link rel="stylesheet" href="jquery-ui-1.12.1/jquery-ui.css">
+	<script type="text/javascript" src="jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery-ui-1.12.1/jquery-ui.js"></script>
+	
+	<link rel="stylesheet" href="jquery/dist/fixed/jquery.contextMenu.min.css">
+	<link rel="stylesheet" href="jquery/dist/jquery.contextMenuCommon.min.css">
+	
+	<script type="text/javascript" src="jquery/dist/jquery-ui-position.min.js"></script>
+	<script type="text/javascript" src="jquery/dist/fixed/jquery.contextMenu.min.js"></script>
+	<script type="text/javascript" src="jquery/dist/jquery.contextMenuCommon.min.js"></script>
+
+	<script type="text/javascript" src="jstree/dist/jstree.min.js"></script>
+	<link rel="stylesheet" href="jstree/dist/themes/default/style.min.css" />
+	
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+
+</head>
+
+<body>
+	<div id="header">
+		<a href="https://otclfoundation.org"  title="https://otclfoundation.org" id="otclFoundation" class="no-style">
+			<img id="logo" src="./images/otcl-logo.png">
+			<i><label title="https://otclfoundation.org">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTCL Foundation.
+				</label>
+			</i>
+		</a>
+		<label id="pageTitle">OTCL Editor</label>
+		<label id="contactUs">contact@otclfoundation.org&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+	</div>
+	
+	<form id="otclEditorForm" action="createOtclFile" accept-charset="utf-8" method="post">
+		<div class="box columnHdr">
+			<div class="sourceDiv">
+				<label><u><b>From / Source</b></u></label>
+			</div>
+			<div class="targetDiv">
+				<label><u><b>To / Target</b></u></label>
+			</div>
+		</div>
+		<div class="box">
+			<div class="sourceDiv">
+				<label class="pkgNType">Pkg/NS:</label>
+				<input id="srcPkgName" type="text" class="inpt"/>
+				<input id='fetchSrc' type='button' value="Fetch Types"  class="btn"/>
+			</div>
+			<div class="targetDiv">
+				<label class="pkgNType">Pkg/NS:</label>
+				<input id="targetPkgName" type="text" class="inpt"/>
+				<input id='fetchTarget' type='button' value="Fetch Types"  class="btn"/>
+			</div>
+		</div>
+		
+		<div class="box">
+ 			<div class="sourceDiv">
+				<label class="pkgNType">Types:</label>
+				<select type="select" id="srcClsNames" name="srcClsNames" class="inptSingle"> 
+				</select>
+			</div>
+			<div class="targetDiv">
+				<label class="pkgNType">Types:</label>
+				<select type="select" id="targetClsNames" name="targetClsNames" class="inptSingle">
+			 	</select>
+			</div>
+		</div>
+		<div class="box" id="divTextArea">
+			<textarea id="otclInstructions" name="otclInstructions" class="txtArea context-menu-one"
+					placeholder="Right-click inside this text-area to select command-type."></textarea>
+		</div>
+		<div class="box">
+			<div class="actions">
+				<input id="showTree" type="button" value="Show Tree" class="actionBtn" >
+			</div>
+
+			<div class="actions">
+				<input id="addScript" type="button" value="Add OTCL Command" class="actionBtn" >
+			</div>
+			<div class="actions">
+				<input id="createOtclFile" type="button" value="Create file" class="actionBtn" />
+			</div>
+			<div class="actions">
+				<input id="flipOtcl" type="button" value="Flip OTCL" class="actionBtn" />
+			</div>
+			<div class="actions">
+				<input id="reset" type="button" value="Clear" class="actionBtn" >
+			</div>
+		</div>
+		<div class="box">
+			<div id="srcTree" class="sourceTree">&nbsp;
+			</div>
+			<div id="targetTree" class="targetTree">&nbsp;
+			</div>
+		</div>
+	</form>
+
+<!--  error messages -->
+	<div id="typesNotSelected" title="Target/Source types" style="display: none">
+	  <p>Cannot proceed - please select both Target and Source types.</p>
+	</div>
+	<div id="nothingToSave" title="Nothing to Save" style="display: none">
+	  <p>Cannot proceed - Nothing to save!</p>
+	</div>
+	<div id="rootOtclChain" title="Root OTCL-Chain" style="display: none">
+	  <p>Root-node on any side cannot be selected to create OTCL-Script block!</p>
+	</div>
+	<div id="targetOtclChain" title="Target OTCL-Chain" style="display: none">
+	  <p>Target OTCL-chain not selected!</p>
+	</div>
+
+	<div id="singleSideCollectionOnly" title="OTCL-Script::Collections on one side Only" style="display: none">
+	  <p>Collections are allowed only in any one of the chains for executeOtclConverter and executeOtclModule!</p>
+	</div>
+	<div id="multipleAnchors" title="OTCL Chain::Multiple Anchors" style="display: none">
+	  <p>OTCL-chain with multiple Anchors (^) is not valid!</p>
+	  <p id="otclChain" />
+	</div>
+
+	<div id="helperClassName" title="Helper-Class Name" style="display: none">
+	  <p>Please define value for placeholder or remove line for 'helper: &lt;&lt;helperClassName&gt;&gt;' parameter under metadata:' or remove line.</p>
+	</div>
+
+	<div id="values" title="'values' property" style="display: none">
+	  <p>Please replace 'from: &lt;&lt;values&gt;&gt;' parameter with values.</p>
+	</div>
+	<div id="getter" title="Getter-Name" style="display: none">
+	  <p>Please define value for placeholder &lt;&lt;getter&gt;&gt; under 'copy: or execute: getter:' or remove line.</p>
+	</div>
+	<div id="setter" title="Setter-Name" style="display: none">
+	  <p>Please define value for placeholder &lt;&lt;setter&gt;&gt; under 'copy: or execute: setter:' or remove line.</p>
+	</div>
+	<div id="getterHelper" title="GetterHelper-Name" style="display: none">
+	  <p>Please define value for placeholder &lt;&lt;getterHelper&gt;&gt; under 'copy: or execute: getterHelper:' or remove line.</p>
+	</div>
+	<div id="setterHelper" title="SetterHelper-Name" style="display: none">
+	  <p>Please define value for placeholder &lt;&lt;setterHelper&gt;&gt; under 'copy: or execute: setterHelper:' or remove line.</p>
+	</div>
+	<div id="helperClassNotDefined" title="HelperClass-Name requried" style="display: none">
+	  <p>'helper:' parameter and value expected under 'metadata:' when 'getterHelper:' / 'setterHelper:' in defined.</p>
+	</div>
+
+	<div id="concreteType" title="Concrete-Type" style="display: none">
+	  <p>Please define value for placeholder &lt;&lt;concreteType&gt;&gt; under 'copy:' or 'execute:' - 'concreteType:' or remove line.</p>
+	</div>
+	<div id="otclConverter" title="OTCL-Converter" style="display: none">
+	  <p>Please define value for placeholder &lt;&lt;otclConverter&gt;&gt; under 'execute: otclConverter:' or remove line.</p>
+	</div>
+	<div id="otclNamespace" title="OTCL-Namespace" style="display: none">
+	  <p>Please define value for placeholder &lt;&lt;otclNamespace&gt;&gt; under 'execute: otclNamespace:' or remove line.</p>
+	</div>
+	<div id="infoLoss" title="Some info can be lost" style="display: none">
+	  <p>Some information can be lost due to some unsupported parameters under from / source which may have to be updated manually.</p>
+	</div>
+
+</body>
+
+<script type="text/javascript" src="js/main.js"></script>
+
+
+</html>
