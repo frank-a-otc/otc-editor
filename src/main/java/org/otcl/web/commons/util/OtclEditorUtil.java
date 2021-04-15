@@ -13,9 +13,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -35,7 +32,13 @@ import org.otcl2.common.OtclConstants;
 import org.otcl2.common.OtclConstants.TARGET_SOURCE;
 import org.otcl2.common.config.OtclConfig;
 import org.otcl2.common.util.CommonUtils;
+import org.otcl2.common.util.OtclUtils;
 import org.otcl2.common.util.PackagesFilterUtil;
+//import org.otcl2.common.OtclConstants;
+//import org.otcl2.common.OtclConstants.TARGET_SOURCE;
+//import org.otcl2.common.config.OtclConfig;
+//import org.otcl2.common.util.CommonUtils;
+//import org.otcl2.common.util.PackagesFilterUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +47,7 @@ public class OtclEditorUtil {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OtclEditorUtil.class);
 	private static final String otclLibLocation = OtclConfig.getOtclLibLocation();
 	private static final FileFilter jarFileFilter = CommonUtils.createFilenameFilter(".jar");
-	private static URLClassLoader clzLoader;
+//	private static URLClassLoader clzLoader;
 	private static Set<String> jarFilesLoaded;
 	private static final int recursionDepth = 2;
 	private static final String SOURCE_ROOT = "source-root";
@@ -52,9 +55,9 @@ public class OtclEditorUtil {
 
 	public static Set<String> findTypeNamesInPackage(String basePackage) {
 		File otclLibDirectory = new File(otclLibLocation);
-		if (clzLoader == null) {
-			clzLoader = loadURLClassLoader(otclLibLocation);
-		}
+//		if (clzLoader == null) {
+//			clzLoader = OtclUtils.loadURLClassLoader(otclLibLocation);
+//		}
 		Set<String> lstClassNames = fetchFileNamesRecursive(otclLibDirectory, jarFileFilter, null, basePackage);
 	    return lstClassNames;
 	}
@@ -105,10 +108,10 @@ public class OtclEditorUtil {
 						}
 		            	clzNames.add(clzName);
 		            	if (!isClzFileAlreadyLoaded) {
-		            		clzLoader.loadClass(clzName);
+		            		OtclUtils.loadClass(clzName);
 		            	}
 					}
-				} catch (IOException | ClassNotFoundException ex) {
+				} catch (Exception ex) {
 					LOGGER.warn("", ex);
 				} finally {
 					try {
@@ -123,15 +126,14 @@ public class OtclEditorUtil {
 	}
 	
 	public static List<ClassMetadataDto> createMembersHierarchy(String clsName, TARGET_SOURCE targetSource) {
-		if (clzLoader == null) {
-			clzLoader = loadURLClassLoader(otclLibLocation);
-		}
+//		if (clzLoader == null) {
+//			clzLoader = OtclUtils.loadURLClassLoader(otclLibLocation);
+//		}
 		Class<?> clz = null;
 		try {
-			clz = clzLoader.loadClass(clsName);
-		} catch (ClassNotFoundException ex) {
+			clz = OtclUtils.loadClass(clsName);
+		} catch (Exception ex) {
 			LOGGER.warn(ex.getMessage());
-		} finally {
 		}
 		return createClassMetadataDtos(clz, targetSource);		
 	}
@@ -340,40 +342,4 @@ public class OtclEditorUtil {
 		return fields;
 	}
 	
-	private static URLClassLoader loadURLClassLoader(String path) {
-		File otclBinDirectory = new File(path);
-		List<URL> urls = createURLClassLoader(otclBinDirectory, CommonUtils.createFilenameFilter(".jar"), null);
-		URLClassLoader clzLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]), 
-				ClassLoader.getSystemClassLoader()); 
-		return clzLoader;
-	}
-
-	private static List<URL> createURLClassLoader(File directory, FileFilter fileFilter, List<URL> urls) {
-		for (File file : directory.listFiles(fileFilter)) {
-			if (file.isDirectory()) {
-				if (urls == null) {
-					urls = createURLClassLoader(file, fileFilter, urls); 
-				} else {
-					urls.addAll(createURLClassLoader(file, fileFilter, urls));
-				}
-			} else {
-				try {
-					URL url = null;
-					if (file.getName().endsWith(".jar")) {
-						url = new URL("jar:file:" + file.getAbsolutePath() +"!/");
-					} else {
-						url = new URL("file:" + file.getAbsolutePath());
-					}
-					if (urls == null) {
-						urls = new ArrayList<>();
-					}
-					urls.add(url);
-				} catch (MalformedURLException e) {
-					LOGGER.warn(e.getMessage());
-				}
-			}
-		}
-		return urls;
-	}
-
 } 
