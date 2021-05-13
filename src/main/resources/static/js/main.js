@@ -16,10 +16,11 @@ let targetMap = new Map();
 var copyCounter = 0;
 var executeCounter = 0;
 var selectMsg = "Select...";
-var isSrcTree = true;
+var hasSrcTree = true;
 
 const CONSTANTS = {
 	ANCHOR: "anchor",
+	ROOT: "$",
 	SOURCE_ROOT: "source-root",
 	TARGET_ROOT: "target-root",
 	GETTER: "getter",
@@ -417,9 +418,9 @@ function fetchAndPopulateJstree(url) {
 	        			"items": jstreeContextmenu
 	        		}
 	        	});
-        		isSrcTree = true;
+        		hasSrcTree = true;
         	} else {
-        		isSrcTree = false;
+        		hasSrcTree = false;
         	}
         	if (targetClsName != null) {
         		$('#targetTree').jstree({
@@ -446,15 +447,40 @@ $("#addScript").click(function( event ) {
    	var targetOtclChain;
    	if (targetNode[0]) {
    		if (targetNode[0].id == CONSTANTS.TARGET_ROOT) {
-   			showMsg($("#rootOtclChain"));
-   			return;
+			if (CONSTANTS.CMD_COPY == command) {
+	   			showMsg($("#rootTargetOtclChain"));
+	   			return;
+	   		}
+   			targetOtclChain = CONSTANTS.ROOT;
+   		} else {
+   			targetOtclChain = targetNode[0].id;
    		}
-   		targetOtclChain = targetNode[0].id;
    	}
    	if (!targetOtclChain) {
 		showMsg($("#targetOtclChain"));
 		return;
 	}
+	var srcNode;
+	var sourceOtclChain;
+	if (hasSrcTree) {
+		srcNode = $('#srcTree').jstree(true).get_selected(true);
+	}
+	if (CONSTANTS.CMD_EXECUTE == command && !srcNode[0]) {
+		showMsg($("#sourceOtclChain"));
+		return;
+	}
+	if (srcNode && srcNode[0]) {
+		if (srcNode[0].id == CONSTANTS.SOURCE_ROOT) {
+			if (CONSTANTS.CMD_COPY == command) {
+				showMsg($("#rootSourceOtclChain"));
+				return;
+			}
+			sourceOtclChain = CONSTANTS.ROOT;
+		} else {
+			sourceOtclChain = srcNode[0].id;
+		}
+	}
+
 	for (const [key, value] of anchorsMap.entries()) {
    		if (targetOtclChain.startsWith(key)) {
    			targetOtclChain = targetOtclChain.replace(key, value);
@@ -484,18 +510,7 @@ $("#addScript").click(function( event ) {
 		scriptBlock = executeScriptTemplate.replace(idPlaceholder, scriptId);
 		scriptBlock = scriptBlock.replace(factoryclassPlaceholder, scriptId);
 	}
-    var srcNode;
-	var sourceOtclChain;
-    if (isSrcTree) {
-    	srcNode = $('#srcTree').jstree(true).get_selected(true);
-    }
-   	if (srcNode && srcNode[0]) {
-   		if (srcNode[0].id == CONSTANTS.SOURCE_ROOT) {
-   			showMsg($("#rootOtclChain"));
-   			return;
-   		}
-	  	sourceOtclChain = srcNode[0].id;
-   	}
+	
 	if (sourceOtclChain == null) {
 		scriptBlock = scriptBlock.replace(fromPlaceholder, valuesTemplate);
 	} else {
@@ -548,13 +563,19 @@ $("#addScript").click(function( event ) {
     	var lastIndexOf = 0;
     	if (sourceType) {
 			if (sourceType.includes(".")) {
+				sourceType = sourceType.replace("$", "_");
+			}
+			if (sourceType.includes(".")) {
 	    		lastIndexOf = sourceType.lastIndexOf(".");
 	    		entryClsName = sourceType.substring(lastIndexOf + 1);
 	    	} else {
 	    		entryClsName = sourceType;
 	    	}
 		}
-    	entryClsName = entryClsName.concat("To");
+    	entryClsName = entryClsName.concat("__");
+		if (targetType.includes(".")) {
+			targetType = targetType.replace("$", "_");
+		}
     	if (targetType.includes(".")) {
     		lastIndexOf = targetType.lastIndexOf(".");
     		entryClsName = entryClsName.concat(targetType.substring(lastIndexOf + 1));
