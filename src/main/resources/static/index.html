@@ -1,9 +1,9 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>OTCL Editor</title>
+	<title>OTC Editor</title>
 	
-	<link rel="icon" href="./images/otcl-logo.png">
+	<link rel="icon" href="./images/otc-logo.png">
 
 	<link rel="stylesheet" href="jquery-ui-1.12.1/jquery-ui.css">
 	<script type="text/javascript" src="jquery/dist/jquery.min.js"></script>
@@ -25,18 +25,18 @@
 
 <body>
 	<div id="header">
-		<a href="https://otclfoundation.org"  title="https://otclfoundation.org" id="otclFoundation" class="no-style">
-			<img id="logo" src="./images/otcl-logo.png">
-			<i><label title="https://otclfoundation.org">
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTCL Foundation.
+		<a href="https://otcfoundation.org"  title="https://otcfoundation.org" id="otcFoundation" class="no-style">
+			<img id="logo" src="./images/otc-logo.png">
+			<i><label title="https://otcfoundation.org">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTC Foundation.
 				</label>
 			</i>
 		</a>
-		<label id="pageTitle">OTCL Editor</label>
-		<label id="contactUs">contact@otclfoundation.org&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+		<label id="pageTitle">OTC Editor</label>
+		<label id="contactUs">contact@otcfoundation.org&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 	</div>
 	
-	<form id="otclEditorForm" action="createOtclFile" accept-charset="utf-8" method="post">
+	<form id="otcEditorForm" action="createOtcFile" accept-charset="utf-8" method="post">
 		<div class="box columnHdr">
 			<div class="sourceDiv">
 				<label><u><b>From / Source</b></u></label>
@@ -71,7 +71,7 @@
 			</div>
 		</div>
 		<div class="box" id="divTextArea">
-			<textarea id="otclInstructions" name="otclInstructions" class="txtArea context-menu-one"
+			<textarea id="otcInstructions" name="otcInstructions" class="txtArea context-menu-one"
 					placeholder="Right-click inside this text-area to select command-type."></textarea>
 		</div>
 		<div class="box">
@@ -80,13 +80,13 @@
 			</div>
 
 			<div class="actions">
-				<input id="addScript" type="button" value="Add OTCL Command" class="actionBtn" >
+				<input id="addScript" type="button" value="Add OTC Command" class="actionBtn" >
 			</div>
 			<div class="actions">
-				<input id="createOtclFile" type="button" value="Create file" class="actionBtn" />
+				<input id="createOtcFile" type="button" value="Create file" class="actionBtn" />
 			</div>
 			<div class="actions">
-				<input id="flipOtcl" type="button" value="Flip OTCL" class="actionBtn" />
+				<input id="flipOtc" type="button" value="Flip OTC" class="actionBtn" />
 			</div>
 			<div class="actions">
 				<input id="reset" type="button" value="Clear" class="actionBtn" >
@@ -107,25 +107,25 @@
 	<div id="nothingToSave" title="Nothing to Save" style="display: none">
 	  <p>Cannot proceed - Nothing to save!</p>
 	</div>
-	<div id="rootSourceOtclChain" title="Root OTCL-Chain" style="display: none">
+	<div id="rootSourceOtcChain" title="Root OTC-Chain" style="display: none">
 	  <p>Selecting Root-node on Source-tree for the 'Copy' command is not allowed!</p>
 	</div>
-	<div id="rootTargetOtclChain" title="Root OTCL-Chain" style="display: none">
+	<div id="rootTargetOtcChain" title="Root OTC-Chain" style="display: none">
 	  <p>Selecting Root-node on Target-tree for the 'Copy' command is not allowed!</p>
 	</div>
-	<div id="sourceOtclChain" title="Target OTCL-Chain" style="display: none">
+	<div id="sourceOtcChain" title="Target OTC-Chain" style="display: none">
 	  <p>For 'Execute' command, selection on Source-tree is mandatory!</p>
 	</div>
-	<div id="targetOtclChain" title="Target OTCL-Chain" style="display: none">
+	<div id="targetOtcChain" title="Target OTC-Chain" style="display: none">
 	  <p>Please make a selection on Target-tree!</p>
 	</div>
 
-	<div id="singleSideCollectionOnly" title="OTCL-Script::Collections on one side Only" style="display: none">
-	  <p>Collections are allowed only in any one of the chains for executeOtclConverter and executeOtclModule!</p>
+	<div id="singleSideCollectionOnly" title="OTC-Script::Collections on one side Only" style="display: none">
+	  <p>Collections are allowed only in any one of the chains for executeOtcConverter and executeOtcModule!</p>
 	</div>
-	<div id="multipleAnchors" title="OTCL Chain::Multiple Anchors" style="display: none">
-	  <p>OTCL-chain with multiple Anchors (^) is not valid!</p>
-	  <p id="otclChain" />
+	<div id="multipleAnchors" title="OTC Chain::Multiple Anchors" style="display: none">
+	  <p>OTC-chain with multiple Anchors (^) is not valid!</p>
+	  <p id="otcChain" />
 	</div>
 
 	<div id="helperClassName" title="Helper-Class Name" style="display: none">
@@ -154,11 +154,11 @@
 	<div id="concreteType" title="Concrete-Type" style="display: none">
 	  <p>Please define value for placeholder &lt;&lt;concreteType&gt;&gt; under 'copy:' or 'execute:' - 'concreteType:' or remove line.</p>
 	</div>
-	<div id="otclConverter" title="OTCL-Converter" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;otclConverter&gt;&gt; under 'execute: otclConverter:' or remove line.</p>
+	<div id="otcConverter" title="OTC-Converter" style="display: none">
+	  <p>Please define value for placeholder &lt;&lt;otcConverter&gt;&gt; under 'execute: otcConverter:' or remove line.</p>
 	</div>
-	<div id="otclNamespace" title="OTCL-Namespace" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;otclNamespace&gt;&gt; under 'execute: otclNamespace:' or remove line.</p>
+	<div id="otcNamespace" title="OTC-Namespace" style="display: none">
+	  <p>Please define value for placeholder &lt;&lt;otcNamespace&gt;&gt; under 'execute: otcNamespace:' or remove line.</p>
 	</div>
 	<div id="infoLoss" title="Some info can be lost" style="display: none">
 	  <p>Some information can be lost due to some unsupported parameters under from / source which may have to be updated manually.</p>

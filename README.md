@@ -1,4 +1,4 @@
-# OTCL editor
+# OTC editor
 
 		
        Fix - Hashtable does not allow null value.
@@ -7,11 +7,11 @@
        Fix - check for concrete types of collections instead of just List.isAssignableFrom(...)
        Fix, while assigning date, if it is assignable, then dont call teh date-converter.
        Fix - enum of primitive types.
-       Fix - otcleditor - right-click to anchor.
+       Fix - otceditor - right-click to anchor.
        Fix - compilation happening even if .dep and .class files are present
-	    Fix - requried in compileOtcl(File directory, String otclNamespace)
-	    		in code - if (!CommonUtils.isEmpty(compilationReport.otclNamespace)) {
-					depFileName = compilationReport.otclNamespace + "." + depFileName;
+	    Fix - requried in compileOtc(File directory, String otcNamespace)
+	    		in code - if (!CommonUtils.isEmpty(compilationReport.otcNamespace)) {
+					depFileName = compilationReport.otcNamespace + "." + depFileName;
 					// this needs a fix
 				}
 	    Fix - validate overrides: concreteType: isAssignable
@@ -19,15 +19,15 @@
 	    
 	    Mapping frameworks performance - https://www.baeldung.com/java-performance-mapping-frameworks
 	    
-	   Web-site - provide link to add user feedback about OTCL 
+	   Web-site - provide link to add user feedback about OTC 
        
        Check override of "concreteType:" for normal tokens.
        
-		Don't mandate source-type if whole otcl has only  'from: values'
+		Don't mandate source-type if whole otc has only  'from: values'
 		
-		“${OTCL_HOME}\lib” - test with only .class files. 
+		“${OTC_HOME}\lib” - test with only .class files. 
 		
-		Change deployment logic to ".dep" files from “${OTCL_HOME}\bin” 
+		Change deployment logic to ".dep" files from “${OTC_HOME}\bin” 
 		
 		Fix - GetSetTemplate and SetterTemplate has issues with date
 		
@@ -45,15 +45,15 @@
 		Twitter, Facebook, Linkedin, Instagram, Whatsapp, 
 		Slack,
 		
-		Industry awards for OTCL
+		Industry awards for OTC
 		
 		Press releases in magazines
 		
 		Fix date format in PropertyConverterUtil using LocalDate.....
-		OTCL-script - executeOtclModule and executeOtclConvertor - collection on any one side is fine.
-		OTCL-script - anchors not allowed.
+		OTC-script - executeOtcModule and executeOtcConvertor - collection on any one side is fine.
+		OTC-script - anchors not allowed.
 		
-		executeOtclConverter - changes in js file to allow collections on any one side.
+		executeOtcConverter - changes in js file to allow collections on any one side.
 		
 		FAQ - with scenarios where developers can make mistakes.
 		Documentation - what all collections does it support
@@ -70,11 +70,11 @@
 		
 		Multiple anchor validation
 
-		Validation - map otcl-token which is leaf and <K> type should not have a map-key
+		Validation - map otc-token which is leaf and <K> type should not have a map-key
 		
 		Test for arrays, Enums and Maps, method calls, generics.
 		
-		Validation OTCL command for maps - atleast one key first.
+		Validation OTC command for maps - atleast one key first.
 		
 		Test setter param-type with different field-type.
 		
@@ -90,7 +90,7 @@
 		
 		Documentation - Understanding logs
 		Documentation - Spring integration
-		Documentation - Otcl imbalances with anchors.
+		Documentation - Otc imbalances with anchors.
 		
 		Documentation - what all collection-types allow null values and null key.
 		
@@ -114,19 +114,19 @@
 		
 		https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode
 		
-		OtclEngineImpl.
-		if (!otclCompilerReportDisabled) {
+		OtcEngineImpl.
+		if (!otcCompilerReportDisabled) {
 				//TODO -- below needs a fix
 		
-		target can be interface - so add OTCL-CONFIG and provide concrete type
+		target can be interface - so add OTC-CONFIG and provide concrete type
 		
 		execueSetvalue - make it in line.
 		executeModule - any one side can have collections
 		executeConverter - any one side can have collections or source can be null.
 		
-		AbstractOtclConverter.executeModule 
+		AbstractOtcConverter.executeModule 
 		
-		OTCL generic and other notations - warning message when each line overrides the earlier setting.
+		OTC generic and other notations - warning message when each line overrides the earlier setting.
 		
 		
 		Add JAXBElements object creation feature.

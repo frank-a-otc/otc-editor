@@ -5,7 +5,7 @@ String.prototype.replaceAt=function(index, character) {
 var pageUrl = "";
 
 $(document).ready(function() {
-	$("#otclInstructions").val('');
+	$("#otcInstructions").val('');
 });
 
 
@@ -42,7 +42,7 @@ var headerTemplate =
 	"    target: <<targetType>>\r\n" +
 	"  entryClassName: <<entryClassName>>\r\n" +
 	"  helper: <<helperClassName>>\r\n" +
-	"otclCommands:\r\n";
+	"otcCommands:\r\n";
 
 var copyScriptTemplate =
 	"- copy:\r\n" +
@@ -58,12 +58,12 @@ var copyScriptTemplate =
 var executeScriptTemplate =
 	"- execute:\r\n" +
 	"    id: <<id>>\r\n" +
-	"    otclConverter: <<otclConverter>>\r\n" +
-	"    otclModule:\r\n" +
-	"      otclNamespace: <<otclNamespace>>\r\n" +
+	"    otcConverter: <<otcConverter>>\r\n" +
+	"    otcModule:\r\n" +
+	"      otcNamespace: <<otcNamespace>>\r\n" +
 	"    executionOrder:\r\n" +
-	"    - otclModule\r\n" +
-	"    - otclConverter\r\n" +
+	"    - otcModule\r\n" +
+	"    - otcConverter\r\n" +
 	"    source:\r\n" +
 	"      <<from>>\r\n" +
 	"      <<fromOverrides>>\r\n" +
@@ -72,8 +72,8 @@ var executeScriptTemplate =
 	"      <<toOverrides>>\r\n" +
 	"    factoryClassName: <<factoryclass>>";
 
-var otclChainTemplate = 
-	"otclChain: <<otclChain>>";
+var otcChainTemplate = 
+	"otcChain: <<otcChain>>";
 
 var valuesTemplate = 
 	"values:\r\n" +
@@ -105,7 +105,7 @@ var fromPlaceholder = "<<from>>";
 var valuesPlaceholder = "<<values>>";
 
 var toPlaceholder = "<<to>>";
-var otclChainPlaceholder = "<<otclChain>>";
+var otcChainPlaceholder = "<<otcChain>>";
 var tokenPathPlaceholder = "<<tokenPath>>";
 var fromOverridesPlaceholder = "      <<fromOverrides>>\r\n";
 var toOverridesPlaceholder = "      <<toOverrides>>\r\n";
@@ -119,8 +119,8 @@ var setterHelperPlaceholder = "<<setterHelper>>";
 var dateFormatPlaceholder = "<<dateFormat>>";
 var concreteTypePlaceholder = "<<concreteType>>";
 var factoryclassPlaceholder = "<<factoryclass>>";
-var otclConverterPlaceholder = "<<otclConverter>>";
-var otclNamespacePlaceholder = "<<otclNamespace>>";
+var otcConverterPlaceholder = "<<otcConverter>>";
+var otcNamespacePlaceholder = "<<otcNamespace>>";
 
 var helperParam = "helper:";
 var getterHelperParam = "getterHelper:";
@@ -163,7 +163,7 @@ $("#fetchTarget").click(function() {
 });
 
 $("#showTree").click(function() {
-	$("#otclInstructions").val('');
+	$("#otcInstructions").val('');
 	var srcClsName = $('#srcClsNames').val();
 	var targetClsName = $('#targetClsNames').val();
 	var url;
@@ -318,8 +318,8 @@ var targetContextMenuItems = {
 };
 
 function jstreeContextmenu(node) {
-	var otclChain = node.id;
-	if (CONSTANTS.SOURCE_ROOT == otclChain) {
+	var otcChain = node.id;
+	if (CONSTANTS.SOURCE_ROOT == otcChain) {
 	    $.contextMenuCommon({
 	        selector: '#srcTree', 
 	        autoHide: true,
@@ -334,14 +334,14 @@ function jstreeContextmenu(node) {
 		$.contextMenu('destroy', "#targetTree");
 		var menuItems;
 		var className = 'data-title';
-		if (CONSTANTS.TARGET_ROOT == otclChain) {
+		if (CONSTANTS.TARGET_ROOT == otcChain) {
 			menuItems = targetContextMenuItems; 
 		} else {
-			if (!otclChain.endsWith("]")) {
+			if (!otcChain.endsWith("]")) {
 				return;
 	        }
 			var isChecked = false;
-			if (anchorsMap.has(otclChain)) {
+			if (anchorsMap.has(otcChain)) {
 				isChecked = true;
 			}
 			var anchorItems = {
@@ -350,12 +350,12 @@ function jstreeContextmenu(node) {
 			        type: 'checkbox', 
 			        selected: isChecked,
 			        callback: function(key, opt) { 
-			        	if (anchorsMap.has(otclChain)) {
-			        		anchorsMap.delete(otclChain);
-			        	} else if (otclChain.endsWith("]")) {
+			        	if (anchorsMap.has(otcChain)) {
+			        		anchorsMap.delete(otcChain);
+			        	} else if (otcChain.endsWith("]")) {
 			        		var subKey;
 			        		for (const [k, v] of anchorsMap.entries()) {
-			        	   		if (otclChain.startsWith(k) || k.startsWith(otclChain)) {
+			        	   		if (otcChain.startsWith(k) || k.startsWith(otcChain)) {
 			        	   			subKey = k;
 			        	   			break;
 			        	   		}
@@ -365,9 +365,9 @@ function jstreeContextmenu(node) {
 			        	   	}
 //			        	   	console.log(node.text);
 //			        	   	$("#" + node.id + " > a").addClass('selectedNodeColor');
-				        	var lastIndexOf = otclChain.lastIndexOf("[");
-				        	var anchoredOtclChain = otclChain.substring(0, lastIndexOf + 1) + "^" + otclChain.substring(lastIndexOf + 1);
-				        	anchorsMap.set(otclChain, anchoredOtclChain);
+				        	var lastIndexOf = otcChain.lastIndexOf("[");
+				        	var anchoredOtcChain = otcChain.substring(0, lastIndexOf + 1) + "^" + otcChain.substring(lastIndexOf + 1);
+				        	anchorsMap.set(otcChain, anchoredOtcChain);
 				        }
 					}
 				}
@@ -444,57 +444,57 @@ function fetchAndPopulateJstree(url) {
 
 $("#addScript").click(function( event ) {
     var targetNode = $('#targetTree').jstree(true).get_selected(true);
-   	var targetOtclChain;
+   	var targetOtcChain;
    	if (targetNode[0]) {
    		if (targetNode[0].id == CONSTANTS.TARGET_ROOT) {
 			if (CONSTANTS.CMD_COPY == command) {
-	   			showMsg($("#rootTargetOtclChain"));
+	   			showMsg($("#rootTargetOtcChain"));
 	   			return;
 	   		}
-   			targetOtclChain = CONSTANTS.ROOT;
+   			targetOtcChain = CONSTANTS.ROOT;
    		} else {
-   			targetOtclChain = targetNode[0].id;
+   			targetOtcChain = targetNode[0].id;
    		}
    	}
-   	if (!targetOtclChain) {
-		showMsg($("#targetOtclChain"));
+   	if (!targetOtcChain) {
+		showMsg($("#targetOtcChain"));
 		return;
 	}
 	var srcNode;
-	var sourceOtclChain;
+	var sourceOtcChain;
 	if (hasSrcTree) {
 		srcNode = $('#srcTree').jstree(true).get_selected(true);
 	}
 	if (CONSTANTS.CMD_EXECUTE == command && !srcNode[0]) {
-		showMsg($("#sourceOtclChain"));
+		showMsg($("#sourceOtcChain"));
 		return;
 	}
 	if (srcNode && srcNode[0]) {
 		if (srcNode[0].id == CONSTANTS.SOURCE_ROOT) {
 			if (CONSTANTS.CMD_COPY == command) {
-				showMsg($("#rootSourceOtclChain"));
+				showMsg($("#rootSourceOtcChain"));
 				return;
 			}
-			sourceOtclChain = CONSTANTS.ROOT;
+			sourceOtcChain = CONSTANTS.ROOT;
 		} else {
-			sourceOtclChain = srcNode[0].id;
+			sourceOtcChain = srcNode[0].id;
 		}
 	}
 
 	for (const [key, value] of anchorsMap.entries()) {
-   		if (targetOtclChain.startsWith(key)) {
-   			targetOtclChain = targetOtclChain.replace(key, value);
+   		if (targetOtcChain.startsWith(key)) {
+   			targetOtcChain = targetOtcChain.replace(key, value);
    			break;
    		}
    	};   	
-	var isValid = isAnchorsValid(targetOtclChain);
+	var isValid = isAnchorsValid(targetOtcChain);
 	if (!isValid) {
 		return;
 	}
-   	var otclInstructions = $("#otclInstructions");
-   	var otclInstructionsValue = otclInstructions.val();
+   	var otcInstructions = $("#otcInstructions");
+   	var otcInstructionsValue = otcInstructions.val();
    	
-   	if (otclInstructionsValue.trim() == "") {
+   	if (otcInstructionsValue.trim() == "") {
    		copyCounter = 0;
    		executeCounter = 0;
    	}
@@ -511,21 +511,21 @@ $("#addScript").click(function( event ) {
 		scriptBlock = scriptBlock.replace(factoryclassPlaceholder, scriptId);
 	}
 	
-	if (sourceOtclChain == null) {
+	if (sourceOtcChain == null) {
 		scriptBlock = scriptBlock.replace(fromPlaceholder, valuesTemplate);
 	} else {
 		if (CONSTANTS.CMD_EXECUTE == command) {
-	    	var isValid = isValidCollections(targetOtclChain, sourceOtclChain);
+	    	var isValid = isValidCollections(targetOtcChain, sourceOtcChain);
 	   		if (!isValid) {
 	   			return;
 	   		}
 		}
-		var from = otclChainTemplate.replace(otclChainPlaceholder, sourceOtclChain);
+		var from = otcChainTemplate.replace(otcChainPlaceholder, sourceOtcChain);
 		scriptBlock = scriptBlock.replace(fromPlaceholder, from);
 	}
 	if (sourceMap.has(CONSTANTS.GETTER)) {
-		var overrides = overridesTemplate.replace(tokenPathPlaceholder, sourceOtclChain);
-		if (sourceOtclChain != null) {
+		var overrides = overridesTemplate.replace(tokenPathPlaceholder, sourceOtcChain);
+		if (sourceOtcChain != null) {
 			if (sourceMap.has(CONSTANTS.GETTER)) {
 				overrides += sourceMap.get(CONSTANTS.GETTER);
 			}
@@ -535,13 +535,13 @@ $("#addScript").click(function( event ) {
 		scriptBlock = scriptBlock.replace(fromOverridesPlaceholder, "");
 	}
 	// ---- to
-	var to = otclChainTemplate.replace(otclChainPlaceholder, targetOtclChain);
+	var to = otcChainTemplate.replace(otcChainPlaceholder, targetOtcChain);
 	scriptBlock = scriptBlock.replace(toPlaceholder, to);
 	
 	if (targetMap.has(CONSTANTS.GETTER) || targetMap.has(CONSTANTS.GETTER_HELPER) ||
 			targetMap.has(CONSTANTS.SETTER) || targetMap.has(CONSTANTS.SETTER_HELPER) ||
 			targetMap.has(CONSTANTS.CONCRETE_TYPE)) {
-		var overrides = overridesTemplate.replace(tokenPathPlaceholder, targetOtclChain.replace('^', ''));
+		var overrides = overridesTemplate.replace(tokenPathPlaceholder, targetOtcChain.replace('^', ''));
 		if (targetMap.has(CONSTANTS.GETTER)) {
 			overrides += targetMap.get(CONSTANTS.GETTER);
 		}
@@ -556,7 +556,7 @@ $("#addScript").click(function( event ) {
 		scriptBlock = scriptBlock.replace(toOverridesPlaceholder, "");
 	}
 
-   	if (otclInstructionsValue.trim() == "") {
+   	if (otcInstructionsValue.trim() == "") {
    		var sourceType = $("#srcClsNames").val();
    		var targetType = $("#targetClsNames").val();
    		var entryClsName = "";
@@ -585,23 +585,23 @@ $("#addScript").click(function( event ) {
    		var header = headerTemplate.replace(sourceTypePlaceholder, sourceType)
 							.replace(targetTypePlaceholder, targetType)
 							.replace(entryClassNamePlaceholder, entryClsName);
-   		otclInstructionsValue = header;
-   		otclInstructions.val(header);
+   		otcInstructionsValue = header;
+   		otcInstructions.val(header);
    	} else {
-   		otclInstructionsValue = otclInstructionsValue.concat('\n\n');
+   		otcInstructionsValue = otcInstructionsValue.concat('\n\n');
    	}
-   	otclInstructionsValue = otclInstructionsValue.concat(scriptBlock);
-   	otclInstructions.val(otclInstructionsValue);
-    if (otclInstructions.length) {
-    	otclInstructions.scrollTop(otclInstructions[0].scrollHeight - otclInstructions.height());
+   	otcInstructionsValue = otcInstructionsValue.concat(scriptBlock);
+   	otcInstructions.val(otcInstructionsValue);
+    if (otcInstructions.length) {
+    	otcInstructions.scrollTop(otcInstructions[0].scrollHeight - otcInstructions.height());
     }
    	$('#converters').val("");
-   	$('#otclScriptType').val("");
+   	$('#otcScriptType').val("");
 });
 
-function isValidCollections(targetOtclChain, sourceOtclChain) {
-   	var idxTarget = targetOtclChain.indexOf("[");
-   	var idxSource = sourceOtclChain.indexOf("[");
+function isValidCollections(targetOtcChain, sourceOtcChain) {
+   	var idxTarget = targetOtcChain.indexOf("[");
+   	var idxSource = sourceOtcChain.indexOf("[");
 	if (idxTarget > 1 && idxSource > 1) {
 		showMsg($("#singleSideCollectionOnly"));
     	return false;
@@ -609,10 +609,10 @@ function isValidCollections(targetOtclChain, sourceOtclChain) {
 	return true;
 }
 
-function isAnchorsValid(otclChain) {
-	var count = (otclChain.match(/^/g) || []).length;
+function isAnchorsValid(otcChain) {
+	var count = (otcChain.match(/^/g) || []).length;
 	if (count > 1) {
-		$("#otclChain").val(" in " + otclChain);
+		$("#otcChain").val(" in " + otcChain);
 		showMsg($("#multipleAnchors"));
     	return false;		
 	}
@@ -620,76 +620,76 @@ function isAnchorsValid(otclChain) {
 }
 
 $("#reset").click(function() {
-	$("#otclInstructions").val('');
+	$("#otcInstructions").val('');
 	copyCounter = 0;
 	executeCounter = 0;
 });
 
-$("#otclEditorForm").submit(function(event) {
-   	var otclInstructions = $("#otclInstructions");
-   	var otclInstructionsValue = otclInstructions.val();
+$("#otcEditorForm").submit(function(event) {
+   	var otcInstructions = $("#otcInstructions");
+   	var otcInstructionsValue = otcInstructions.val();
 
-   	if (otclInstructionsValue.includes(helperClassNamePlaceholder)) {
+   	if (otcInstructionsValue.includes(helperClassNamePlaceholder)) {
 		showMsg($("#helperClassName"));
 		return false;
 	}
-   	if (otclInstructionsValue.includes(valuesPlaceholder)) {
+   	if (otcInstructionsValue.includes(valuesPlaceholder)) {
 		showMsg($("#values"));
 		return false;
 	}
-   	if (otclInstructionsValue.includes(getterPlaceholder)) {
+   	if (otcInstructionsValue.includes(getterPlaceholder)) {
 		showMsg($("#getter"));
 		return false;
 	}
-   	if (otclInstructionsValue.includes(setterPlaceholder)) {
+   	if (otcInstructionsValue.includes(setterPlaceholder)) {
 		showMsg($("#setter"));
 		return false;
 	}
-   	if (otclInstructionsValue.includes(getterHelperPlaceholder)) {
+   	if (otcInstructionsValue.includes(getterHelperPlaceholder)) {
 		showMsg($("#getterHelper"));
 		return false;
 	}
-   	if (otclInstructionsValue.includes(getterHelperParam) || otclInstructionsValue.includes(setterHelperParam)) {
-   		if (!otclInstructionsValue.includes(helperParam)) {
+   	if (otcInstructionsValue.includes(getterHelperParam) || otcInstructionsValue.includes(setterHelperParam)) {
+   		if (!otcInstructionsValue.includes(helperParam)) {
    			showMsg($("#helperClassNotDefined"));
    			return false;
    		}
 	}
-   	if (otclInstructionsValue.includes(setterHelperPlaceholder)) {
+   	if (otcInstructionsValue.includes(setterHelperPlaceholder)) {
 		showMsg($("#setterHelper"));
 		return false;
 	}
-   	if (otclInstructionsValue.includes(concreteTypePlaceholder)) {
+   	if (otcInstructionsValue.includes(concreteTypePlaceholder)) {
 		showMsg($("#concreteType"));
 		return false;
 	}
-   	if (otclInstructionsValue.includes(otclConverterPlaceholder)) {
-		showMsg($("#otclConverter"));
+   	if (otcInstructionsValue.includes(otcConverterPlaceholder)) {
+		showMsg($("#otcConverter"));
 		return false;
 	}
-   	if (otclInstructionsValue.includes(otclNamespacePlaceholder)) {
-		showMsg($("#otclNamespace"));
+   	if (otcInstructionsValue.includes(otcNamespacePlaceholder)) {
+		showMsg($("#otcNamespace"));
 		return false;
 	}
 });
 
-$("#createOtclFile").click(function() {
+$("#createOtcFile").click(function() {
 	var targetClsName = $('#targetClsNames').val();
 	if (!targetClsName) {
 		showMsg($("#typesNotSelected"));
    		return false;
 	}
-	var otclInstructions = $("#otclInstructions").val();
-	if (!otclInstructions) {
+	var otcInstructions = $("#otcInstructions").val();
+	if (!otcInstructions) {
 		showMsg($("#nothingToSave"));
 		return ;
 	}
-	$("#otclEditorForm").submit();
+	$("#otcEditorForm").submit();
 });
 
-$("#flipOtcl").click(function() {
-	var otcl = $("#otclInstructions").val();
-	if (!otcl) {
+$("#flipOtc").click(function() {
+	var otc = $("#otcInstructions").val();
+	if (!otc) {
 		showMsg($("#nothingToSave"));
 		return;
 	}
@@ -710,12 +710,12 @@ $("#flipOtcl").click(function() {
 		buttons: {
 	        Ok: function() {
 	          $( this ).dialog( "close" );
-	      		var url = pageUrl.concat('flipOtcl');
+	      		var url = pageUrl.concat('flipOtc');
 		    	var entryClzName = $('#srcPkgName').val();
 		    	var newEntryClzName = targetClsName + "To" + srcClsName;
-		    	otcl = otcl.replace(entryClzName, newEntryClzName);
-	    		$.post( url, { otclInstructions: otcl }).done(function( data ) {
-	      			$("#otclInstructions").val(data);
+		    	otc = otc.replace(entryClzName, newEntryClzName);
+	    		$.post( url, { otcInstructions: otc }).done(function( data ) {
+	      			$("#otcInstructions").val(data);
 	    	  	});
 		    	var srcPkgName = $('#srcPkgName').val();
 		    	var targetPkgName = $('#targetPkgName').val();

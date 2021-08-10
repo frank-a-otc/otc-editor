@@ -13,7 +13,7 @@ html, body {
 	height: 30px;
 }
 
-#otclFoundation {
+#otcFoundation {
     width:  30%;
 	text-align: left;
     /* vertical-align: middle; */
@@ -83,10 +83,10 @@ html, body {
 .inptSingle {
 	width: 86%;
 }
-.otclScript {
+.otcScript {
 	width: 15%;
 }
-.otclScriptInpt {
+.otcScriptInpt {
 	width: 80%;
 }
 .txtArea {

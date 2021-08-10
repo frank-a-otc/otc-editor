@@ -9,14 +9,17 @@
 		<version>2.2.5.RELEASE</version>
 		<relativePath />
 	</parent>
-	<groupId>org.otcl</groupId>
-	<artifactId>otcl-web</artifactId>
-	<version>1.0</version>
+	<groupId>org.otcframework</groupId>
+	<artifactId>otc-web</artifactId>
+	<version>1.0-SNAPSHOT</version>
 
 	<packaging>jar</packaging>
 	
 	<properties>
-		<otcl.version>1.2</otcl.version>
+	    <maven.compiler.source>1.8</maven.compiler.source>
+	    <maven.compiler.target>1.8</maven.compiler.target>
+	    <java.version>1.8</java.version>
+	    <otc.version>1.0-SNAPSHOT</otc.version>
 	</properties>
 
 	<dependencies>
@@ -39,9 +42,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.otcl2</groupId>
-			<artifactId>otcl2-common</artifactId>
-			<version>${otcl.version}</version>
+			<groupId>org.otcframework</groupId>
+			<artifactId>otc-common</artifactId>
+			<version>${otc.version}</version>
 		</dependency>
 
 		<dependency>
@@ -52,15 +55,8 @@
 	</dependencies>
 
 	<build>
-		<finalName>otcleditor</finalName>
+		<finalName>otceditor</finalName>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<release>11</release>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
