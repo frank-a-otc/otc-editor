@@ -5,7 +5,7 @@
 * @version 1.0
 * @since   2020-06-08 
 */
-package org.otc.web.controller;
+package org.otcframework.web.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,13 +16,13 @@ import java.util.Set;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import org.otc.web.commons.dto.ClassMetadataDto;
-import org.otc.web.commons.dto.JstreeNodeInfo;
-import org.otc.web.commons.service.OtcEditorService;
-import org.otc.web.commons.util.JsTreeNodeUtil;
 import org.otcframework.common.OtcConstants.TARGET_SOURCE;
 import org.otcframework.common.dto.otc.OtcFileDto;
 import org.otcframework.common.util.OtcUtils;
+import org.otcframework.web.commons.dto.ClassMetadataDto;
+import org.otcframework.web.commons.dto.JstreeNodeInfo;
+import org.otcframework.web.commons.service.OtcEditorService;
+import org.otcframework.web.commons.util.JsTreeNodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

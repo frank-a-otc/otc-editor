@@ -5,7 +5,7 @@
 * @version 1.0
 * @since   2020-06-08 
 */
-package org.otc.web.commons.exception;
+package org.otcframework.web.commons.exception;
 
 import org.otcframework.common.exception.OtcException;
 

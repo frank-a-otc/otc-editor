@@ -5,7 +5,7 @@
 * @version 1.0
 * @since   2020-06-08 
 */
-package org.otc.web.commons.util;
+package org.otcframework.web.commons.util;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -27,13 +27,13 @@ import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.otc.web.commons.dto.ClassMetadataDto;
 import org.otcframework.common.OtcConstants;
 import org.otcframework.common.OtcConstants.TARGET_SOURCE;
 import org.otcframework.common.config.OtcConfig;
 import org.otcframework.common.util.CommonUtils;
 import org.otcframework.common.util.OtcUtils;
 import org.otcframework.common.util.PackagesFilterUtil;
+import org.otcframework.web.commons.dto.ClassMetadataDto;
 //import org.otc.common.OtcConstants;
 //import org.otc.common.OtcConstants.TARGET_SOURCE;
 //import org.otc.common.config.OtcConfig;

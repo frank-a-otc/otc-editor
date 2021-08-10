@@ -5,14 +5,14 @@
 * @version 1.0
 * @since   2020-06-08 
 */
-package org.otc.web.commons.service;
+package org.otcframework.web.commons.service;
 
 import java.util.List;
 import java.util.Set;
 
-import org.otc.web.commons.dto.ClassMetadataDto;
 import org.otcframework.common.OtcConstants;
 import org.otcframework.common.dto.otc.OtcFileDto;
+import org.otcframework.web.commons.dto.ClassMetadataDto;
 
 
 public interface OtcEditorService {

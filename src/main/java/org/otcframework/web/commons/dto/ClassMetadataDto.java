@@ -5,7 +5,7 @@
 * @version 1.0
 * @since   2020-06-08 
 */
-package org.otc.web.commons.dto;
+package org.otcframework.web.commons.dto;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,7 +5,7 @@
 * @version 1.0
 * @since   2020-06-08 
 */
-package org.otc.web.core.service.impl;
+package org.otcframework.web.core.service.impl;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -13,10 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.otc.web.commons.dto.ClassMetadataDto;
-import org.otc.web.commons.exception.OtcEditorException;
-import org.otc.web.commons.service.OtcEditorService;
-import org.otc.web.commons.util.OtcEditorUtil;
 import org.otcframework.common.OtcConstants.TARGET_SOURCE;
 import org.otcframework.common.dto.otc.OtcFileDto;
 import org.otcframework.common.dto.otc.OtcFileDto.Execute;
@@ -25,6 +21,10 @@ import org.otcframework.common.dto.otc.OverrideDto;
 import org.otcframework.common.dto.otc.SourceDto;
 import org.otcframework.common.dto.otc.TargetDto;
 import org.otcframework.common.util.OtcUtils;
+import org.otcframework.web.commons.dto.ClassMetadataDto;
+import org.otcframework.web.commons.exception.OtcEditorException;
+import org.otcframework.web.commons.service.OtcEditorService;
+import org.otcframework.web.commons.util.OtcEditorUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

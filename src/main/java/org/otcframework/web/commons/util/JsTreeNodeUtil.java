@@ -5,13 +5,13 @@
 * @version 1.0
 * @since   2020-06-08 
 */
-package org.otc.web.commons.util;
+package org.otcframework.web.commons.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.otc.web.commons.dto.ClassMetadataDto;
-import org.otc.web.commons.dto.JstreeNodeInfo;
+import org.otcframework.web.commons.dto.ClassMetadataDto;
+import org.otcframework.web.commons.dto.JstreeNodeInfo;
 
 public class JsTreeNodeUtil {
 
