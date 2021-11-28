@@ -13,15 +13,6 @@ html, body {
 	height: 30px;
 }
 
-#otcFoundation {
-    width:  30%;
-	text-align: left;
-    /* vertical-align: middle; */
-	float: left; 
-	color: white;
-	text-decoration: none;
-}
-
 #logo {
 	position: relative;
     float: left;
@@ -31,9 +22,9 @@ html, body {
 }
 
 #pageTitle {
-    width:  40%;
+    width:  45%;
 	font-size: 25px;
-	text-align: center;
+	text-align: right;
 	display:inline-block
 }
 

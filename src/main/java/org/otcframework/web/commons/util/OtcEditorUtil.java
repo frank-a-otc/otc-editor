@@ -34,11 +34,6 @@ import org.otcframework.common.util.CommonUtils;
 import org.otcframework.common.util.OtcUtils;
 import org.otcframework.common.util.PackagesFilterUtil;
 import org.otcframework.web.commons.dto.ClassMetadataDto;
-//import org.otc.common.OtcConstants;
-//import org.otc.common.OtcConstants.TARGET_SOURCE;
-//import org.otc.common.config.OtcConfig;
-//import org.otc.common.util.CommonUtils;
-//import org.otc.common.util.PackagesFilterUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +42,6 @@ public class OtcEditorUtil {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OtcEditorUtil.class);
 	private static final String otcLibLocation = OtcConfig.getOtcLibLocation();
 	private static final FileFilter jarFileFilter = CommonUtils.createFilenameFilter(".jar");
-//	private static URLClassLoader clzLoader;
 	private static Set<String> jarFilesLoaded;
 	private static final int recursionDepth = 2;
 	private static final String SOURCE_ROOT = "source-root";

@@ -72,8 +72,8 @@ var executeScriptTemplate =
 	"      <<toOverrides>>\r\n" +
 	"    factoryClassName: <<factoryclass>>";
 
-var otcChainTemplate = 
-	"otcChain: <<otcChain>>";
+var objectPathTemplate = 
+	"objectPath: <<objectPath>>";
 
 var valuesTemplate = 
 	"values:\r\n" +
@@ -105,7 +105,7 @@ var fromPlaceholder = "<<from>>";
 var valuesPlaceholder = "<<values>>";
 
 var toPlaceholder = "<<to>>";
-var otcChainPlaceholder = "<<otcChain>>";
+var objectPathPlaceholder = "<<objectPath>>";
 var tokenPathPlaceholder = "<<tokenPath>>";
 var fromOverridesPlaceholder = "      <<fromOverrides>>\r\n";
 var toOverridesPlaceholder = "      <<toOverrides>>\r\n";
@@ -520,7 +520,7 @@ $("#addScript").click(function( event ) {
 	   			return;
 	   		}
 		}
-		var from = otcChainTemplate.replace(otcChainPlaceholder, sourceOtcChain);
+		var from = objectPathTemplate.replace(objectPathPlaceholder, sourceOtcChain);
 		scriptBlock = scriptBlock.replace(fromPlaceholder, from);
 	}
 	if (sourceMap.has(CONSTANTS.GETTER)) {
@@ -535,7 +535,7 @@ $("#addScript").click(function( event ) {
 		scriptBlock = scriptBlock.replace(fromOverridesPlaceholder, "");
 	}
 	// ---- to
-	var to = otcChainTemplate.replace(otcChainPlaceholder, targetOtcChain);
+	var to = objectPathTemplate.replace(objectPathPlaceholder, targetOtcChain);
 	scriptBlock = scriptBlock.replace(toPlaceholder, to);
 	
 	if (targetMap.has(CONSTANTS.GETTER) || targetMap.has(CONSTANTS.GETTER_HELPER) ||

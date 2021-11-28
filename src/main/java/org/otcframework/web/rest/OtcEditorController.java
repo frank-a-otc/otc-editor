@@ -5,7 +5,7 @@
 * @version 1.0
 * @since   2020-06-08 
 */
-package org.otcframework.web.controller;
+package org.otcframework.web.rest;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,7 +26,6 @@ import org.otcframework.web.commons.util.JsTreeNodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@ComponentScan(basePackages= {"org.otc.web"})
 public class OtcEditorController {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(OtcEditorController.class);

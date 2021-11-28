@@ -14,7 +14,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages= {"org.otc.web.controller"})
+@ComponentScan(basePackages= {"org.otcframework.web"})
 public class OtcEditorApp extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
@@ -25,5 +25,5 @@ public class OtcEditorApp extends SpringBootServletInitializer {
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 		return builder.sources(OtcEditorApp.class);
 	}
-
+	
 }
