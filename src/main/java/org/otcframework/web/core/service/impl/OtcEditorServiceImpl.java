@@ -16,7 +16,7 @@ import java.util.Set;
 import org.otcframework.common.OtcConstants.TARGET_SOURCE;
 import org.otcframework.common.dto.otc.OtcFileDto;
 import org.otcframework.common.dto.otc.OtcFileDto.Execute;
-import org.otcframework.common.dto.otc.OtcFileDto.OtcCommands;
+import org.otcframework.common.dto.otc.OtcFileDto.OtclCommand;
 import org.otcframework.common.dto.otc.OverrideDto;
 import org.otcframework.common.dto.otc.SourceDto;
 import org.otcframework.common.dto.otc.TargetDto;
@@ -83,10 +83,10 @@ public class OtcEditorServiceImpl implements OtcEditorService {
 			reverseOtcFileDto.metadata.objectTypes = new OtcFileDto.Metadata.ObjectTypes(); 
 			reverseOtcFileDto.metadata.objectTypes.source = otcFileDto.metadata.objectTypes.target;
 			reverseOtcFileDto.metadata.objectTypes.target = otcFileDto.metadata.objectTypes.source;
-			reverseOtcFileDto.otcCommands = new ArrayList<>();
-			for (OtcCommands otcScript : otcFileDto.otcCommands) {
-				OtcCommands flippedOtcScript = new OtcCommands();
-				reverseOtcFileDto.otcCommands.add(flippedOtcScript);
+			reverseOtcFileDto.otclCommands = new ArrayList<>();
+			for (OtclCommand otcScript : otcFileDto.otclCommands) {
+				OtclCommand flippedOtcScript = new OtclCommand();
+				reverseOtcFileDto.otclCommands.add(flippedOtcScript);
 				if (otcScript.copy != null) {
 					flippedOtcScript.copy = new OtcFileDto.Copy();
 					flippedOtcScript.copy.id = otcScript.copy.id;

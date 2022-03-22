@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>org.otcframework</groupId>
 	<artifactId>otc-web</artifactId>
-	<version>1.0</version>
+	<version>2.0</version>
 
 	<packaging>jar</packaging>
 	
@@ -19,7 +19,7 @@
 	    <maven.compiler.source>1.8</maven.compiler.source>
 	    <maven.compiler.target>1.8</maven.compiler.target>
 	    <java.version>1.8</java.version>
-	    <otc.version>1.0</otc.version>
+	    <otc.version>2.0</otc.version>
 	</properties>
 
 	<dependencies>
