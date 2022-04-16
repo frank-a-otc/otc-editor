@@ -5,7 +5,7 @@ html, body {
 
 #header {
 	margin-top: 0px;
-    background-color: #4CAF50;
+    background-color: rgb(127,127,127);
     color: white;
 	font-size: 15px;
     font-weight: bold;

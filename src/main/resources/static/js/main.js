@@ -42,7 +42,7 @@ var headerTemplate =
 	"    target: <<targetType>>\r\n" +
 	"  entryClassName: <<entryClassName>>\r\n" +
 	"  helper: <<helperClassName>>\r\n" +
-	"otcCommands:\r\n";
+	"otclCommands:\r\n";
 
 var copyScriptTemplate =
 	"- copy:\r\n" +
@@ -58,12 +58,12 @@ var copyScriptTemplate =
 var executeScriptTemplate =
 	"- execute:\r\n" +
 	"    id: <<id>>\r\n" +
-	"    otcConverter: <<otcConverter>>\r\n" +
-	"    otcModule:\r\n" +
-	"      otcNamespace: <<otcNamespace>>\r\n" +
+	"    otclConverter: <<otcConverter>>\r\n" +
+	"    otclModule:\r\n" +
+	"      otclNamespace: <<otcNamespace>>\r\n" +
 	"    executionOrder:\r\n" +
-	"    - otcModule\r\n" +
-	"    - otcConverter\r\n" +
+	"    - otclModule\r\n" +
+	"    - otclConverter\r\n" +
 	"    source:\r\n" +
 	"      <<from>>\r\n" +
 	"      <<fromOverrides>>\r\n" +
