@@ -58,12 +58,12 @@ var copyScriptTemplate =
 var executeScriptTemplate =
 	"- execute:\r\n" +
 	"    id: <<id>>\r\n" +
-	"    otclConverter: <<otcConverter>>\r\n" +
-	"    otclModule:\r\n" +
-	"      otclNamespace: <<otcNamespace>>\r\n" +
+	"    converter: <<otcConverter>>\r\n" +
+	"    module:\r\n" +
+	"      namespace: <<otcNamespace>>\r\n" +
 	"    executionOrder:\r\n" +
-	"    - otclModule\r\n" +
-	"    - otclConverter\r\n" +
+	"    - module\r\n" +
+	"    - converter\r\n" +
 	"    source:\r\n" +
 	"      <<from>>\r\n" +
 	"      <<fromOverrides>>\r\n" +

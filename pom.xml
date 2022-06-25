@@ -21,7 +21,7 @@
 	    <maven.compiler.target>1.8</maven.compiler.target>
 	    <java.version>1.8</java.version>
  -->	    
-	    <otc.version>2.2</otc.version>
+	    <otc.version>2.5-SNAPSHOT</otc.version>
 	</properties>
 
 	<dependencies>
