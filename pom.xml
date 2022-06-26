@@ -10,7 +10,7 @@
 		<relativePath />
 	</parent>
 	<groupId>org.otcframework</groupId>
-	<artifactId>otc-web</artifactId>
+	<artifactId>otc-editor</artifactId>
 	<version>2.0</version>
 
 	<packaging>jar</packaging>
