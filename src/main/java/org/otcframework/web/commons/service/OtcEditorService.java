@@ -21,7 +21,7 @@ public interface OtcEditorService {
 	
 	OtcFileDto createOtcFileDto(String otcInstructions, boolean reverse);
 	
-	List<ClassMetadataDto> createMembersHierarchy(String clsName, OtcConstants.TARGET_SOURCE targetSource);
+	List<ClassMetadataDto> createTree(String clsName, OtcConstants.TARGET_SOURCE targetSource);
 
 	String createYaml(OtcFileDto otcFileDto);
 	

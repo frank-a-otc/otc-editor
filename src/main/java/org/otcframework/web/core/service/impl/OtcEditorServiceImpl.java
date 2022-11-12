@@ -16,7 +16,7 @@ import java.util.Set;
 import org.otcframework.common.OtcConstants.TARGET_SOURCE;
 import org.otcframework.common.dto.otc.OtcFileDto;
 import org.otcframework.common.dto.otc.OtcFileDto.Execute;
-import org.otcframework.common.dto.otc.OtcFileDto.OtclCommand;
+import org.otcframework.common.dto.otc.OtcFileDto.OtcsCommand;
 import org.otcframework.common.dto.otc.OverrideDto;
 import org.otcframework.common.dto.otc.SourceDto;
 import org.otcframework.common.dto.otc.TargetDto;
@@ -51,7 +51,7 @@ public class OtcEditorServiceImpl implements OtcEditorService {
 	}
 	
 	@Override
-	public List<ClassMetadataDto> createMembersHierarchy(String clsName, TARGET_SOURCE targetSource) {
+	public List<ClassMetadataDto> createTree(String clsName, TARGET_SOURCE targetSource) {
 		if (StringUtils.isEmpty(clsName)) {
 			throw new OtcEditorException("", "Class-name cannot be empty!");
 		}
@@ -83,10 +83,10 @@ public class OtcEditorServiceImpl implements OtcEditorService {
 			reverseOtcFileDto.metadata.objectTypes = new OtcFileDto.Metadata.ObjectTypes(); 
 			reverseOtcFileDto.metadata.objectTypes.source = otcFileDto.metadata.objectTypes.target;
 			reverseOtcFileDto.metadata.objectTypes.target = otcFileDto.metadata.objectTypes.source;
-			reverseOtcFileDto.otclCommands = new ArrayList<>();
-			for (OtclCommand otcScript : otcFileDto.otclCommands) {
-				OtclCommand flippedOtcScript = new OtclCommand();
-				reverseOtcFileDto.otclCommands.add(flippedOtcScript);
+			reverseOtcFileDto.commands = new ArrayList<>();
+			for (OtcsCommand otcScript : otcFileDto.commands) {
+				OtcsCommand flippedOtcScript = new OtcsCommand();
+				reverseOtcFileDto.commands.add(flippedOtcScript);
 				if (otcScript.copy != null) {
 					flippedOtcScript.copy = new OtcFileDto.Copy();
 					flippedOtcScript.copy.id = otcScript.copy.id;

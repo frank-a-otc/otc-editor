@@ -10,10 +10,16 @@ package org.otcframework.web.commons.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 public final class ClassMetadataDto {
 
+	@JsonInclude(Include.NON_NULL) 
 	public String id;
+	@JsonInclude(Include.NON_NULL) 
 	public List<ClassMetadataDto> children;
+	@JsonInclude(Include.NON_NULL) 
 	public String text;
 	
 	private ClassMetadataDto(Builder builder) {

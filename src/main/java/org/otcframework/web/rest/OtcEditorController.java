@@ -20,9 +20,7 @@ import org.otcframework.common.OtcConstants.TARGET_SOURCE;
 import org.otcframework.common.dto.otc.OtcFileDto;
 import org.otcframework.common.util.OtcUtils;
 import org.otcframework.web.commons.dto.ClassMetadataDto;
-import org.otcframework.web.commons.dto.JstreeNodeInfo;
 import org.otcframework.web.commons.service.OtcEditorService;
-import org.otcframework.web.commons.util.JsTreeNodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,62 +39,62 @@ public class OtcEditorController {
 	@Autowired
 	private OtcEditorService otcEditorService;
 
-	public static final String URL_SHOW_TYPES ="/showTypes";
-	public static final String URL_FETCH_SOURCE_JSTREE_HIERARCHY ="/fetchSourceJsTreeData";
-	public static final String URL_FETCH_TARGET_JSTREE_HIERARCHY ="/fetchTargetJsTreeData";
-	public static final String URL_FETCH_JSTREE_HIERARCHY ="/fetchJsTreeData";
+	public static final String URL_SHOW_TYPES ="/getTypes";
+	public static final String URL_GET_SOURCE_TREE ="/getSourceTree";
+	public static final String URL_GET_TARGET_TREE ="/getTargetTree";
+	public static final String URL_GET_TREE ="/getTree";
 	public static final String URL_CREATE_OTCFILE ="/createOtcFile";
 	public static final String URL_FLIP_OTC ="/flipOtc";
 
 	@GetMapping(value=URL_SHOW_TYPES, produces={"application/json;charset=UTF-8"})
-	public @ResponseBody Set<String> getClassNames(@RequestParam(name = "pkgName") String pkgName) {
-		Set<String> lstClsName = otcEditorService.findTypeNamesInPackage(pkgName);
-		return lstClsName;
+	public @ResponseBody Set<String> getFullyQualifiedNames(@RequestParam(name = "pkgName") String pkgName) {
+		Set<String> clsNames = otcEditorService.findTypeNamesInPackage(pkgName);
+		return clsNames;
 	}
 
-	@GetMapping(value=URL_FETCH_SOURCE_JSTREE_HIERARCHY)
-	public @ResponseBody Map<String, List<JstreeNodeInfo>> fetchSourceJsTree(@RequestParam(name = "srcClsName")
+	@GetMapping(value=URL_GET_SOURCE_TREE)
+	public @ResponseBody Map<String, List<ClassMetadataDto>> getSourceTree(@RequestParam(name = "srcClsName")
 			String srcClsName) {
-		Map<String, List<JstreeNodeInfo>> mapFields = new HashMap<>();
+		Map<String, List<ClassMetadataDto>> mapJsTreeNodes = new HashMap<>();
 		if (!StringUtils.isEmpty(srcClsName)) { 
-			List<ClassMetadataDto> lstSrcFields = otcEditorService.createMembersHierarchy(srcClsName,
+			List<ClassMetadataDto> lstSrcFields = otcEditorService.createTree(srcClsName,
 					TARGET_SOURCE.SOURCE);
-			mapFields.put("sourceFieldNames", JsTreeNodeUtil.convert(lstSrcFields));
+			mapJsTreeNodes.put("sourceFieldNames", lstSrcFields);
 		}
-		return mapFields;
+		return mapJsTreeNodes;
 	}
 
-	@GetMapping(value=URL_FETCH_TARGET_JSTREE_HIERARCHY)
-	public @ResponseBody Map<String, List<JstreeNodeInfo>> fetchTargetJsTree(@RequestParam(name = "targetClsName")
+	@GetMapping(value=URL_GET_TARGET_TREE)
+	public @ResponseBody Map<String, List<ClassMetadataDto>> getTargetTree(@RequestParam(name = "targetClsName")
 			String targetClsName) {
-		Map<String, List<JstreeNodeInfo>> mapFields = new HashMap<>();
+		Map<String, List<ClassMetadataDto>> mapJsTreeNodes = new HashMap<>();
 		if (!StringUtils.isEmpty(targetClsName)) { 
-			List<ClassMetadataDto> lstTargetFields = otcEditorService.createMembersHierarchy(targetClsName,
+			List<ClassMetadataDto> lstTargetFields = otcEditorService.createTree(targetClsName,
 					TARGET_SOURCE.TARGET);
-			mapFields.put("targetFieldNames", JsTreeNodeUtil.convert(lstTargetFields));
+			mapJsTreeNodes.put("targetFieldNames", lstTargetFields);
 		}
-		return mapFields;
+		return mapJsTreeNodes;
 	}
 
-	@GetMapping(value=URL_FETCH_JSTREE_HIERARCHY)
-	public @ResponseBody Map<String, List<JstreeNodeInfo>> fetchJsTree(@RequestParam(name = "srcClsName")
+	@GetMapping(value=URL_GET_TREE)
+	public @ResponseBody Map<String, List<ClassMetadataDto>> getTree(@RequestParam(name = "srcClsName")
 			String srcClsName, @RequestParam(name = "targetClsName") String targetClsName) {
-		Map<String, List<JstreeNodeInfo>> mapFields = null;
+		Map<String, List<ClassMetadataDto>> mapJsTreeNodes = null;
 		if (srcClsName != null) {
-			mapFields = fetchSourceJsTree(srcClsName);
+			mapJsTreeNodes = getSourceTree(srcClsName);
 		}
 		if (targetClsName != null) {
-			if (mapFields == null) {
-				mapFields = fetchTargetJsTree(targetClsName);
+			if (mapJsTreeNodes == null) {
+				mapJsTreeNodes = getTargetTree(targetClsName);
 			} else {
-				mapFields.putAll(fetchTargetJsTree(targetClsName));
+				mapJsTreeNodes.putAll(getTargetTree(targetClsName));
 			}
 		}
-		return mapFields;
+		return mapJsTreeNodes;
 	}
 
 	@PostMapping(value=URL_CREATE_OTCFILE)
-	public void createMapper(@RequestParam(name = "otcInstructions") String otcInstructions, HttpServletResponse response) {
+	public void createOtclFile(@RequestParam(name = "otcInstructions") String otcInstructions, HttpServletResponse response) {
 		response.setContentType("text/plain");
 	    ServletOutputStream out;
 		try {
@@ -116,7 +114,7 @@ public class OtcEditorController {
 	}
 
 	@PostMapping(value=URL_FLIP_OTC)
-	public @ResponseBody String flipOtc(@RequestParam(name = "otcInstructions") String otcInstructions) {
+	public @ResponseBody String flipOtcl(@RequestParam(name = "otcInstructions") String otcInstructions) {
 		OtcFileDto otcFileDto = otcEditorService.createOtcFileDto(otcInstructions, true);
 		otcInstructions = otcEditorService.createYaml(otcFileDto);
 		return otcInstructions;

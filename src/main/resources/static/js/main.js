@@ -42,7 +42,7 @@ var headerTemplate =
 	"    target: <<targetType>>\r\n" +
 	"  entryClassName: <<entryClassName>>\r\n" +
 	"  helper: <<helperClassName>>\r\n" +
-	"otclCommands:\r\n";
+	"commands:\r\n";
 
 var copyScriptTemplate =
 	"- copy:\r\n" +
@@ -149,7 +149,7 @@ $("#fetchSrc").click(function() {
 	if (!srcPkgName) {
 		return;
 	}
-	var url = pageUrl.concat('showTypes').concat('?pkgName=').concat(srcPkgName);
+	var url = pageUrl.concat('getTypes').concat('?pkgName=').concat(srcPkgName);
 	getClassNames(url, 'srcClsNames');
 });
 
@@ -158,7 +158,7 @@ $("#fetchTarget").click(function() {
 	if (!targetPkgName) {
 		return;
 	}
-	var url = pageUrl.concat('showTypes').concat('?pkgName=').concat(targetPkgName);
+	var url = pageUrl.concat('getTypes').concat('?pkgName=').concat(targetPkgName);
 	getClassNames(url, 'targetClsNames');
 });
 
@@ -168,11 +168,11 @@ $("#showTree").click(function() {
 	var targetClsName = $('#targetClsNames').val();
 	var url;
 	if (srcClsName != null && srcClsName.trim() != '' && targetClsName != null && targetClsName.trim() != '') {
-		url = pageUrl.concat('fetchJsTreeData');
+		url = pageUrl.concat('getTree');
 	} else if (srcClsName != null && srcClsName.trim() != '') {
-		url = pageUrl.concat('fetchSourceJsTreeData');
+		url = pageUrl.concat('getSourceTree');
 	} else if (targetClsName != null && targetClsName.trim() != '') {
-		url = pageUrl.concat('fetchTargetJsTreeData');
+		url = pageUrl.concat('getTargetTree');
 	}
 	var didSucceed = fetchAndPopulateJstree(url);
 	if (!didSucceed) {

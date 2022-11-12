@@ -11,7 +11,7 @@ public class OtcErrorController implements ErrorController {
 
     @RequestMapping(value = PATH)
     public String error() {
-        return "Some error has occured - If you manually edited OTCL contents, please recheck.";
+        return "Some unknown error has occured - please contact admin - frank.a.otc@gmail.com.";
     }
 
     @Override
