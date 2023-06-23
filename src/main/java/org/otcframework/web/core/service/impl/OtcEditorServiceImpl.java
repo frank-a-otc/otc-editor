@@ -51,11 +51,11 @@ public class OtcEditorServiceImpl implements OtcEditorService {
 	}
 	
 	@Override
-	public List<ClassMetadataDto> createTree(String clsName, TARGET_SOURCE targetSource) {
+	public List<ClassMetadataDto> createTree(String clsName, TARGET_SOURCE targetOrSource) {
 		if (StringUtils.isEmpty(clsName)) {
 			throw new OtcEditorException("", "Class-name cannot be empty!");
 		}
-		return OtcEditorUtil.createMembersHierarchy(clsName, targetSource);
+		return OtcEditorUtil.createMembersHierarchy(clsName, targetOrSource);
 	}
 
 	@Override

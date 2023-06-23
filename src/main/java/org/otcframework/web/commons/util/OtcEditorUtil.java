@@ -31,6 +31,7 @@ import org.otcframework.common.OtcConstants;
 import org.otcframework.common.OtcConstants.TARGET_SOURCE;
 import org.otcframework.common.config.OtcConfig;
 import org.otcframework.common.util.CommonUtils;
+import org.otcframework.common.util.OtcReflectionUtil;
 import org.otcframework.common.util.OtcUtils;
 import org.otcframework.common.util.PackagesFilterUtil;
 import org.otcframework.web.commons.dto.ClassMetadataDto;
@@ -61,7 +62,11 @@ public class OtcEditorUtil {
         if (!PackagesFilterUtil.isFilteredPackage(basePackage)) {
         	return null;
         }
-		for (File file : directory.listFiles(fileFilter)) {
+		File[] files = directory.listFiles(fileFilter);
+		if (files == null) {
+			return null;
+		}
+		for (File file : files) {
 			if (file.isDirectory()) {
 				if (clzNames == null) {
 					clzNames = fetchFileNamesRecursive(file, fileFilter, clzNames, basePackage);
@@ -91,6 +96,7 @@ public class OtcEditorUtil {
 				        }
 				        clzName = clzName.substring(0, clzName.lastIndexOf(".")).replace('/', '.');
 				        String pkgName = clzName.substring(0, clzName.lastIndexOf("."));
+//						if (!pkgName.startsWith(basePackage)) {
 			            if (!pkgName.equals(basePackage)) {
 			            	continue;
 			            }
@@ -120,21 +126,19 @@ public class OtcEditorUtil {
 	}
 	
 	public static List<ClassMetadataDto> createMembersHierarchy(String clsName, TARGET_SOURCE targetSource) {
-//		if (clzLoader == null) {
-//			clzLoader = OtcUtils.loadURLClassLoader(otcLibLocation);
-//		}
 		Class<?> clz = null;
 		try {
 			clz = OtcUtils.loadClass(clsName);
 		} catch (Exception ex) {
-			LOGGER.warn(ex.getMessage());
+			LOGGER.error(ex.getMessage(), ex);
+			throw ex;
 		}
 		return createClassMetadataDtos(clz, targetSource);		
 	}
 	
 	private static List<ClassMetadataDto> createClassMetadataDtos(Class<?> clz, TARGET_SOURCE targetSource) {
-		List<ClassMetadataDto> membersClassMetadataDtos = createClassMetadataDtos(null, null, clz, null, null,
-				recursionDepth, null);
+		List<ClassMetadataDto> membersClassMetadataDtos = createClassMetadataDtos(null, clz, null,
+				null, recursionDepth, null, targetSource);
 		String txt = clz.getName().concat(" - (right-click for context-menu)");
 		ClassMetadataDto classMetadataDto = ClassMetadataDto.newBuilder()
 			.addId(TARGET_SOURCE.TARGET == targetSource ? TARGET_ROOT : SOURCE_ROOT)
@@ -146,9 +150,9 @@ public class OtcEditorUtil {
 		return classMetadataDtos;
 	}
 
-	private static List<ClassMetadataDto> createClassMetadataDtos(Field field, Class<?> parentClz, Class<?> clz,
+	private static List<ClassMetadataDto> createClassMetadataDtos(Class<?> parentClz, Class<?> clz,
 			String displayId, Map<Class<?>, List<ClassMetadataDto>> mapRegistry, int recursiveChildrenDepthCount, 
-			Set<String> compiledOtcChains) {
+			Set<String> compiledOtcChains, TARGET_SOURCE targetSource) {
 		if (!PackagesFilterUtil.isFilteredPackage(clz)) {
 			return null;
 		}
@@ -167,17 +171,17 @@ public class OtcEditorUtil {
 		}
 		List<ClassMetadataDto> classMetadataDtos = new ArrayList<>();
 		mapRegistry.put(clz, classMetadataDtos);
-		List<ClassMetadataDto> membersClassMetadataDtos = createClassMetadataDtosRecursive(field, clz, 
-				mapRegistry, recursiveChildrenDepthCount, compiledOtcChains, displayId);
+		List<ClassMetadataDto> membersClassMetadataDtos = createClassMetadataDtosRecursive(clz,
+				mapRegistry, recursiveChildrenDepthCount, compiledOtcChains, displayId, targetSource);
 		if (membersClassMetadataDtos != null) {
 			classMetadataDtos.addAll(membersClassMetadataDtos);
 		}
 		return classMetadataDtos; 
 	}
 	
-	private static List<ClassMetadataDto> createClassMetadataDtosRecursive(Field field, Class<?> clz,  
+	private static List<ClassMetadataDto> createClassMetadataDtosRecursive(Class<?> clz,
 			Map<Class<?>, List<ClassMetadataDto>> mapRegistry, int recursiveChildrenDepthCount, 
-			Set<String> compiledIds, String displayId) {
+			Set<String> compiledIds, String displayId, TARGET_SOURCE targetSource) {
 		if (!PackagesFilterUtil.isFilteredPackage(clz)) {
 			return null;
 		}
@@ -188,32 +192,31 @@ public class OtcEditorUtil {
 		}
 		boolean isParentEnum = clz.isEnum();
 		for (Entry<String, Field> entry : fields.entrySet()) {
-			field = entry.getValue();
+			Field field = entry.getValue();
 			Class<?> fieldType = field.getType();
 			String propName = entry.getKey();
 			boolean isEnum = fieldType.isEnum();
 			if ((isEnum && isParentEnum) || (isParentEnum && propName.endsWith("$VALUES"))) {
 				continue;
 			}
-			classMetadataDtos = createUiNode(field, clz, isParentEnum, mapRegistry, recursiveChildrenDepthCount,
-					compiledIds, displayId, classMetadataDtos);
+			classMetadataDtos = createUiNode(field, clz, mapRegistry, recursiveChildrenDepthCount,
+					compiledIds, displayId, classMetadataDtos, targetSource);
 		}
 		
 		return classMetadataDtos;
 	}
 	
-	private static List<ClassMetadataDto> createUiNode(Field field, Class<?> clz, boolean isParentEnum, 
+	private static List<ClassMetadataDto> createUiNode(Field field, Class<?> clz,
 			Map<Class<?>, List<ClassMetadataDto>> mapRegistry, int recursiveChildrenDepthCount, 
-			Set<String> compiledIds, String displayId, List<ClassMetadataDto> classMetadataDtos) {
+			Set<String> compiledIds, String displayId, List<ClassMetadataDto> classMetadataDtos, TARGET_SOURCE targetSource) {
 		Class<?> fieldType = field.getType();
 		Type genericType = field.getGenericType();
 		String propName = field.getName();
 		StringBuilder otcChain = new StringBuilder();
-		if (displayId == null) {
-			otcChain.append(propName);
-		} else {
-			otcChain.append(displayId).append(".").append(propName);
+		if (displayId != null) {
+			otcChain.append(displayId).append(".");
 		}
+		otcChain.append(propName);
 		if (Map.class.isAssignableFrom(fieldType)) {
 			otcChain.append(OtcConstants.MAP_REF);
 		} else if (Collection.class.isAssignableFrom(fieldType) || fieldType.isArray()) {
@@ -223,9 +226,9 @@ public class OtcEditorUtil {
 		if (compiledIds.contains(otcId)) {
 			return classMetadataDtos;
 		}
+		compiledIds.add(otcId);
 		StringBuilder txtBuilder = new StringBuilder();
 		txtBuilder.append(propName);
-		compiledIds.add(otcId);
 		Class<?> keyType = null;
 		Class<?> valueType = null;
 		boolean isMap = false;
@@ -235,72 +238,103 @@ public class OtcEditorUtil {
 		StringBuilder partialTxtBuilder = new StringBuilder();
 		if (Map.class.isAssignableFrom(fieldType)) {
 			isMap = true;
-			txtBuilder.append(" (").append(fieldType.getName()).append(OtcConstants.MAP_REF).append(")");	 
+			txtBuilder.append(" : ").append(fieldType.getName()).append(OtcConstants.MAP_REF);
 			builder.addText(txtBuilder.toString());
 			ParameterizedType parameterizedType = (ParameterizedType) genericType;
 			keyType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
 			valueType = (Class<?>) parameterizedType.getActualTypeArguments()[1];
 			String keyRef = otcId + OtcConstants.MAP_KEY_REF;
 			String displayText = OtcConstants.MAP_KEY_REF;
+			displayText += " : ";
 			if (keyType.isEnum()) {
-				displayText += " (*ENUM: ";
-			} else {
-				displayText += " (";
+				displayText += "*ENUM: ";
 			}
-			displayText += keyType.getName() + ")"; 
+			displayText += keyType.getName(); // + ")";
 			ClassMetadataDto.Builder keyClassMetadataDtoBuilder = ClassMetadataDto.newBuilder()
 					.addId(keyRef)
 					.addText(displayText);
 			if (PackagesFilterUtil.isFilteredPackage(keyType)) {
-				keyClassMetadataDtoBuilder.addChildren(createClassMetadataDtos(field, null, keyType, keyRef, 
-						mapRegistry, recursiveChildrenDepthCount, compiledIds));
+				keyClassMetadataDtoBuilder.addChildren(createClassMetadataDtos(null, keyType, keyRef,
+						mapRegistry, recursiveChildrenDepthCount, compiledIds, targetSource));
 			}
 			builder.addChild(keyClassMetadataDtoBuilder.build());
 			String valueRef = otcId + OtcConstants.MAP_VALUE_REF;
 			displayText = OtcConstants.MAP_VALUE_REF;
+			displayText += " : ";
 			if (valueType.isEnum()) {
-				displayText += " (*ENUM: ";
-			} else {
-				displayText += " (";
+				displayText += " *ENUM: ";
 			}
-			displayText += valueType.getName() + ")"; 
+			displayText += valueType.getName(); // + ")";
 			ClassMetadataDto.Builder valueClassMetadataDtoBuilder = ClassMetadataDto.newBuilder()
 					.addId(valueRef)
 					.addText(displayText);
 			if (PackagesFilterUtil.isFilteredPackage(valueType)) {
-				valueClassMetadataDtoBuilder.addChildren(createClassMetadataDtos(field, null, valueType, valueRef, 
-						mapRegistry, recursiveChildrenDepthCount, compiledIds));
+				valueClassMetadataDtoBuilder.addChildren(createClassMetadataDtos(null, valueType, valueRef,
+						mapRegistry, recursiveChildrenDepthCount, compiledIds, targetSource));
 			}
 			builder.addChild(valueClassMetadataDtoBuilder.build());
 		} else if (fieldType.isArray()) {
 			txtBuilder.append("[]");
 			genericType = fieldType.getComponentType();
 			childType = (Class<?>) genericType;
-			partialTxtBuilder.append(childType.getName()).append(")");	
+			partialTxtBuilder.append(childType.getName()); //.append(")");
 		} else if (Collection.class.isAssignableFrom(fieldType)) {
 			genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 			if (genericType instanceof ParameterizedType) {
 				genericType = Object.class;
 			}
 			childType = (Class<?>) genericType;
-			partialTxtBuilder.append(fieldType.getName()).append("<").append(childType.getName()).append(">")
-				.append(")");	
+			partialTxtBuilder.append(fieldType.getName()).append("<").append(childType.getName()).append(">");
+//				.append(")");
 		} else {
 			childType = fieldType;
 			genericType = null;
-			partialTxtBuilder.append(fieldType.getTypeName()).append(")");	
+			partialTxtBuilder.append(fieldType.getTypeName()); //.append(")");
 		}
-		if (!isMap ) {
+		if (!isMap) {
+			txtBuilder.append(" : ");
 			if (childType.isEnum()) {
-				txtBuilder.append(" (*ENUM: ");
-			} else {
-				txtBuilder.append(" (");
+				txtBuilder.append(" *ENUM: ");
 			}
 			txtBuilder.append(partialTxtBuilder);
 			builder.addText(txtBuilder.toString());
 			if (PackagesFilterUtil.isFilteredPackage(childType)) {
-				builder.addChildren(createClassMetadataDtos(field, clz, childType, otcId, mapRegistry, 
-						recursiveChildrenDepthCount, compiledIds));
+				builder.addChildren(createClassMetadataDtos(clz, childType, otcId, mapRegistry,
+						recursiveChildrenDepthCount, compiledIds, targetSource));
+			}
+		}
+		if (!field.getDeclaringClass().isEnum()) {
+			if (field.getName().equals("ptc")) {
+				System.out.println("");
+			}
+			String getter;
+			try {
+				OtcEditorReflectionUtil.findGetterName(field, otcId);
+			} catch (NoSuchMethodException e) {
+				// exception already logged by OtcEditorReflectionUtil
+				getter = OtcEditorReflectionUtil.findNonJavaBeanGetterName(field);
+				if (getter == null) {
+					builder.addIsGetterHelperRequired(true);
+				} else {
+					builder.addIsGetterRequired(true);
+					builder.addGetter(getter);
+				}
+			}
+
+			if (TARGET_SOURCE.TARGET == targetSource) {
+				String setter;
+				try {
+					OtcEditorReflectionUtil.findSetterName(field, otcId);
+				} catch (NoSuchMethodException e) {
+					// exception already logged by OtcEditorReflectionUtil
+					setter = OtcEditorReflectionUtil.findNonJavaBeanSetterName(field);
+					if (setter == null) {
+						builder.addIsSetterHelperRequired(true);
+					} else {
+						builder.addIsSetterRequired(true);
+						builder.addSetter(setter);
+					}
+				}
 			}
 		}
 		ClassMetadataDto classMetadataDto = builder.build();

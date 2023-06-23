@@ -19,13 +19,31 @@ public final class ClassMetadataDto {
 	public String id;
 	@JsonInclude(Include.NON_NULL) 
 	public List<ClassMetadataDto> children;
-	@JsonInclude(Include.NON_NULL) 
+	@JsonInclude(Include.NON_NULL)
 	public String text;
-	
+	@JsonInclude(Include.NON_NULL)
+	public Boolean isSetterRequired;
+	@JsonInclude(Include.NON_NULL)
+	public String setter;
+	@JsonInclude(Include.NON_NULL)
+	public Boolean isSetterHelperRequired;
+	@JsonInclude(Include.NON_NULL)
+	public Boolean isGetterRequired;
+	@JsonInclude(Include.NON_NULL)
+	public String getter;
+	@JsonInclude(Include.NON_NULL)
+	public Boolean isGetterHelperRequired;
+
 	private ClassMetadataDto(Builder builder) {
 		id = builder.id;
 		children = builder.children;
 		text = builder.text;
+		isGetterRequired = builder.isGetterRequired;
+		getter = builder.getter;
+		isGetterHelperRequired = builder.isGetterHelperRequired;
+		isSetterRequired = builder.isSetterRequired;
+		setter = builder.setter;
+		isSetterHelperRequired = builder.isSetterHelperRequired;
 	}
 	
 	public static Builder newBuilder() {
@@ -44,6 +62,12 @@ public final class ClassMetadataDto {
 		result = prime * result + ((children == null) ? 0 : children.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result + ((setter == null) ? 0 : setter.hashCode());
+		result = prime * result + ((isSetterRequired == null) ? 0 : isSetterRequired.hashCode());
+		result = prime * result + ((isSetterHelperRequired == null) ? 0 : isSetterHelperRequired.hashCode());
+		result = prime * result + ((getter == null) ? 0 : getter.hashCode());
+		result = prime * result + ((isGetterRequired == null) ? 0 : isGetterRequired.hashCode());
+		result = prime * result + ((isGetterHelperRequired == null) ? 0 : isGetterHelperRequired.hashCode());
 		return result;
 	}
 
@@ -78,6 +102,12 @@ public final class ClassMetadataDto {
 		private String id;
 		private List<ClassMetadataDto> children;
 		private String text;
+		public boolean isSetterRequired;
+		private String setter;
+		public boolean isSetterHelperRequired;
+		public boolean isGetterRequired;
+		private String getter;
+		public boolean isGetterHelperRequired;
 
 		public Builder addId(String id) {
 			this.id = id;
@@ -103,6 +133,36 @@ public final class ClassMetadataDto {
 
 		public Builder addText(String text) {
 			this.text = text;
+			return this;
+		}
+
+		public Builder addIsSetterRequired(boolean isSetterRequired) {
+			this.isSetterRequired = isSetterRequired;
+			return this;
+		}
+
+		public Builder addSetter(String setter) {
+			this.setter = setter;
+			return this;
+		}
+
+		public Builder addIsSetterHelperRequired(boolean isSetterHelperRequired) {
+			this.isSetterHelperRequired = isSetterHelperRequired;
+			return this;
+		}
+
+		public Builder addIsGetterRequired(boolean isGetterRequired) {
+			this.isGetterRequired = isGetterRequired;
+			return this;
+		}
+
+		public Builder addGetter(String getter) {
+			this.getter = getter;
+			return this;
+		}
+
+		public Builder addIsGetterHelperRequired(boolean isGetterHelperRequired) {
+			this.isGetterHelperRequired = isGetterHelperRequired;
 			return this;
 		}
 

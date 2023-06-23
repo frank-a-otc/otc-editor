@@ -56,9 +56,14 @@ public class OtcEditorController {
 	public @ResponseBody Map<String, List<ClassMetadataDto>> getSourceTree(@RequestParam(name = "srcClsName")
 			String srcClsName) {
 		Map<String, List<ClassMetadataDto>> mapJsTreeNodes = new HashMap<>();
-		if (!StringUtils.isEmpty(srcClsName)) { 
-			List<ClassMetadataDto> lstSrcFields = otcEditorService.createTree(srcClsName,
-					TARGET_SOURCE.SOURCE);
+		if (!StringUtils.isEmpty(srcClsName)) {
+			List<ClassMetadataDto> lstSrcFields = null;
+			try {
+				lstSrcFields = otcEditorService.createTree(srcClsName, TARGET_SOURCE.SOURCE);
+			} catch (Exception e) {
+				LOGGER.error("Error - ", e);
+				throw new RuntimeException(e);
+			}
 			mapJsTreeNodes.put("sourceFieldNames", lstSrcFields);
 		}
 		return mapJsTreeNodes;
@@ -68,9 +73,14 @@ public class OtcEditorController {
 	public @ResponseBody Map<String, List<ClassMetadataDto>> getTargetTree(@RequestParam(name = "targetClsName")
 			String targetClsName) {
 		Map<String, List<ClassMetadataDto>> mapJsTreeNodes = new HashMap<>();
-		if (!StringUtils.isEmpty(targetClsName)) { 
-			List<ClassMetadataDto> lstTargetFields = otcEditorService.createTree(targetClsName,
-					TARGET_SOURCE.TARGET);
+		if (!StringUtils.isEmpty(targetClsName)) {
+			List<ClassMetadataDto> lstTargetFields = null;
+			try {
+				lstTargetFields = otcEditorService.createTree(targetClsName, TARGET_SOURCE.TARGET);
+			} catch (Exception e) {
+				LOGGER.error("Error - ", e);
+				throw new RuntimeException(e);
+			}
 			mapJsTreeNodes.put("targetFieldNames", lstTargetFields);
 		}
 		return mapJsTreeNodes;

@@ -166,6 +166,10 @@ $("#showTree").click(function() {
 	$("#otcInstructions").val('');
 	var srcClsName = $('#srcClsNames').val();
 	var targetClsName = $('#targetClsNames').val();
+	if (targetClsName == null || targetClsName.trim() == '') {
+		showMsg($("#targetTypeNotSelected"));
+		return;
+	}
 	var url;
 	if (srcClsName != null && srcClsName.trim() != '' && targetClsName != null && targetClsName.trim() != '') {
 		url = pageUrl.concat('getTree');
@@ -240,7 +244,7 @@ var sourceOverrideItems = {
     	name: "getterHelper", 
         type: 'radio', 
         callback: function(key, options) {
-    		sourceMap.set(CONSTANTS.GETTER, getterHelperTemplate);
+    		sourceMap.set(CONSTANTS.GETTER_HELPER, getterHelperTemplate);
         	return false;
         }
     }
@@ -270,7 +274,7 @@ var targetContextMenuItems = {
         type: 'radio', 
         radio: "set",
         callback: function(key, options) {
-        	targetMap.set(CONSTANTS.SETTER, setterHelperTemplate);
+        	targetMap.set(CONSTANTS.SETTER_HELPER, setterHelperTemplate);
         	return false;
         }
     },
@@ -298,7 +302,7 @@ var targetContextMenuItems = {
         type: 'radio', 
         radio: "get",
         callback: function(key, options) {
-        	targetMap.set(CONSTANTS.GETTER, getterHelperTemplate);
+        	targetMap.set(CONSTANTS.GETTER_HELPER, getterHelperTemplate);
         	return false;
         }
     },
@@ -445,16 +449,34 @@ function fetchAndPopulateJstree(url) {
 $("#addScript").click(function( event ) {
     var targetNode = $('#targetTree').jstree(true).get_selected(true);
    	var targetOtcChain;
-   	if (targetNode[0]) {
-   		if (targetNode[0].id == CONSTANTS.TARGET_ROOT) {
+	var isTargetSetterRequired = false;
+	var isTargetSetterHelperRequired = false;
+	var isTargetGetterRequired = false;
+	var isTargetGetterHelperRequired = false;
+	var targetSetter = "";
+	var targetGetter = "";
+	var target = targetNode[0];
+   	if (targetNode && targetNode[0]) {
+    	var target = targetNode[0];
+   		if (target.id == CONSTANTS.TARGET_ROOT) {
 			if (CONSTANTS.CMD_COPY == command) {
 	   			showMsg($("#rootTargetOtcChain"));
 	   			return;
 	   		}
    			targetOtcChain = CONSTANTS.ROOT;
    		} else {
-   			targetOtcChain = targetNode[0].id;
+   			targetOtcChain = target.id;
    		}
+        isTargetSetterRequired = target.original.isSetterRequired;
+        isTargetSetterHelperRequired = target.original.isSetterHelperRequired;
+        isTargetGetterRequired = target.original.isGetterRequired;
+        isTargetGetterHelperRequired = target.original.isGetterHelperRequired;
+        if (isTargetSetterRequired) {
+            targetSetter = target.original.setter;
+        }
+        if (isTargetGetterRequired) {
+            targetGetter = target.original.getter;
+        }
    	}
    	if (!targetOtcChain) {
 		showMsg($("#targetOtcChain"));
@@ -465,20 +487,29 @@ $("#addScript").click(function( event ) {
 	if (hasSrcTree) {
 		srcNode = $('#srcTree').jstree(true).get_selected(true);
 	}
-	if (CONSTANTS.CMD_EXECUTE == command && !srcNode[0]) {
+	if (CONSTANTS.CMD_EXECUTE == command && !source) {
 		showMsg($("#sourceOtcChain"));
 		return;
 	}
+	var isSrcGetterRequired = false;
+	var isSrcGetterHelperRequired = false;
+	var srcGetter = "";
 	if (srcNode && srcNode[0]) {
-		if (srcNode[0].id == CONSTANTS.SOURCE_ROOT) {
+    	var source = srcNode[0];
+		if (source.id == CONSTANTS.SOURCE_ROOT) {
 			if (CONSTANTS.CMD_COPY == command) {
 				showMsg($("#rootSourceOtcChain"));
 				return;
 			}
 			sourceOtcChain = CONSTANTS.ROOT;
 		} else {
-			sourceOtcChain = srcNode[0].id;
+			sourceOtcChain = source.id;
 		}
+		isSrcGetterRequired = source.original.isGetterRequired;
+		isSrcGetterHelperRequired = source.original.isGetterHelperRequired;
+        if (isSrcGetterRequired) {
+            srcGetter = source.original.getter;
+        }
 	}
 
 	for (const [key, value] of anchorsMap.entries()) {
@@ -523,11 +554,17 @@ $("#addScript").click(function( event ) {
 		var from = objectPathTemplate.replace(objectPathPlaceholder, sourceOtcChain);
 		scriptBlock = scriptBlock.replace(fromPlaceholder, from);
 	}
-	if (sourceMap.has(CONSTANTS.GETTER)) {
+
+	if (sourceMap.has(CONSTANTS.GETTER) || sourceMap.has(CONSTANTS.GETTER_HELPER) ||
+	        isSrcGetterRequired || isSrcGetterHelperRequired) {
 		var overrides = overridesTemplate.replace(tokenPathPlaceholder, sourceOtcChain);
 		if (sourceOtcChain != null) {
-			if (sourceMap.has(CONSTANTS.GETTER)) {
-				overrides += sourceMap.get(CONSTANTS.GETTER);
+			if (sourceMap.has(CONSTANTS.GETTER) || isSrcGetterRequired) {
+//				overrides += sourceMap.get(CONSTANTS.GETTER);
+				overrides += getterTemplate;
+				overrides = overrides.replace(getterPlaceholder, srcGetter);
+			} else if (sourceMap.has(CONSTANTS.GETTER_HELPER) || isSrcGetterHelperRequired) {
+				overrides += getterHelperTemplate;
 			}
 		}
 		scriptBlock = scriptBlock.replace(fromOverridesPlaceholder, overrides);
@@ -537,17 +574,26 @@ $("#addScript").click(function( event ) {
 	// ---- to
 	var to = objectPathTemplate.replace(objectPathPlaceholder, targetOtcChain);
 	scriptBlock = scriptBlock.replace(toPlaceholder, to);
-	
+
 	if (targetMap.has(CONSTANTS.GETTER) || targetMap.has(CONSTANTS.GETTER_HELPER) ||
 			targetMap.has(CONSTANTS.SETTER) || targetMap.has(CONSTANTS.SETTER_HELPER) ||
-			targetMap.has(CONSTANTS.CONCRETE_TYPE)) {
+			targetMap.has(CONSTANTS.CONCRETE_TYPE) || isTargetSetterRequired || isTargetSetterHelperRequired ||
+			isTargetGetterRequired || isTargetGetterHelperRequired) {
 		var overrides = overridesTemplate.replace(tokenPathPlaceholder, targetOtcChain.replace('^', ''));
-		if (targetMap.has(CONSTANTS.GETTER)) {
-			overrides += targetMap.get(CONSTANTS.GETTER);
+		if (targetMap.has(CONSTANTS.GETTER) || isTargetGetterRequired) {
+//			overrides += targetMap.get(CONSTANTS.GETTER);
+            overrides += getterTemplate;
+			overrides = overrides.replace(getterPlaceholder, targetGetter);
+        } else if (targetMap.has(CONSTANTS.GETTER_HELPER) || isTargetGetterHelperRequired) {
+            overrides += getterHelperTemplate;
 		}
-		if (targetMap.has(CONSTANTS.SETTER)) {
-			overrides += targetMap.get(CONSTANTS.SETTER);
-		}	
+		if (targetMap.has(CONSTANTS.SETTER) || isTargetSetterRequired) {
+//			overrides += targetMap.get(CONSTANTS.SETTER);
+            overrides += setterTemplate;
+			overrides = overrides.replace(setterPlaceholder, targetSetter);
+        } else if (targetMap.has(CONSTANTS.SETTER_HELPER) || isTargetSetterHelperRequired) {
+            overrides += setterHelperTemplate;
+		}
 		if (targetMap.has(CONSTANTS.CONCRETE_TYPE)) {
 			overrides += concreteTypeTemplate;
 		}
