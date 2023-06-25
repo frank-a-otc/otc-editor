@@ -89,6 +89,9 @@
 			<div class="actions">
 				<input id="reset" type="button" value="Clear" class="actionBtn" >
 			</div>
+			<div class="actions">
+				<input id="compile" type="button" value="Compile" class="actionBtn" data-href="compile">
+			</div>
 		</div>
 		<div class="box">
 			<div id="srcTree" class="sourceTree">&nbsp;
@@ -165,6 +168,9 @@
 	  <p>Some information can be lost due to some unsupported parameters under from / source which may have to be updated manually.</p>
 	</div>
 
+	<div id="messageDialog" title="Message" style="display: none">
+		<p id="message"></p>
+	</div>
 </body>
 
 <script type="text/javascript" src="js/main.js"></script>

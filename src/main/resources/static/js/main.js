@@ -138,7 +138,7 @@ function getClassNames(url, eleName) {
 	        	$.each(data, function(i, item){
 	                selectHtml = selectHtml.concat("<option>", item, "</option>");
 	            });
-	        	$('#'+eleName).html(selectHtml);
+	        	$('#' + eleName).html(selectHtml);
         	}
         }
     });	
@@ -410,7 +410,7 @@ function fetchAndPopulateJstree(url) {
 	$.jstree.defaults.core.force_text = true;
     $.ajax({
         url : url,
-        dataType:"json",
+        dataType: "json",
         success : function(response) {
         	if (srcClsName != null) {
         		$('#srcTree').jstree({
@@ -438,9 +438,9 @@ function fetchAndPopulateJstree(url) {
 	        	});
         	}
         },
-        error : function(xhr, ajaxOptions, thrownError) {
-            alert(xhr.status);
-            alert(thrownError);
+        error: function(xhr, status, error) {
+            var errorHeader = xhr.status;
+            showMsg('Error: ' + errorHeader, error);
         }
     });
    	return true;
@@ -785,9 +785,45 @@ $("#flipOtc").click(function() {
 	});
 });
 
+$("#compile").click(function() {
+	var url = $('#compile').data('href');
+    $.ajax({
+        url : url,
+        type: "PUT",
+        success : function(response) {
+            showMsg('Compilation:', response);
+        },
+        error: function(xhr, status, error) {
+            var errorHeader = xhr.status;
+            var errorMessage = error;
+            if (errorHeader == 500) {
+                errorMessage += 'Probable cause - Pls check if JDK versions of the jar(s) in ${OTC_HOME}/lib' +
+                    ' and otceditor match.';
+            }
+            showMsg('Error: ' + errorHeader, errorMessage);
+        }
+    });
+});
+
 function showMsg(msgElement) {
 	msgElement.show();
 	msgElement.dialog({
+		resizable: false,
+	    modal: true,
+		buttons: {
+	        Ok: function() {
+	          $( this ).dialog( "close" );
+	        }
+        }
+	});
+	return;
+}
+
+function showMsg(caption, msg) {
+	$("#messageDialog").attr('title', caption);
+	$("#message").text(msg);
+	$("#messageDialog").show();
+	$("#messageDialog").dialog({
 		resizable: false,
 	    modal: true,
 		buttons: {

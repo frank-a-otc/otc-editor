@@ -50,9 +50,6 @@ public class OtcEditorUtil {
 
 	public static Set<String> findTypeNamesInPackage(String basePackage) {
 		File otcLibDirectory = new File(otcLibLocation);
-//		if (clzLoader == null) {
-//			clzLoader = OtcUtils.loadURLClassLoader(otcLibLocation);
-//		}
 		Set<String> lstClassNames = fetchFileNamesRecursive(otcLibDirectory, jarFileFilter, null, basePackage);
 	    return lstClassNames;
 	}

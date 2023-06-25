@@ -19,6 +19,7 @@
 	    <maven.compiler.source>1.8</maven.compiler.source>
 	    <maven.compiler.target>1.8</maven.compiler.target>
 	    <otc.version>2.7.0</otc.version>
+		<lombok.version>1.18.22</lombok.version>
 	</properties>
 
 	<dependencies>
@@ -45,12 +46,22 @@
 			<artifactId>otc-common</artifactId>
 			<version>${otc.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.otcframework</groupId>
+			<artifactId>otc-compiler</artifactId>
+			<version>${otc.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -60,7 +71,8 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<layout>ZIP</layout>
+					<mainClass>org.otcframework.web.OtcEditorApp</mainClass>
+					<!--<layout>ZIP</layout>-->
 				</configuration>
 				<executions>
 					<execution>

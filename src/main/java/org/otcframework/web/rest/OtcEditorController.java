@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.otcframework.common.OtcConstants.TARGET_SOURCE;
 import org.otcframework.common.dto.otc.OtcFileDto;
 import org.otcframework.common.util.OtcUtils;
+import org.otcframework.web.CompilerTest;
 import org.otcframework.web.commons.dto.ClassMetadataDto;
 import org.otcframework.web.commons.service.OtcEditorService;
 import org.slf4j.Logger;
@@ -26,10 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class OtcEditorController {
@@ -45,6 +43,8 @@ public class OtcEditorController {
 	public static final String URL_GET_TREE ="/getTree";
 	public static final String URL_CREATE_OTCFILE ="/createOtcFile";
 	public static final String URL_FLIP_OTC ="/flipOtc";
+	public static final String COMPILE ="/compile";
+	public static CompilerTest compilerTest = new CompilerTest();
 
 	@GetMapping(value=URL_SHOW_TYPES, produces={"application/json;charset=UTF-8"})
 	public @ResponseBody Set<String> getFullyQualifiedNames(@RequestParam(name = "pkgName") String pkgName) {
@@ -130,4 +130,8 @@ public class OtcEditorController {
 		return otcInstructions;
 	}
 
+	@PutMapping(value=COMPILE)
+	public @ResponseBody String compile() {
+		return compilerTest.compile();
+	}
 }
