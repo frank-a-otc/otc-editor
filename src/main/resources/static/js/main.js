@@ -140,6 +140,15 @@ function getClassNames(url, eleName) {
 	            });
 	        	$('#' + eleName).html(selectHtml);
         	}
+        },
+        error: function(xhr, status, error) {
+            var errorMessage = error;
+            var errorHeader = xhr.status;
+            if (errorHeader == 500) {
+                errorMessage == error + ' - probable cause - Pls check if JDK versions of the jar(s) in ${OTC_HOME}/lib' +
+                    ' and otceditor match.';
+            }
+            showMsg('Error: ' + errorHeader, errorMessage);
         }
     });	
 }
@@ -439,8 +448,13 @@ function fetchAndPopulateJstree(url) {
         	}
         },
         error: function(xhr, status, error) {
+            var errorMessage = error;
             var errorHeader = xhr.status;
-            showMsg('Error: ' + errorHeader, error);
+            if (errorHeader == 500) {
+                errorMessage == error + ' - probable cause - Pls check if JDK versions of the jar(s) in ${OTC_HOME}/lib' +
+                    ' and otceditor match.';
+            }
+            showMsg('Error: ' + errorHeader, errorMessage);
         }
     });
    	return true;
@@ -794,10 +808,10 @@ $("#compile").click(function() {
             showMsg('Compilation:', response);
         },
         error: function(xhr, status, error) {
-            var errorHeader = xhr.status;
             var errorMessage = error;
+            var errorHeader = xhr.status;
             if (errorHeader == 500) {
-                errorMessage += 'Probable cause - Pls check if JDK versions of the jar(s) in ${OTC_HOME}/lib' +
+                errorMessage == error + ' - probable cause - Pls check if JDK versions of the jar(s) in ${OTC_HOME}/lib' +
                     ' and otceditor match.';
             }
             showMsg('Error: ' + errorHeader, errorMessage);
