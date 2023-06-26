@@ -132,6 +132,10 @@ public class OtcEditorController {
 
 	@PutMapping(value=COMPILE)
 	public @ResponseBody String compile() {
-		return compilerTest.compile();
+		try {
+			return compilerTest.compile();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

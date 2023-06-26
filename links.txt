@@ -2,5 +2,5 @@ To check java version -
 
 https://stackoverflow.com/questions/3313532/what-version-of-javac-built-my-jar
 
-javap -cp otceditor.jar.original -verbose org.otcframework.web.OtcEditorApp
+javap -cp otceditor.jar.original -verbose org.otcframework.web.OtcEditorApp | grep major
 

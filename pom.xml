@@ -16,9 +16,9 @@
 	<packaging>jar</packaging>
 	
 	<properties>
-	    <maven.compiler.source>17</maven.compiler.source>
-	    <maven.compiler.target>17</maven.compiler.target>
-	    <otc.version>2.7.0</otc.version>
+	    <maven.compiler.source>1.8</maven.compiler.source>
+	    <maven.compiler.target>1.8</maven.compiler.target>
+	    <otc.version>2.7.1-SNAPSHOT</otc.version>
 		<lombok.version>1.18.22</lombok.version>
 	</properties>
 
@@ -70,10 +70,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+<!--
 				<configuration>
 					<mainClass>org.otcframework.web.OtcEditorApp</mainClass>
-					<!--<layout>ZIP</layout>-->
 				</configuration>
+-->
 				<executions>
 					<execution>
 						<goals>
