@@ -130,9 +130,8 @@ public class OtcEditorReflectionUtil {
         } else {
             paramsBuilder = new StringBuilder("()");
         }
-        String msg = "Method '" + clz.getName() + "." + methodName + paramsBuilder.toString()
-                + " not found for tokenpath : " + tokenPath;
-        return msg;
+        return String.format("Java Bean spec violation - Method '%s.%s%s not found for object-path : %s", clz.getName(), methodName,
+                paramsBuilder, tokenPath);
     }
 
 }

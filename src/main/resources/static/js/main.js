@@ -144,11 +144,12 @@ function getClassNames(url, eleName) {
         error: function(xhr, status, error) {
             var errorMessage = error;
             var errorHeader = xhr.status;
+            errorMessage = xhr.responseText;
             if (errorHeader == 500) {
-                errorMessage == error + ' - probable cause - Pls check if JDK versions of the jar(s) in ${OTC_HOME}/lib' +
-                    ' and otceditor match.';
+                errorMessage = errorMessage + ' - Pls check if JDK versions of both OTC-Editor and the jar(s) in ${OTC_HOME}/lib' +
+                    ' are compatible.';
             }
-            showMsg('Error: ' + errorHeader, errorMessage);
+            showMsgDialog('Error: ' + errorHeader, errorMessage);
         }
     });	
 }
@@ -424,7 +425,7 @@ function fetchAndPopulateJstree(url) {
         	if (srcClsName != null) {
         		$('#srcTree').jstree({
 	        		'core': {
-	        			'data': response.sourceFieldNames
+	        			'data': response.sourceTreeData
 	        		},
 	        		"plugins": ["contextmenu"],
 	        		"contextmenu": {
@@ -438,7 +439,7 @@ function fetchAndPopulateJstree(url) {
         	if (targetClsName != null) {
         		$('#targetTree').jstree({
 	        		'core': {
-	        			'data': response.targetFieldNames
+	        			'data': response.targetTreeData
 	        		},
 	        		"plugins": ["contextmenu", "themes", "ui", "types"],
 	        		"contextmenu": {
@@ -450,11 +451,12 @@ function fetchAndPopulateJstree(url) {
         error: function(xhr, status, error) {
             var errorMessage = error;
             var errorHeader = xhr.status;
+            errorMessage = xhr.responseText;
             if (errorHeader == 500) {
-                errorMessage == error + ' - probable cause - Pls check if JDK versions of the jar(s) in ${OTC_HOME}/lib' +
-                    ' and otceditor match.';
+                errorMessage = errorMessage + ' - Pls check if JDK versions of both OTC-Editor and the jar(s) in ${OTC_HOME}/lib' +
+                    ' are compatible.';
             }
-            showMsg('Error: ' + errorHeader, errorMessage);
+            showMsgDialog('Error: ' + errorHeader, errorMessage);
         }
     });
    	return true;
@@ -742,7 +744,7 @@ $("#createOtcFile").click(function() {
 	var otcInstructions = $("#otcInstructions").val();
 	if (!otcInstructions) {
 		showMsg($("#nothingToSave"));
-		return ;
+		return false;
 	}
 	$("#otcEditorForm").submit();
 });
@@ -805,7 +807,7 @@ $("#compile").click(function() {
         url : url,
         type: "PUT",
         success : function(response) {
-            showMsg('Compilation:', response);
+            showMsgDialog('Compilation:', response);
         },
         error: function(xhr, status, error) {
             var errorMessage = error;
@@ -814,12 +816,15 @@ $("#compile").click(function() {
                 errorMessage == error + ' - probable cause - Pls check if JDK versions of the jar(s) in ${OTC_HOME}/lib' +
                     ' and otceditor match.';
             }
-            showMsg('Error: ' + errorHeader, errorMessage);
+            showMsgDialog('Error: ' + errorHeader, errorMessage);
         }
     });
 });
 
 function showMsg(msgElement) {
+	alert($(msgElement).attr('title'));
+	alert($(msgElement).text());
+
 	msgElement.show();
 	msgElement.dialog({
 		resizable: false,
@@ -827,13 +832,17 @@ function showMsg(msgElement) {
 		buttons: {
 	        Ok: function() {
 	          $( this ).dialog( "close" );
+              $(msgElement).attr('title', '');
+              $(msgElement).text('');
 	        }
         }
 	});
 	return;
 }
 
-function showMsg(caption, msg) {
+function showMsgDialog(caption, msg) {
+	alert(caption);
+	alert(msg);
 	$("#messageDialog").attr('title', caption);
 	$("#message").text(msg);
 	$("#messageDialog").show();
@@ -843,6 +852,8 @@ function showMsg(caption, msg) {
 		buttons: {
 	        Ok: function() {
 	          $( this ).dialog( "close" );
+	          $("#messageDialog").attr('title', '');
+              $("#message").text();
 	        }
         }
 	});

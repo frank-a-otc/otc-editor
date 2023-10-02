@@ -31,7 +31,6 @@ import org.otcframework.common.OtcConstants;
 import org.otcframework.common.OtcConstants.TARGET_SOURCE;
 import org.otcframework.common.config.OtcConfig;
 import org.otcframework.common.util.CommonUtils;
-import org.otcframework.common.util.OtcReflectionUtil;
 import org.otcframework.common.util.OtcUtils;
 import org.otcframework.common.util.PackagesFilterUtil;
 import org.otcframework.web.commons.dto.ClassMetadataDto;
@@ -44,7 +43,7 @@ public class OtcEditorUtil {
 	private static final String otcLibLocation = OtcConfig.getOtcLibLocation();
 	private static final FileFilter jarFileFilter = CommonUtils.createFilenameFilter(".jar");
 	private static Set<String> jarFilesLoaded;
-	private static final int recursionDepth = 2;
+	private static final int cyclicDependencyDepth = OtcConfig.getCyclicDependencyDepth();
 	private static final String SOURCE_ROOT = "source-root";
 	private static final String TARGET_ROOT = "target-root";
 
@@ -92,8 +91,12 @@ public class OtcEditorUtil {
 				        	continue;
 				        }
 				        clzName = clzName.substring(0, clzName.lastIndexOf(".")).replace('/', '.');
-				        String pkgName = clzName.substring(0, clzName.lastIndexOf("."));
-//						if (!pkgName.startsWith(basePackage)) {
+						String pkgName;
+						if (clzName.contains(".")) {
+							pkgName = clzName.substring(0, clzName.lastIndexOf("."));
+						} else {
+							pkgName = "";
+						}
 			            if (!pkgName.equals(basePackage)) {
 			            	continue;
 			            }
@@ -135,7 +138,7 @@ public class OtcEditorUtil {
 	
 	private static List<ClassMetadataDto> createClassMetadataDtos(Class<?> clz, TARGET_SOURCE targetSource) {
 		List<ClassMetadataDto> membersClassMetadataDtos = createClassMetadataDtos(null, clz, null,
-				null, recursionDepth, null, targetSource);
+				null, cyclicDependencyDepth, null, targetSource);
 		String txt = clz.getName().concat(" - (right-click for context-menu)");
 		ClassMetadataDto classMetadataDto = ClassMetadataDto.newBuilder()
 			.addId(TARGET_SOURCE.TARGET == targetSource ? TARGET_ROOT : SOURCE_ROOT)
@@ -148,18 +151,21 @@ public class OtcEditorUtil {
 	}
 
 	private static List<ClassMetadataDto> createClassMetadataDtos(Class<?> parentClz, Class<?> clz,
-			String displayId, Map<Class<?>, List<ClassMetadataDto>> mapRegistry, int recursiveChildrenDepthCount, 
+			String displayId, Map<Class<?>, List<ClassMetadataDto>> mapRegistry, int cyclicDependencyDepthCount,
 			Set<String> compiledOtcChains, TARGET_SOURCE targetSource) {
 		if (!PackagesFilterUtil.isFilteredPackage(clz)) {
 			return null;
 		}
 		if (mapRegistry != null) {
 			if (mapRegistry.containsKey(clz)) {
-				if (recursiveChildrenDepthCount < recursionDepth) {
+				if (cyclicDependencyDepthCount < cyclicDependencyDepth) {
 					return mapRegistry.get(clz);
 				}
 				if (clz == parentClz) {
-					recursiveChildrenDepthCount++;
+					if (cyclicDependencyDepthCount == cyclicDependencyDepth) {
+						return null;
+					}
+					cyclicDependencyDepthCount++;
 				}
 			}
 		} else {
@@ -169,7 +175,7 @@ public class OtcEditorUtil {
 		List<ClassMetadataDto> classMetadataDtos = new ArrayList<>();
 		mapRegistry.put(clz, classMetadataDtos);
 		List<ClassMetadataDto> membersClassMetadataDtos = createClassMetadataDtosRecursive(clz,
-				mapRegistry, recursiveChildrenDepthCount, compiledOtcChains, displayId, targetSource);
+				mapRegistry, cyclicDependencyDepthCount, compiledOtcChains, displayId, targetSource);
 		if (membersClassMetadataDtos != null) {
 			classMetadataDtos.addAll(membersClassMetadataDtos);
 		}
@@ -301,9 +307,6 @@ public class OtcEditorUtil {
 			}
 		}
 		if (!field.getDeclaringClass().isEnum()) {
-			if (field.getName().equals("ptc")) {
-				System.out.println("");
-			}
 			String getter;
 			try {
 				OtcEditorReflectionUtil.findGetterName(field, otcId);
@@ -346,7 +349,14 @@ public class OtcEditorUtil {
 		if (!PackagesFilterUtil.isFilteredPackage(clz)) {
 			return fields;
 		}
-		for (Field field : clz.getDeclaredFields()) {
+		Field[] fieldArr;
+		try {
+			fieldArr = clz.getDeclaredFields();
+		} catch (Throwable e) {
+			LOGGER.error(e.getMessage(), e);
+			return fields;
+		}
+		for (Field field : fieldArr) {
 			if (fields == null) {
 				fields = new LinkedHashMap<>();
 			}

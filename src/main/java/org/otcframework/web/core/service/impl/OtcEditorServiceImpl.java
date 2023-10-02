@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import org.otcframework.common.OtcConstants.TARGET_SOURCE;
 import org.otcframework.common.dto.otc.OtcFileDto;
 import org.otcframework.common.dto.otc.OtcFileDto.Execute;
@@ -32,14 +34,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 
 @Service
 public class OtcEditorServiceImpl implements OtcEditorService {
 
-//	private static final Logger LOGGER = LoggerFactory.getLogger(OtcEditorServiceImpl.class);
-	
 	private static ObjectMapper objectMapper;
 
 	public OtcEditorServiceImpl() {
@@ -60,8 +58,7 @@ public class OtcEditorServiceImpl implements OtcEditorService {
 
 	@Override
 	public Set<String> findTypeNamesInPackage(String basePackage) {
-		Set<String> fileNames = OtcEditorUtil.findTypeNamesInPackage(basePackage);
-		return fileNames;
+		return OtcEditorUtil.findTypeNamesInPackage(basePackage);
 	}
 
 	@Override

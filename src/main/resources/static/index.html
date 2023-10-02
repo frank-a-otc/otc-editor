@@ -34,7 +34,7 @@
 		<label id="contactUs"><b>frank.a.otc@gmail.com</b></label>
 	</div>
 	
-	<form id="otcEditorForm" action="createOtcFile" accept-charset="utf-8" method="post">
+	<form id="otcEditorForm" action="/createOtcFile" accept-charset="utf-8" method="post">
 		<div class="box columnHdr">
 			<div class="sourceDiv">
 				<label><u><b>From / Source</b></u></label>
@@ -125,7 +125,7 @@
 	</div>
 
 	<div id="singleSideCollectionOnly" title="OTC-Script::Collections on one side Only" style="display: none">
-	  <p>Collections are allowed only in any one of the chains for executeOtcConverter and executeOtcModule!</p>
+	  <p>Collections are allowed only in any one of the object-paths for 'executeOtcConverter:' and 'executeOtcModule:' params</p>
 	</div>
 	<div id="multipleAnchors" title="OTC Chain::Multiple Anchors" style="display: none">
 	  <p>OTC-chain with multiple Anchors (^) is not valid!</p>
@@ -133,36 +133,39 @@
 	</div>
 
 	<div id="helperClassName" title="Helper-Class Name" style="display: none">
-	  <p>Please define value for placeholder or remove line for 'helper: &lt;&lt;helperClassName&gt;&gt;' parameter under metadata:' or remove line.</p>
+	  <p>Please define value for placeholder or remove line for 'helper: &lt;&lt;helperClassName&gt;&gt;' parameter under 'metadata:'.</p>
 	</div>
 
 	<div id="values" title="'values' property" style="display: none">
-	  <p>Please replace 'from: &lt;&lt;values&gt;&gt;' parameter with values.</p>
+	  <p>Please replace '&lt;&lt;values&gt;&gt;' placeholder in 'from:' parameter with values.</p>
 	</div>
 	<div id="getter" title="Getter-Name" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;getter&gt;&gt; under 'copy: or execute: getter:' or remove line.</p>
+	  <p>Please define value or remove line for placeholder &lt;&lt;getter&gt;&gt; under 'copy.getter:' or 'execute.getter:' parameter.</p>
 	</div>
 	<div id="setter" title="Setter-Name" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;setter&gt;&gt; under 'copy: or execute: setter:' or remove line.</p>
+	  <p>Please define value or remove line for placeholder &lt;&lt;setter&gt;&gt; under 'copy.setter:' or 'execute.setter:' parameter.</p>
 	</div>
 	<div id="getterHelper" title="GetterHelper-Name" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;getterHelper&gt;&gt; under 'copy: or execute: getterHelper:' or remove line.</p>
+	  <p>Please define value  or remove line for placeholder &lt;&lt;getterHelper&gt;&gt; under 'copy.getterHelper:' or
+		  'execute.getterHelper:' parameter.</p>
 	</div>
 	<div id="setterHelper" title="SetterHelper-Name" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;setterHelper&gt;&gt; under 'copy: or execute: setterHelper:' or remove line.</p>
+	  <p>Please define value  or remove line for placeholder &lt;&lt;setterHelper&gt;&gt; under 'copy.setterHelper:' or
+		  'execute.setterHelper:' parameter.</p>
 	</div>
 	<div id="helperClassNotDefined" title="HelperClass-Name requried" style="display: none">
-	  <p>'helper:' parameter and value expected under 'metadata:' when 'getterHelper:' / 'setterHelper:' in defined.</p>
+	  <p>'metadata.helper:' parameter with value expected when 'getterHelper:' / 'setterHelper:' are used.</p>
 	</div>
 
 	<div id="concreteType" title="Concrete-Type" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;concreteType&gt;&gt; under 'copy:' or 'execute:' - 'concreteType:' or remove line.</p>
+	  <p>Please define value or remove line for placeholder '&lt;&lt;concreteType&gt;&gt;' under 'copy.concreteType:' or 'execute.concreteType:'
+		  parameter.</p>
 	</div>
 	<div id="otcConverter" title="OTC-Converter" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;otcConverter&gt;&gt; under 'execute: otcConverter:' or remove line.</p>
+	  <p>Please define value or remove line for placeholder '&lt;&lt;otcConverter&gt;&gt;' under 'execute.otcConverter:' parameter.</p>
 	</div>
 	<div id="otcNamespace" title="OTC-Namespace" style="display: none">
-	  <p>Please define value for placeholder &lt;&lt;otcNamespace&gt;&gt; under 'execute: otcNamespace:' or remove line.</p>
+	  <p>Please define value or remove line for placeholder '&lt;&lt;otcNamespace&gt;&gt;' under 'execute.otcNamespace:' parameter.</p>
 	</div>
 	<div id="infoLoss" title="Some info can be lost" style="display: none">
 	  <p>Some information can be lost due to some unsupported parameters under from / source which may have to be updated manually.</p>

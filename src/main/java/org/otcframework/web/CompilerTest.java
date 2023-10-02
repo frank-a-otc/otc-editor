@@ -26,8 +26,11 @@ import org.otcframework.common.compiler.CompilationReport;
 import org.otcframework.common.config.OtcConfig;
 import org.otcframework.compiler.OtcsCompiler;
 import org.otcframework.compiler.OtcsCompilerImpl;
+import org.otcframework.web.commons.exception.OtcEditorException;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 
@@ -63,15 +66,19 @@ public class CompilerTest {
 			return;
 		}
 		File[] allContents = folder.listFiles();
-		if (allContents != null) {
-			for (File file : allContents) {
-				if (file.isDirectory()) {
-					deleteRecursive(file);
-				} else {
-					file.delete();
+		try {
+			if (allContents != null) {
+				for (File file : allContents) {
+					if (file.isDirectory()) {
+						deleteRecursive(file);
+					} else {
+						Files.delete(file.toPath());
+					}
 				}
 			}
+			Files.delete(folder.toPath());
+		} catch (IOException e) {
+			throw new OtcEditorException(e);
 		}
-		folder.delete();
 	}
 }

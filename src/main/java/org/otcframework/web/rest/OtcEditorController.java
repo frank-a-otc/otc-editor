@@ -18,13 +18,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.otcframework.common.OtcConstants.TARGET_SOURCE;
 import org.otcframework.common.dto.otc.OtcFileDto;
+import org.otcframework.common.exception.OtcException;
+import org.otcframework.common.exception.OtcUnsupportedJdkException;
 import org.otcframework.common.util.OtcUtils;
 import org.otcframework.web.CompilerTest;
 import org.otcframework.web.commons.dto.ClassMetadataDto;
+import org.otcframework.web.commons.exception.OtcEditorException;
 import org.otcframework.web.commons.service.OtcEditorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -47,58 +51,75 @@ public class OtcEditorController {
 	public static CompilerTest compilerTest = new CompilerTest();
 
 	@GetMapping(value=URL_SHOW_TYPES, produces={"application/json;charset=UTF-8"})
-	public @ResponseBody Set<String> getFullyQualifiedNames(@RequestParam(name = "pkgName") String pkgName) {
-		Set<String> clsNames = otcEditorService.findTypeNamesInPackage(pkgName);
-		return clsNames;
+	public <T> ResponseEntity<T> getFullyQualifiedNames(@RequestParam(name = "pkgName") String pkgName) {
+		Set<String> clsNames = null;
+		try {
+			clsNames = otcEditorService.findTypeNamesInPackage(pkgName);
+			if (clsNames == null) {
+				return (ResponseEntity<T>) ResponseEntity.unprocessableEntity().body(
+						String.format("Could not find types for package '%s'", pkgName));
+			}
+			return (ResponseEntity<T>) ResponseEntity.ok(clsNames);
+		} catch (Exception e) {
+			return (ResponseEntity<T>) ResponseEntity.unprocessableEntity().body(e.getMessage());
+		}
 	}
 
 	@GetMapping(value=URL_GET_SOURCE_TREE)
-	public @ResponseBody Map<String, List<ClassMetadataDto>> getSourceTree(@RequestParam(name = "srcClsName")
-			String srcClsName) {
-		Map<String, List<ClassMetadataDto>> mapJsTreeNodes = new HashMap<>();
-		if (!StringUtils.isEmpty(srcClsName)) {
-			List<ClassMetadataDto> lstSrcFields = null;
-			try {
-				lstSrcFields = otcEditorService.createTree(srcClsName, TARGET_SOURCE.SOURCE);
-			} catch (Exception e) {
-				LOGGER.error("Error - ", e);
-				throw new RuntimeException(e);
-			}
-			mapJsTreeNodes.put("sourceFieldNames", lstSrcFields);
-		}
-		return mapJsTreeNodes;
+	public <T> ResponseEntity<T> getSourceTree(@RequestParam(name = "srcClsName") String srcClsName) {
+		return getTreeEntity(srcClsName, TARGET_SOURCE.SOURCE);
 	}
 
 	@GetMapping(value=URL_GET_TARGET_TREE)
-	public @ResponseBody Map<String, List<ClassMetadataDto>> getTargetTree(@RequestParam(name = "targetClsName")
-			String targetClsName) {
+	public <T> ResponseEntity<T> getTargetTree(@RequestParam(name = "targetClsName") String targetClsName) {
+		return getTreeEntity(targetClsName, TARGET_SOURCE.TARGET);
+	}
+
+	@GetMapping(value=URL_GET_TREE)
+	public <T> ResponseEntity<T> getBothTrees(@RequestParam(name = "srcClsName")
+			String srcClsName, @RequestParam(name = "targetClsName") String targetClsName) {
+		Map<String, List<ClassMetadataDto>> mapJsTreeNodes = null;
+		try {
+			if (srcClsName != null) {
+				mapJsTreeNodes = getTree(srcClsName, TARGET_SOURCE.SOURCE);
+			}
+			if (targetClsName != null) {
+				if (mapJsTreeNodes == null) {
+					mapJsTreeNodes = getTree(targetClsName, TARGET_SOURCE.TARGET);
+				} else {
+					mapJsTreeNodes.putAll(getTree(targetClsName, TARGET_SOURCE.TARGET));
+				}
+			}
+			return (ResponseEntity<T>) ResponseEntity.ok(mapJsTreeNodes);
+		} catch (OtcException e) {
+			return (ResponseEntity<T>) ResponseEntity.unprocessableEntity().body(e.getMessage());
+		}
+	}
+
+	private <T> ResponseEntity<T> getTreeEntity(String targetClsName, TARGET_SOURCE target_source) {
+		try {
+			Map<String, List<ClassMetadataDto>> mapJsTreeNodes = getTree(targetClsName, target_source);
+			return (ResponseEntity<T>) ResponseEntity.ok(mapJsTreeNodes);
+		} catch (OtcException e) {
+			return (ResponseEntity<T>) ResponseEntity.unprocessableEntity().body(e.getMessage());
+		}
+	}
+
+	private Map<String, List<ClassMetadataDto>> getTree(String targetClsName, TARGET_SOURCE target_source) {
 		Map<String, List<ClassMetadataDto>> mapJsTreeNodes = new HashMap<>();
 		if (!StringUtils.isEmpty(targetClsName)) {
 			List<ClassMetadataDto> lstTargetFields = null;
 			try {
-				lstTargetFields = otcEditorService.createTree(targetClsName, TARGET_SOURCE.TARGET);
+				lstTargetFields = otcEditorService.createTree(targetClsName, target_source);
 			} catch (Exception e) {
-				LOGGER.error("Error - ", e);
-				throw new RuntimeException(e);
+				LOGGER.error(e.getMessage(), e);
+				if (e instanceof OtcUnsupportedJdkException) {
+					throw e;
+				}
+				throw new OtcEditorException(e);
 			}
-			mapJsTreeNodes.put("targetFieldNames", lstTargetFields);
-		}
-		return mapJsTreeNodes;
-	}
-
-	@GetMapping(value=URL_GET_TREE)
-	public @ResponseBody Map<String, List<ClassMetadataDto>> getTree(@RequestParam(name = "srcClsName")
-			String srcClsName, @RequestParam(name = "targetClsName") String targetClsName) {
-		Map<String, List<ClassMetadataDto>> mapJsTreeNodes = null;
-		if (srcClsName != null) {
-			mapJsTreeNodes = getSourceTree(srcClsName);
-		}
-		if (targetClsName != null) {
-			if (mapJsTreeNodes == null) {
-				mapJsTreeNodes = getTargetTree(targetClsName);
-			} else {
-				mapJsTreeNodes.putAll(getTargetTree(targetClsName));
-			}
+			String key = TARGET_SOURCE.TARGET == target_source ? "targetTreeData" : "sourceTreeData";
+			mapJsTreeNodes.put(key, lstTargetFields);
 		}
 		return mapJsTreeNodes;
 	}
@@ -120,22 +141,25 @@ public class OtcEditorController {
 		} catch (IOException e) {
 			LOGGER.error("", e);
 		}
-        return;
 	}
 
 	@PostMapping(value=URL_FLIP_OTC)
-	public @ResponseBody String flipOtcl(@RequestParam(name = "otcInstructions") String otcInstructions) {
+	public ResponseEntity<String> flipOtcl(@RequestParam(name = "otcInstructions") String otcInstructions) {
 		OtcFileDto otcFileDto = otcEditorService.createOtcFileDto(otcInstructions, true);
-		otcInstructions = otcEditorService.createYaml(otcFileDto);
-		return otcInstructions;
+		try {
+			otcInstructions = otcEditorService.createYaml(otcFileDto);
+		} catch (Exception e) {
+			return ResponseEntity.unprocessableEntity().body(e.getMessage());
+		}
+		return ResponseEntity.ok(otcInstructions);
 	}
 
 	@PutMapping(value=COMPILE)
-	public @ResponseBody String compile() {
+	public ResponseEntity<String> compile() {
 		try {
-			return compilerTest.compile();
+			return ResponseEntity.ok(compilerTest.compile());
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			return ResponseEntity.unprocessableEntity().body(e.getMessage());
 		}
 	}
 }
