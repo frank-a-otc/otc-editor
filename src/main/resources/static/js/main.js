@@ -177,7 +177,7 @@ $("#showTree").click(function() {
 	var srcClsName = $('#srcClsNames').val();
 	var targetClsName = $('#targetClsNames').val();
 	if (targetClsName == null || targetClsName.trim() == '') {
-		showMsg($("#targetTypeNotSelected"));
+		showMsgDialog($("#targetTypeNotSelected").data('title'), $("#msgTargetTypeNotSelected").text());
 		return;
 	}
 	var url;
@@ -340,7 +340,6 @@ function jstreeContextmenu(node) {
 	        className: 'data-title',
 	        callback: function(key, options) {
 	            var m = "clicked: " + key;
-//	            window.console && console.log(m) || alert(m); 
 	        },
 	        items: sourceOverrideItems
 	    });
@@ -377,8 +376,6 @@ function jstreeContextmenu(node) {
 			        	   	if (subKey) {
 			        	   		anchorsMap.delete(subKey);
 			        	   	}
-//			        	   	console.log(node.text);
-//			        	   	$("#" + node.id + " > a").addClass('selectedNodeColor');
 				        	var lastIndexOf = otcChain.lastIndexOf("[");
 				        	var anchoredOtcChain = otcChain.substring(0, lastIndexOf + 1) + "^" + otcChain.substring(lastIndexOf + 1);
 				        	anchorsMap.set(otcChain, anchoredOtcChain);
@@ -395,7 +392,6 @@ function jstreeContextmenu(node) {
 	        className: className,
 	        callback: function(key, options) {
 	            var m = "clicked: " + key;
-//	            window.console && console.log(m) || alert(m); 
 	        },
 	        items: menuItems
 	    });
@@ -476,7 +472,7 @@ $("#addScript").click(function( event ) {
     	var target = targetNode[0];
    		if (target.id == CONSTANTS.TARGET_ROOT) {
 			if (CONSTANTS.CMD_COPY == command) {
-	   			showMsg($("#rootTargetOtcChain"));
+        		showMsgDialog($("#rootTargetOtcChain").data('title'), $("#msgRootTargetOtcChain").text());
 	   			return;
 	   		}
    			targetOtcChain = CONSTANTS.ROOT;
@@ -495,7 +491,7 @@ $("#addScript").click(function( event ) {
         }
    	}
    	if (!targetOtcChain) {
-		showMsg($("#targetOtcChain"));
+   		showMsgDialog($("#targetOtcChain").data('title'), $("#msgTargetOtcChain").text());
 		return;
 	}
 	var srcNode;
@@ -504,7 +500,7 @@ $("#addScript").click(function( event ) {
 		srcNode = $('#srcTree').jstree(true).get_selected(true);
 	}
 	if (CONSTANTS.CMD_EXECUTE == command && !source) {
-		showMsg($("#sourceOtcChain"));
+   		showMsgDialog($("#sourceOtcChain").data('title'), $("#msgSourceOtcChain").text());
 		return;
 	}
 	var isSrcGetterRequired = false;
@@ -514,7 +510,7 @@ $("#addScript").click(function( event ) {
     	var source = srcNode[0];
 		if (source.id == CONSTANTS.SOURCE_ROOT) {
 			if (CONSTANTS.CMD_COPY == command) {
-				showMsg($("#rootSourceOtcChain"));
+           		showMsgDialog($("#rootSourceOtcChain").data('title'), $("#msgRootSourceOtcChain").text());
 				return;
 			}
 			sourceOtcChain = CONSTANTS.ROOT;
@@ -576,7 +572,6 @@ $("#addScript").click(function( event ) {
 		var overrides = overridesTemplate.replace(tokenPathPlaceholder, sourceOtcChain);
 		if (sourceOtcChain != null) {
 			if (sourceMap.has(CONSTANTS.GETTER) || isSrcGetterRequired) {
-//				overrides += sourceMap.get(CONSTANTS.GETTER);
 				overrides += getterTemplate;
 				overrides = overrides.replace(getterPlaceholder, srcGetter);
 			} else if (sourceMap.has(CONSTANTS.GETTER_HELPER) || isSrcGetterHelperRequired) {
@@ -597,14 +592,12 @@ $("#addScript").click(function( event ) {
 			isTargetGetterRequired || isTargetGetterHelperRequired) {
 		var overrides = overridesTemplate.replace(tokenPathPlaceholder, targetOtcChain.replace('^', ''));
 		if (targetMap.has(CONSTANTS.GETTER) || isTargetGetterRequired) {
-//			overrides += targetMap.get(CONSTANTS.GETTER);
             overrides += getterTemplate;
 			overrides = overrides.replace(getterPlaceholder, targetGetter);
         } else if (targetMap.has(CONSTANTS.GETTER_HELPER) || isTargetGetterHelperRequired) {
             overrides += getterHelperTemplate;
 		}
 		if (targetMap.has(CONSTANTS.SETTER) || isTargetSetterRequired) {
-//			overrides += targetMap.get(CONSTANTS.SETTER);
             overrides += setterTemplate;
 			overrides = overrides.replace(setterPlaceholder, targetSetter);
         } else if (targetMap.has(CONSTANTS.SETTER_HELPER) || isTargetSetterHelperRequired) {
@@ -665,7 +658,7 @@ function isValidCollections(targetOtcChain, sourceOtcChain) {
    	var idxTarget = targetOtcChain.indexOf("[");
    	var idxSource = sourceOtcChain.indexOf("[");
 	if (idxTarget > 1 && idxSource > 1) {
-		showMsg($("#singleSideCollectionOnly"));
+        showMsgDialog($("#singleSideCollectionOnly").data('title'), $("#msgSingleSideCollectionOnly").text());
     	return false;
 	}
 	return true;
@@ -675,7 +668,8 @@ function isAnchorsValid(otcChain) {
 	var count = (otcChain.match(/^/g) || []).length;
 	if (count > 1) {
 		$("#otcChain").val(" in " + otcChain);
-		showMsg($("#multipleAnchors"));
+        showMsgDialog($("#multipleAnchors").data('title'), $("#msgMultipleAnchors").text());
+		$("#otcChain").val("");
     	return false;		
 	}
 	return true;
@@ -692,45 +686,45 @@ $("#otcEditorForm").submit(function(event) {
    	var otcInstructionsValue = otcInstructions.val();
 
    	if (otcInstructionsValue.includes(helperClassNamePlaceholder)) {
-		showMsg($("#helperClassName"));
+        showMsgDialog($("#helperClassName").data('title'), $("#msgHelperClassName").text());
 		return false;
 	}
    	if (otcInstructionsValue.includes(valuesPlaceholder)) {
-		showMsg($("#values"));
+        showMsgDialog($("#values").data('title'), $("#msgValues").text());
 		return false;
 	}
    	if (otcInstructionsValue.includes(getterPlaceholder)) {
-		showMsg($("#getter"));
+        showMsgDialog($("#getter").data('title'), $("#msgGetter").text());
 		return false;
 	}
    	if (otcInstructionsValue.includes(setterPlaceholder)) {
-		showMsg($("#setter"));
+        showMsgDialog($("#setter").data('title'), $("#msgSetter").text());
 		return false;
 	}
    	if (otcInstructionsValue.includes(getterHelperPlaceholder)) {
-		showMsg($("#getterHelper"));
+        showMsgDialog($("#getterHelper").data('title'), $("#msgGetterHelper").text());
 		return false;
 	}
    	if (otcInstructionsValue.includes(getterHelperParam) || otcInstructionsValue.includes(setterHelperParam)) {
    		if (!otcInstructionsValue.includes(helperParam)) {
-   			showMsg($("#helperClassNotDefined"));
+            showMsgDialog($("#helperClassNotDefined").data('title'), $("#msgHelperClassNotDefined").text());
    			return false;
    		}
 	}
    	if (otcInstructionsValue.includes(setterHelperPlaceholder)) {
-		showMsg($("#setterHelper"));
+        showMsgDialog($("#setterHelper").data('title'), $("#msgSetterHelper").text());
 		return false;
 	}
    	if (otcInstructionsValue.includes(concreteTypePlaceholder)) {
-		showMsg($("#concreteType"));
+        showMsgDialog($("#concreteType").data('title'), $("#msgConcreteType").text());
 		return false;
 	}
    	if (otcInstructionsValue.includes(otcConverterPlaceholder)) {
-		showMsg($("#otcConverter"));
+        showMsgDialog($("#otcConverter").data('title'), $("#msgOtcConverter").text());
 		return false;
 	}
    	if (otcInstructionsValue.includes(otcNamespacePlaceholder)) {
-		showMsg($("#otcNamespace"));
+        showMsgDialog($("#otcNamespace").data('title'), $("#msgOtcNamespace").text());
 		return false;
 	}
 });
@@ -738,12 +732,12 @@ $("#otcEditorForm").submit(function(event) {
 $("#createOtcFile").click(function() {
 	var targetClsName = $('#targetClsNames').val();
 	if (!targetClsName) {
-		showMsg($("#typesNotSelected"));
+        showMsgDialog($("#typesNotSelected").data('title'), $("#msgTypesNotSelected").text());
    		return false;
 	}
 	var otcInstructions = $("#otcInstructions").val();
 	if (!otcInstructions) {
-		showMsg($("#nothingToSave"));
+        showMsgDialog($("#nothingToSave").data('title'), $("#msgNothingToSave").text());
 		return false;
 	}
 	$("#otcEditorForm").submit();
@@ -752,17 +746,17 @@ $("#createOtcFile").click(function() {
 $("#flipOtc").click(function() {
 	var otc = $("#otcInstructions").val();
 	if (!otc) {
-		showMsg($("#nothingToSave"));
+        showMsgDialog($("#nothingToSave").data('title'), $("#msgNothingToSave").text());
 		return;
 	}
 	var srcClsName = $('#srcClsNames').val();
 	if (!srcClsName) {
-		showMsg($("#typesNotSelected"));
+        showMsgDialog($("#typesNotSelected").data('title'), $("#msgTypesNotSelected").text());
    		return false;
 	}
 	var targetClsName = $('#targetClsNames').val();
 	if (!targetClsName) {
-		showMsg($("#typesNotSelected"));
+        showMsgDialog($("#typesNotSelected").data('title'), $("#msgTypesNotSelected").text());
    		return false;
 	}
 	$("#infoLoss").show();
@@ -821,39 +815,16 @@ $("#compile").click(function() {
     });
 });
 
-function showMsg(msgElement) {
-	alert($(msgElement).attr('title'));
-	alert($(msgElement).text());
-
-	msgElement.show();
-	msgElement.dialog({
-		resizable: false,
-	    modal: true,
-		buttons: {
-	        Ok: function() {
-	          $( this ).dialog( "close" );
-              $(msgElement).attr('title', '');
-              $(msgElement).text('');
-	        }
-        }
-	});
-	return;
-}
-
 function showMsgDialog(caption, msg) {
-	alert(caption);
-	alert(msg);
-	$("#messageDialog").attr('title', caption);
 	$("#message").text(msg);
 	$("#messageDialog").show();
 	$("#messageDialog").dialog({
+		title: caption,
 		resizable: false,
 	    modal: true,
 		buttons: {
 	        Ok: function() {
-	          $( this ).dialog( "close" );
-	          $("#messageDialog").attr('title', '');
-              $("#message").text();
+                $( this ).dialog( "close" );
 	        }
         }
 	});

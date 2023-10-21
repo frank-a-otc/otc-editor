@@ -102,76 +102,76 @@
 	</form>
 
 <!--  error messages -->
-	<div id="targetTypeNotSelected" title="Target types" style="display: none">
-		<p>Can't proceed - please select Target type.</p>
+	<div id="targetTypeNotSelected" data-title="Target types" style="display: none">
+		<p id="msgTargetTypeNotSelected">Can't proceed - please select Target type.</p>
 	</div>
-	<div id="typesNotSelected" title="Target/Source types" style="display: none">
-		<p>Please select both Target and Source types.</p>
+	<div id="typesNotSelected" data-title="Target/Source types" style="display: none">
+		<p id="msgTypesNotSelected">Please select both Target and Source types.</p>
 	</div>
-	<div id="nothingToSave" title="Nothing to Save" style="display: none">
-	  <p>Cannot proceed - Nothing to save!</p>
+	<div id="nothingToSave" data-title="Nothing to Save" style="display: none">
+	  <p id="msgNothingToSave">Cannot proceed - Nothing to save!</p>
 	</div>
-	<div id="rootSourceOtcChain" title="Root OTC-Chain" style="display: none">
-	  <p>Selecting Root-node on Source-tree for the 'Copy' command is not allowed!</p>
+	<div id="rootSourceOtcChain" data-title="Root OTC-Chain" style="display: none">
+	  <p id="msgRootSourceOtcChain">Selecting Root-node on Source-tree for the 'Copy' command is not allowed!</p>
 	</div>
-	<div id="rootTargetOtcChain" title="Root OTC-Chain" style="display: none">
-	  <p>Selecting Root-node on Target-tree for the 'Copy' command is not allowed!</p>
+	<div id="rootTargetOtcChain" data-title="Root OTC-Chain" style="display: none">
+	  <p id="msgRootTargetOtcChain">Selecting Root-node on Target-tree for the 'Copy' command is not allowed!</p>
 	</div>
-	<div id="sourceOtcChain" title="Target OTC-Chain" style="display: none">
-	  <p>For 'Execute' command, selection on Source-tree is mandatory!</p>
+	<div id="sourceOtcChain" data-title="Target OTC-Chain" style="display: none">
+	  <p id="msgSourceOtcChain">For 'Execute' command, selection on Source-tree is mandatory!</p>
 	</div>
-	<div id="targetOtcChain" title="Target OTC-Chain" style="display: none">
-	  <p>Please make a selection on Target-tree!</p>
+	<div id="targetOtcChain" data-title="Target OTC-Chain" style="display: none">
+	  <p id="msgTargetOtcChain">Please make a selection on Target-tree!</p>
 	</div>
 
-	<div id="singleSideCollectionOnly" title="OTC-Script::Collections on one side Only" style="display: none">
-	  <p>Collections are allowed only in any one of the object-paths for 'executeOtcConverter:' and 'executeOtcModule:' params</p>
+	<div id="singleSideCollectionOnly" data-title="OTC-Script::Collections on one side Only" style="display: none">
+	  <p id="msgSingleSideCollectionOnly">Collections are allowed only in any one of the object-paths for 'executeOtcConverter:' and 'executeOtcModule:' params</p>
 	</div>
-	<div id="multipleAnchors" title="OTC Chain::Multiple Anchors" style="display: none">
-	  <p>OTC-chain with multiple Anchors (^) is not valid!</p>
+	<div id="multipleAnchors" data-title="OTC Chain::Multiple Anchors" style="display: none">
+	  <p id="msgMultipleAnchors">OTC-chain with multiple Anchors (^) is not valid!</p>
 	  <p id="otcChain" />
 	</div>
 
-	<div id="helperClassName" title="Helper-Class Name" style="display: none">
-	  <p>Please define value for placeholder or remove line for 'helper: &lt;&lt;helperClassName&gt;&gt;' parameter under 'metadata:'.</p>
+	<div id="helperClassName" data-title="Helper-Class Name" style="display: none">
+	  <p id="msgHelperClassName">Please define value for placeholder or remove line for 'helper: &lt;&lt;helperClassName&gt;&gt;' parameter under 'metadata:'.</p>
 	</div>
 
-	<div id="values" title="'values' property" style="display: none">
-	  <p>Please replace '&lt;&lt;values&gt;&gt;' placeholder in 'from:' parameter with values.</p>
+	<div id="values" data-title="'values' property" style="display: none">
+	  <p id="msgValues">Please replace '&lt;&lt;values&gt;&gt;' placeholder in 'from:' parameter with values.</p>
 	</div>
-	<div id="getter" title="Getter-Name" style="display: none">
-	  <p>Please define value or remove line for placeholder &lt;&lt;getter&gt;&gt; under 'copy.getter:' or 'execute.getter:' parameter.</p>
+	<div id="getter" data-title="Getter-Name" style="display: none">
+	  <p id="msgGetter">Please define value or remove line for placeholder &lt;&lt;getter&gt;&gt; under 'copy.getter:' or 'execute.getter:' parameter.</p>
 	</div>
-	<div id="setter" title="Setter-Name" style="display: none">
-	  <p>Please define value or remove line for placeholder &lt;&lt;setter&gt;&gt; under 'copy.setter:' or 'execute.setter:' parameter.</p>
+	<div id="setter" data-title="Setter-Name" style="display: none">
+	  <p id="msgSetter">Please define value or remove line for placeholder &lt;&lt;setter&gt;&gt; under 'copy.setter:' or 'execute.setter:' parameter.</p>
 	</div>
-	<div id="getterHelper" title="GetterHelper-Name" style="display: none">
-	  <p>Please define value  or remove line for placeholder &lt;&lt;getterHelper&gt;&gt; under 'copy.getterHelper:' or
+	<div id="getterHelper" data-title="GetterHelper-Name" style="display: none">
+	  <p id="msgGetterHelper">Please define value  or remove line for placeholder &lt;&lt;getterHelper&gt;&gt; under 'copy.getterHelper:' or
 		  'execute.getterHelper:' parameter.</p>
 	</div>
-	<div id="setterHelper" title="SetterHelper-Name" style="display: none">
-	  <p>Please define value  or remove line for placeholder &lt;&lt;setterHelper&gt;&gt; under 'copy.setterHelper:' or
+	<div id="setterHelper" data-title="SetterHelper-Name" style="display: none">
+	  <p id="msgSetterHelper">Please define value  or remove line for placeholder &lt;&lt;setterHelper&gt;&gt; under 'copy.setterHelper:' or
 		  'execute.setterHelper:' parameter.</p>
 	</div>
-	<div id="helperClassNotDefined" title="HelperClass-Name requried" style="display: none">
-	  <p>'metadata.helper:' parameter with value expected when 'getterHelper:' / 'setterHelper:' are used.</p>
+	<div id="helperClassNotDefined" data-title="HelperClass-Name requried" style="display: none">
+	  <p id="msgHelperClassNotDefined">'metadata.helper:' parameter with value expected when 'getterHelper:' / 'setterHelper:' are used.</p>
 	</div>
 
-	<div id="concreteType" title="Concrete-Type" style="display: none">
-	  <p>Please define value or remove line for placeholder '&lt;&lt;concreteType&gt;&gt;' under 'copy.concreteType:' or 'execute.concreteType:'
+	<div id="concreteType" data-title="Concrete-Type" style="display: none">
+	  <p id="msgConcreteType">Please define value or remove line for placeholder '&lt;&lt;concreteType&gt;&gt;' under 'copy.concreteType:' or 'execute.concreteType:'
 		  parameter.</p>
 	</div>
-	<div id="otcConverter" title="OTC-Converter" style="display: none">
-	  <p>Please define value or remove line for placeholder '&lt;&lt;otcConverter&gt;&gt;' under 'execute.otcConverter:' parameter.</p>
+	<div id="otcConverter" data-title="OTC-Converter" style="display: none">
+	  <p id="msgOtcConverter">Please define value or remove line for placeholder '&lt;&lt;otcConverter&gt;&gt;' under 'execute.otcConverter:' parameter.</p>
 	</div>
-	<div id="otcNamespace" title="OTC-Namespace" style="display: none">
-	  <p>Please define value or remove line for placeholder '&lt;&lt;otcNamespace&gt;&gt;' under 'execute.otcNamespace:' parameter.</p>
+	<div id="otcNamespace" data-title="OTC-Namespace" style="display: none">
+	  <p id="msgOtcNamespace">Please define value or remove line for placeholder '&lt;&lt;otcNamespace&gt;&gt;' under 'execute.otcNamespace:' parameter.</p>
 	</div>
-	<div id="infoLoss" title="Some info can be lost" style="display: none">
-	  <p>Some information can be lost due to some unsupported parameters under from / source which may have to be updated manually.</p>
+	<div id="infoLoss" data-title="Some info can be lost" style="display: none">
+	  <p id="msgInfoLoss">Some information can be lost due to some unsupported parameters under from / source which may have to be updated manually.</p>
 	</div>
 
-	<div id="messageDialog" title="Message" style="display: none">
+	<div id="messageDialog" data-title="Message" style="display: none">
 		<p id="message"></p>
 	</div>
 </body>

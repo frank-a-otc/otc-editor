@@ -33,8 +33,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-
-public class CompilerTest {
+public class CompilerUtil {
 
 	private static final String OTC_HOME = OtcConfig.getOtcHomeLocation();
 	private static final String OTCS_SOURCE_LOCATION = OtcConfig.getOtcSourceLocation();
@@ -44,21 +43,20 @@ public class CompilerTest {
 	private static final OtcsCompiler otcsCompiler = OtcsCompilerImpl.getInstance();
 
 	public String compile() {
-		cleanupGeratedFiles();
+		cleanupGeneratedFiles();
 		// -- compile script and generate source code
 		List<CompilationReport> compilationReports = otcsCompiler.compile();
 		if (compilationReports == null || compilationReports.isEmpty()) {
 			return String.format("No OTC Scripts to compile in '%s'", OTCS_SOURCE_LOCATION);
 		}
-		otcsCompiler.compileSourceCode();
 		return String.format("Successfully compiled all OTC Scripts in '%s' and generated source-code files in '%s'",
 				OTCS_SOURCE_LOCATION, GENERATED_SOURCE_CODE_LOCATION);
 	}
 
-	private void cleanupGeratedFiles() {
-		deleteRecursive(new File(OTC_HOME + File.separator + "tmd"));
-		deleteRecursive(new File(OTC_HOME + File.separator + "src"));
-		deleteRecursive(new File(OTC_HOME + File.separator + "target"));
+	private void cleanupGeneratedFiles() {
+		deleteRecursive(new File(OTC_HOME + "tmd"));
+		deleteRecursive(new File(OTC_HOME + "src"));
+		deleteRecursive(new File(OTC_HOME + "target"));
 	}
 
 	private void deleteRecursive(File folder) {

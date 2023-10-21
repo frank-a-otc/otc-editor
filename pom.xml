@@ -20,29 +20,29 @@
 	    <maven.compiler.target>1.8</maven.compiler.target>
 	    <otc.version>2.7.1-SNAPSHOT</otc.version>
 		<lombok.version>1.18.22</lombok.version>
-		<!--<jaxb-impl.version>4.0.3</jaxb-impl.version>-->
+		<jaxb-runtime.version>2.3.2</jaxb-runtime.version>
 		<jaxb-api.version>2.2.12</jaxb-api.version>
 		<jackson.dataformat.version>2.13.4</jackson.dataformat.version>
 	</properties>
 
 	<profiles>
 		<profile>
-			<id>jdk>=11</id>
+			<id>jdk>=9</id>
 			<activation>
-				<jdk>[11,18]</jdk>
+				<jdk>[9,]</jdk>
 			</activation>
 			<dependencies>
 				<!-- API, java.xml.bind module -->
 				<dependency>
 					<groupId>jakarta.xml.bind</groupId>
 					<artifactId>jakarta.xml.bind-api</artifactId>
-					<version>2.3.2</version>
+					<version>${jaxb-runtime.version}</version>
 				</dependency>
 				<!-- Runtime, com.sun.xml.bind module -->
 				<dependency>
 					<groupId>org.glassfish.jaxb</groupId>
 					<artifactId>jaxb-runtime</artifactId>
-					<version>2.3.2</version>
+					<version>${jaxb-runtime.version}</version>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -66,8 +66,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
-
-
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>

@@ -16,12 +16,13 @@ import java.util.Set;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import org.otcframework.common.OtcConstants.TARGET_SOURCE;
+
+import static org.otcframework.common.OtcConstants.*;
+
 import org.otcframework.common.dto.otc.OtcFileDto;
 import org.otcframework.common.exception.OtcException;
-import org.otcframework.common.exception.OtcUnsupportedJdkException;
 import org.otcframework.common.util.OtcUtils;
-import org.otcframework.web.CompilerTest;
+import org.otcframework.web.CompilerUtil;
 import org.otcframework.web.commons.dto.ClassMetadataDto;
 import org.otcframework.web.commons.exception.OtcEditorException;
 import org.otcframework.web.commons.service.OtcEditorService;
@@ -48,7 +49,7 @@ public class OtcEditorController {
 	public static final String URL_CREATE_OTCFILE ="/createOtcFile";
 	public static final String URL_FLIP_OTC ="/flipOtc";
 	public static final String COMPILE ="/compile";
-	public static CompilerTest compilerTest = new CompilerTest();
+	public static final CompilerUtil compilerUtil = new CompilerUtil();
 
 	@GetMapping(value=URL_SHOW_TYPES, produces={"application/json;charset=UTF-8"})
 	public <T> ResponseEntity<T> getFullyQualifiedNames(@RequestParam(name = "pkgName") String pkgName) {
@@ -111,11 +112,11 @@ public class OtcEditorController {
 			List<ClassMetadataDto> lstTargetFields = null;
 			try {
 				lstTargetFields = otcEditorService.createTree(targetClsName, target_source);
+			} catch (OtcException e) { //OtcUnsupportedJdkException //TODO
+				LOGGER.error(e.getMessage(), e);
+				throw e;
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
-				if (e instanceof OtcUnsupportedJdkException) {
-					throw e;
-				}
 				throw new OtcEditorException(e);
 			}
 			String key = TARGET_SOURCE.TARGET == target_source ? "targetTreeData" : "sourceTreeData";
@@ -157,7 +158,7 @@ public class OtcEditorController {
 	@PutMapping(value=COMPILE)
 	public ResponseEntity<String> compile() {
 		try {
-			return ResponseEntity.ok(compilerTest.compile());
+			return ResponseEntity.ok(compilerUtil.compile());
 		} catch (Exception e) {
 			return ResponseEntity.unprocessableEntity().body(e.getMessage());
 		}
