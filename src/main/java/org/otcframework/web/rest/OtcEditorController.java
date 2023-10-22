@@ -19,8 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.otcframework.common.OtcConstants.*;
 
+import org.otcframework.common.config.OtcConfig;
 import org.otcframework.common.dto.otc.OtcFileDto;
 import org.otcframework.common.exception.OtcException;
+import org.otcframework.common.exception.OtcUnsupportedJdkException;
 import org.otcframework.common.util.OtcUtils;
 import org.otcframework.web.CompilerUtil;
 import org.otcframework.web.commons.dto.ClassMetadataDto;
@@ -37,8 +39,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class OtcEditorController {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(OtcEditorController.class);
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(OtcEditorController.class);
+
 	@Autowired
 	private OtcEditorService otcEditorService;
 
@@ -49,7 +51,10 @@ public class OtcEditorController {
 	public static final String URL_CREATE_OTCFILE ="/createOtcFile";
 	public static final String URL_FLIP_OTC ="/flipOtc";
 	public static final String COMPILE ="/compile";
+
 	public static final CompilerUtil compilerUtil = new CompilerUtil();
+	private static final String OTC_LIB_LOCATION = OtcConfig.getOtcLibLocation();
+	private static final String JDK_VER_CONFLICT_MSG = " Please check jar compatibility of OTC-Editor ver and jars in " + OTC_LIB_LOCATION;
 
 	@GetMapping(value=URL_SHOW_TYPES, produces={"application/json;charset=UTF-8"})
 	public <T> ResponseEntity<T> getFullyQualifiedNames(@RequestParam(name = "pkgName") String pkgName) {
@@ -92,34 +97,36 @@ public class OtcEditorController {
 				}
 			}
 			return (ResponseEntity<T>) ResponseEntity.ok(mapJsTreeNodes);
+		} catch (OtcUnsupportedJdkException e) {
+			return (ResponseEntity<T>) ResponseEntity.unprocessableEntity().body(e.getMessage() + JDK_VER_CONFLICT_MSG);
 		} catch (OtcException e) {
 			return (ResponseEntity<T>) ResponseEntity.unprocessableEntity().body(e.getMessage());
 		}
 	}
 
-	private <T> ResponseEntity<T> getTreeEntity(String targetClsName, TARGET_SOURCE target_source) {
+	private <T> ResponseEntity<T> getTreeEntity(String targetClsName, TARGET_SOURCE targetSource) {
 		try {
-			Map<String, List<ClassMetadataDto>> mapJsTreeNodes = getTree(targetClsName, target_source);
+			Map<String, List<ClassMetadataDto>> mapJsTreeNodes = getTree(targetClsName, targetSource);
 			return (ResponseEntity<T>) ResponseEntity.ok(mapJsTreeNodes);
 		} catch (OtcException e) {
 			return (ResponseEntity<T>) ResponseEntity.unprocessableEntity().body(e.getMessage());
 		}
 	}
 
-	private Map<String, List<ClassMetadataDto>> getTree(String targetClsName, TARGET_SOURCE target_source) {
+	private Map<String, List<ClassMetadataDto>> getTree(String targetClsName, TARGET_SOURCE targetSource) {
 		Map<String, List<ClassMetadataDto>> mapJsTreeNodes = new HashMap<>();
 		if (!StringUtils.isEmpty(targetClsName)) {
 			List<ClassMetadataDto> lstTargetFields = null;
 			try {
-				lstTargetFields = otcEditorService.createTree(targetClsName, target_source);
-			} catch (OtcException e) { //OtcUnsupportedJdkException //TODO
+				lstTargetFields = otcEditorService.createTree(targetClsName, targetSource);
+			} catch (OtcException e) {
 				LOGGER.error(e.getMessage(), e);
 				throw e;
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				throw new OtcEditorException(e);
 			}
-			String key = TARGET_SOURCE.TARGET == target_source ? "targetTreeData" : "sourceTreeData";
+			String key = TARGET_SOURCE.TARGET == targetSource ? "targetTreeData" : "sourceTreeData";
 			mapJsTreeNodes.put(key, lstTargetFields);
 		}
 		return mapJsTreeNodes;
@@ -156,7 +163,7 @@ public class OtcEditorController {
 	}
 
 	@PutMapping(value=COMPILE)
-	public ResponseEntity<String> compile() {
+	public ResponseEntity<String> compileOtcsFileAndGenerateCode() {
 		try {
 			return ResponseEntity.ok(compilerUtil.compile());
 		} catch (Exception e) {
