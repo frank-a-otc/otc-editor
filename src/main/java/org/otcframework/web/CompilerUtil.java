@@ -45,7 +45,7 @@ public class CompilerUtil {
 	public String compile() {
 		cleanupGeneratedFiles();
 		// -- compile script and generate source code
-		List<CompilationReport> compilationReports = otcsCompiler.compile();
+		List<CompilationReport> compilationReports = otcsCompiler.compileOtcsFiles();
 		if (compilationReports == null || compilationReports.isEmpty()) {
 			return String.format("No OTC Scripts to compile in '%s'", OTCS_SOURCE_LOCATION);
 		}
