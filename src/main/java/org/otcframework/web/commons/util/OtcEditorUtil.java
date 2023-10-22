@@ -43,7 +43,7 @@ public class OtcEditorUtil {
 	private static final String otcLibLocation = OtcConfig.getOtcLibLocation();
 	private static final FileFilter jarFileFilter = CommonUtils.createFilenameFilter(".jar");
 	private static Set<String> jarFilesLoaded;
-	private static final int cyclicDependencyDepth = 2; //OtcConfig.getCyclicDependencyDepth();//TODO
+	private static final int CYCLIC_DEPENDENCY_DEPTH = OtcConfig.getCyclicDependencyDepth();
 	private static final String SOURCE_ROOT = "source-root";
 	private static final String TARGET_ROOT = "target-root";
 
@@ -138,7 +138,7 @@ public class OtcEditorUtil {
 	
 	private static List<ClassMetadataDto> createClassMetadataDtos(Class<?> clz, TARGET_SOURCE targetSource) {
 		List<ClassMetadataDto> membersClassMetadataDtos = createClassMetadataDtos(null, clz, null,
-				null, cyclicDependencyDepth, null, targetSource);
+				null, CYCLIC_DEPENDENCY_DEPTH, null, targetSource);
 		String txt = clz.getName().concat(" - (right-click for context-menu)");
 		ClassMetadataDto classMetadataDto = ClassMetadataDto.newBuilder()
 			.addId(TARGET_SOURCE.TARGET == targetSource ? TARGET_ROOT : SOURCE_ROOT)
@@ -158,11 +158,11 @@ public class OtcEditorUtil {
 		}
 		if (mapRegistry != null) {
 			if (mapRegistry.containsKey(clz)) {
-				if (cyclicDependencyDepthCount < cyclicDependencyDepth) {
+				if (cyclicDependencyDepthCount < CYCLIC_DEPENDENCY_DEPTH) {
 					return mapRegistry.get(clz);
 				}
 				if (clz == parentClz) {
-					if (cyclicDependencyDepthCount == cyclicDependencyDepth) {
+					if (cyclicDependencyDepthCount == CYCLIC_DEPENDENCY_DEPTH) {
 						return null;
 					}
 					cyclicDependencyDepthCount++;
