@@ -1,0 +1,31 @@
+
+
+MapStruct	-	https://mapstruct.org/
+
+Jmapper		-	http://jmapper-framework.github.io/jmapper-core/
+
+Dozer		-	https://github.com/DozerMapper/dozer/
+
+Orika		-	https://github.com/orika-mapper/orika
+
+Selma		-	http://www.selma-java.org/
+
+ModelMapper	-	http://modelmapper.org/
+
+Moo			-	https://github.com/geoffreywiseman/Moo
+
+Nomin		-	http://nomin.sourceforge.net/
+
+omapper 	-	https://code.google.com/archive/p/omapper/wikis/Home.wiki
+
+Smooks		-	https://www.smooks.org/index
+
+Morph		-	http://morph.sourceforge.net/
+
+Transmorph 	-	https://github.com/cchabanois/transmorph
+
+EZMorph		-	http://ezmorph.sourceforge.net/
+
+OTOM		-	https://www.javacodegeeks.com/2013/10/java-object-to-object-mapper.html
+
+CommonConvert	-	http://commons.apache.org/dormant/convert/

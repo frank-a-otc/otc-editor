@@ -43,7 +43,7 @@ public class OtcEditorUtil {
 	private static final String otcLibLocation = OtcConfig.getOtcLibLocation();
 	private static final FileFilter jarFileFilter = CommonUtils.createFilenameFilter(".jar");
 	private static Set<String> jarFilesLoaded;
-	private static final int CYCLIC_DEPENDENCY_DEPTH = OtcConfig.getCyclicDependencyDepth();
+	private static final int CYCLIC_DEPENDENCY_DEPTH = OtcConfig.getCyclicReferenceDepth();
 	private static final String SOURCE_ROOT = "source-root";
 	private static final String TARGET_ROOT = "target-root";
 

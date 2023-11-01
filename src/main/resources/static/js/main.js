@@ -142,9 +142,8 @@ function getClassNames(url, eleName) {
         	}
         },
         error: function(xhr, status, error) {
-            var errorMessage = error;
             var errorHeader = xhr.status;
-            errorMessage = xhr.responseText;
+            var errorMessage = xhr.responseText;
             if (errorHeader == 500) {
                 errorMessage = errorMessage + ' - Pls check if JDK versions of both OTC-Editor and the jar(s) in ${OTC_HOME}/lib' +
                     ' are compatible.';
@@ -445,9 +444,8 @@ function fetchAndPopulateJstree(url) {
         	}
         },
         error: function(xhr, status, error) {
-            var errorMessage = error;
             var errorHeader = xhr.status;
-            errorMessage = xhr.responseText;
+            var errorMessage = xhr.responseText;
             if (errorHeader == 500) {
                 errorMessage = errorMessage + ' - Pls check if JDK versions of both OTC-Editor and the jar(s) in ${OTC_HOME}/lib' +
                     ' are compatible.';
@@ -804,8 +802,8 @@ $("#compile").click(function() {
             showMsgDialog('Compilation:', response);
         },
         error: function(xhr, status, error) {
-            var errorMessage = error;
             var errorHeader = xhr.status;
+            var errorMessage = xhr.responseText;
             if (errorHeader == 500) {
                 errorMessage == error + ' - probable cause - Pls check if JDK versions of the jar(s) in ${OTC_HOME}/lib' +
                     ' and otceditor match.';

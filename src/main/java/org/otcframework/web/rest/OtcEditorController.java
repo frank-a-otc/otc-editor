@@ -63,7 +63,8 @@ public class OtcEditorController {
 			clsNames = otcEditorService.findTypeNamesInPackage(pkgName);
 			if (clsNames == null) {
 				return (ResponseEntity<T>) ResponseEntity.unprocessableEntity().body(
-						String.format("Could not find types for package '%s'", pkgName));
+						String.format("Package '%s' not configured in '%s%s' file or could not find types for package",
+								pkgName, OtcConfig.getOtcHomeLocation(), OtcConfig.OTC_CONFIG_FILE));
 			}
 			return (ResponseEntity<T>) ResponseEntity.ok(clsNames);
 		} catch (Exception e) {
