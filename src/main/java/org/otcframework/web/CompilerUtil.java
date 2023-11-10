@@ -36,7 +36,6 @@ import java.util.List;
 
 public class CompilerUtil {
 
-	private static final String OTC_HOME = OtcConfig.getOtcHomeLocation();
 	private static final String UNIT_TEST_LOCATION = OtcConfig.getUnitTestLocation();
 	private static final String GENERATED_SOURCE_CODE_LOCATION = OtcConfig.getSourceCodeLocation();
 
