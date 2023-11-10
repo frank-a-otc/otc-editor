@@ -10,7 +10,7 @@ public class OtcErrorController implements ErrorController {
     private static final String PATH = "/error";
 
     @RequestMapping(value = PATH)
-    public String error() {
+    public String handleError() {
         return "Some unknown error has occured - please contact admin - frank.a.otc@gmail.com.";
     }
 
@@ -18,6 +18,5 @@ public class OtcErrorController implements ErrorController {
     public String getErrorPath() {
         return PATH;
     }
-
 
 }
