@@ -50,10 +50,7 @@ public class OtcEditorController {
 	public static final String URL_CREATE_OTCFILE ="/createOtcFile";
 	public static final String URL_FLIP_OTC ="/flipOtc";
 	public static final String COMPILE ="/compile";
-
 	public static final CompilerUtil compilerUtil = new CompilerUtil();
-	private static final String OTC_LIB_LOCATION = OtcConfig.getOtcLibLocation();
-	private static final String JDK_VER_CONFLICT_MSG = " Please check jar compatibility of OTC-Editor ver and jars in " + OTC_LIB_LOCATION;
 
 	@GetMapping(value=URL_SHOW_TYPES, produces={"application/json;charset=UTF-8"})
 	public <T> ResponseEntity<T> getFullyQualifiedNames(@RequestParam(name = "pkgName") String pkgName) {

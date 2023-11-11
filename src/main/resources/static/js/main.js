@@ -196,7 +196,7 @@ $("#showTree").click(function() {
     });
 
     $('#targetTree').on('loaded.jstree', function() {
-   	 $("#targetTree").jstree("open_node", $("#" + CONSTANTS.TARGET_ROOT));
+   	    $("#targetTree").jstree("open_node", $("#" + CONSTANTS.TARGET_ROOT));
    });
 });
 
@@ -814,15 +814,17 @@ $("#compile").click(function() {
 });
 
 function showMsgDialog(caption, msg) {
-	$("#message").text(msg);
+    $("#messageDialog").empty();
+    $("#messageDialog").html(msg);
+//	$("#message").html(msg);
 	$("#messageDialog").show();
 	$("#messageDialog").dialog({
 		title: caption,
-		resizable: false,
+		resizable: true,
 	    modal: true,
 		buttons: {
 	        Ok: function() {
-                $( this ).dialog( "close" );
+                $( this ).dialog("close");
 	        }
         }
 	});

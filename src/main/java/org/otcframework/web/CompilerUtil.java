@@ -36,8 +36,8 @@ import java.util.List;
 
 public class CompilerUtil {
 
-	private static final String UNIT_TEST_LOCATION = OtcConfig.getUnitTestLocation();
-	private static final String GENERATED_SOURCE_CODE_LOCATION = OtcConfig.getSourceCodeLocation();
+	private static final String UNIT_TEST_LOCATION = OtcConfig.getUnitTestDirectoryPath();
+	private static final String GENERATED_SOURCE_CODE_LOCATION = OtcConfig.getSourceCodeDirectoryPath();
 
 	/** The Constant otcsCompiler. */
 	private static final OtcsCompiler otcsCompiler = OtcsCompilerImpl.getInstance();
@@ -49,21 +49,21 @@ public class CompilerUtil {
 		if (compilationReports == null || compilationReports.isEmpty()) {
 			return String.format("No OTC Scripts to compile in '%s'", UNIT_TEST_LOCATION);
 		}
-		return String.format("Successfully compiled all OTC Scripts in '%s' and generated source-code files in '%s'",
-				UNIT_TEST_LOCATION, GENERATED_SOURCE_CODE_LOCATION);
+		return String.format("Successfully compiled all OTC Scripts in <br/><br/>'%s'<br/><br/> and generated " +
+						"source-code files in <br/><br/>'%s'", UNIT_TEST_LOCATION, GENERATED_SOURCE_CODE_LOCATION);
 	}
 
 	private void cleanupGeneratedFiles() {
 		if (!OtcConfig.isDefaultLocations() || !OtcConfig.getCleanupBeforeCompile()) {
 			return;
 		}
-		OtcUtils.deleteRecursive(OtcConfig.getOtcTmdLocation());
-		OtcUtils.creteDirectory(OtcConfig.getOtcTmdLocation());
+		OtcUtils.deleteFileOrFolder(OtcConfig.getOtcTmdDirectoryPath());
+		OtcUtils.creteDirectory(OtcConfig.getOtcTmdDirectoryPath());
 
-		OtcUtils.deleteRecursive(OtcConfig.getSourceCodeLocation());
-		OtcUtils.creteDirectory(OtcConfig.getSourceCodeLocation());
+		OtcUtils.deleteFileOrFolder(GENERATED_SOURCE_CODE_LOCATION);
+		OtcUtils.creteDirectory(GENERATED_SOURCE_CODE_LOCATION);
 
-		OtcUtils.deleteRecursive(OtcConfig.getTargetLocation());
-		OtcUtils.creteDirectory(OtcConfig.getTargetLocation());
+		OtcUtils.deleteFileOrFolder(OtcConfig.getTargetDirectoryPath());
+		OtcUtils.creteDirectory(OtcConfig.getTargetDirectoryPath());
 	}
 }
