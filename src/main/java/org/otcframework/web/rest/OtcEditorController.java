@@ -141,7 +141,7 @@ public class OtcEditorController {
 		    out.flush();
 		    out.close();
 		} catch (IOException e) {
-			LOGGER.error("", e);
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 

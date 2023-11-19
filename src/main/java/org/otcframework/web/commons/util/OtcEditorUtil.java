@@ -111,7 +111,7 @@ public class OtcEditorUtil {
 		            	}
 					}
 				} catch (Exception ex) {
-					LOGGER.warn("", ex);
+					LOGGER.warn(ex.getMessage(), ex);
 				} finally {
 					try {
 						jarFile.close();
