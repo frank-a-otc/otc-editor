@@ -1,14 +1,24 @@
-FROM openjdk:8
-ADD target/otceditor.war otceditor.war
+#FROM openjdk:8-jdk-alpine
+FROM adoptopenjdk/openjdk8
 VOLUME /tmp
-EXPOSE 2243
-ENV JAVA_OPTS=""
-CMD java $JAVA_OPTS -jar otceditor.war
+ADD target/otceditor.jar otceditor.jar
+EXPOSE 8081
 
-# to build: sudo docker build  -t ****.dkr.ecr.ap-south-1.amazonaws.com/otceditor:1.0 .
-# to run: 
-#    - sudo docker run -e JAVA_OPTS="$_JAVA_OPTIONS" -v /otceditor:/otceditor -p 8080:8080 *****.dkr.ecr.ap-south-1.amazonaws.com/usermgmt:1.0
-# to push to ECR
-#    - Run 'aws configure' just once - contact Frank for Access-key and Secret-key.
-#    - first authentiate with AWS - '(aws ecr get-login --no-include-email --region ap-south-1)' if not yet authenticated.
-#    - sudo docker push ****.dkr.ecr.ap-south-1.amazonaws.com/otceditor:1.0
+#ARG OTCHOME
+ENV OTC_HOME=/tmp
+#RUN ls ${OTC_HOME}
+
+ENTRYPOINT ["java", "-jar", "/otceditor.jar"]
+
+# to build:
+#    - docker build -t otceditor:latest -f Dockerfile .
+# to run on windows:
+#    - docker run -p 8081:8081 otceditor -v %OTC_HOME%:/tmp
+# to run on Linux:
+#    - docker run -p 8081:8081 otceditor -v ${OTC_HOME}:tmp
+# to push for java 8 to docker hub
+#    - docker push otceditor8:1.0
+# to push for java 11 to docker hub
+#    - docker push otceditor11:1.0
+# to push for java 12 to docker hub
+#    - docker push otceditor12:1.0
