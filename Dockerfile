@@ -2,7 +2,7 @@
 FROM adoptopenjdk/openjdk8
 VOLUME /tmp
 ADD target/otceditor.jar otceditor.jar
-EXPOSE 8081
+EXPOSE 8088
 
 #ARG OTCHOME
 ENV OTC_HOME=/tmp
