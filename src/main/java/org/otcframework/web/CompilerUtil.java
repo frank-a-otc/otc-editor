@@ -62,8 +62,5 @@ public class CompilerUtil {
 
 		OtcUtils.deleteFileOrFolder(GENERATED_SOURCE_CODE_LOCATION);
 		OtcUtils.creteDirectory(GENERATED_SOURCE_CODE_LOCATION);
-
-		OtcUtils.deleteFileOrFolder(OtcConfig.getTargetDirectoryPath());
-		OtcUtils.creteDirectory(OtcConfig.getTargetDirectoryPath());
 	}
 }
