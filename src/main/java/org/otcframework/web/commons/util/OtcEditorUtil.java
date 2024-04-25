@@ -1,10 +1,25 @@
 /**
-* Copyright (c) otcframework.org
-*
-* @author  Franklin Abel
-* @version 1.0
-* @since   2020-06-08 
-*/
+ * Copyright (c) otcframework.org
+ *
+ * @author  Franklin J Abel
+ * @version 1.0
+ * @since   2020-06-08
+ *
+ * This file is part of the OTC framework.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package org.otcframework.web.commons.util;
 
 import java.io.File;
@@ -40,17 +55,16 @@ import org.slf4j.LoggerFactory;
 public class OtcEditorUtil {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(OtcEditorUtil.class);
-	private static final String otcLibLocation = OtcConfig.getOtcLibLocation();
+	private static final String OTC_LIB_DIRECTORY_PATH = OtcConfig.getOtcLibDirectoryPath();
 	private static final FileFilter jarFileFilter = CommonUtils.createFilenameFilter(".jar");
 	private static Set<String> jarFilesLoaded;
-	private static final int CYCLIC_DEPENDENCY_DEPTH = OtcConfig.getCyclicReferenceDepth();
+	private static final int CYCLIC_DEPENDENCY_DEPTH = 2;
 	private static final String SOURCE_ROOT = "source-root";
 	private static final String TARGET_ROOT = "target-root";
 
 	public static Set<String> findTypeNamesInPackage(String basePackage) {
-		File otcLibDirectory = new File(otcLibLocation);
-		Set<String> lstClassNames = fetchFileNamesRecursive(otcLibDirectory, jarFileFilter, null, basePackage);
-	    return lstClassNames;
+		File otcLibDirectory = new File(OTC_LIB_DIRECTORY_PATH);
+		return fetchFileNamesRecursive(otcLibDirectory, jarFileFilter, null, basePackage);
 	}
 	
 	private static Set<String> fetchFileNamesRecursive(File directory, FileFilter fileFilter, Set<String> clzNames,
@@ -112,7 +126,7 @@ public class OtcEditorUtil {
 		            	}
 					}
 				} catch (Exception ex) {
-					LOGGER.warn("", ex);
+					LOGGER.warn(ex.getMessage(), ex);
 				} finally {
 					try {
 						jarFile.close();
@@ -170,7 +184,7 @@ public class OtcEditorUtil {
 			}
 		} else {
 			mapRegistry = new HashMap<>();
-			compiledOtcChains = new HashSet<String>();
+			compiledOtcChains = new HashSet<>();
 		}
 		List<ClassMetadataDto> classMetadataDtos = new ArrayList<>();
 		mapRegistry.put(clz, classMetadataDtos);
@@ -232,8 +246,8 @@ public class OtcEditorUtil {
 		compiledIds.add(otcId);
 		StringBuilder txtBuilder = new StringBuilder();
 		txtBuilder.append(propName);
-		Class<?> keyType = null;
-		Class<?> valueType = null;
+		Class<?> keyType;
+		Class<?> valueType;
 		boolean isMap = false;
 		ClassMetadataDto.Builder builder = ClassMetadataDto.newBuilder()
 				.addId(otcId);
@@ -252,7 +266,7 @@ public class OtcEditorUtil {
 			if (keyType.isEnum()) {
 				displayText += "*ENUM: ";
 			}
-			displayText += keyType.getName(); // + ")";
+			displayText += keyType.getName();
 			ClassMetadataDto.Builder keyClassMetadataDtoBuilder = ClassMetadataDto.newBuilder()
 					.addId(keyRef)
 					.addText(displayText);
@@ -267,7 +281,7 @@ public class OtcEditorUtil {
 			if (valueType.isEnum()) {
 				displayText += " *ENUM: ";
 			}
-			displayText += valueType.getName(); // + ")";
+			displayText += valueType.getName();
 			ClassMetadataDto.Builder valueClassMetadataDtoBuilder = ClassMetadataDto.newBuilder()
 					.addId(valueRef)
 					.addText(displayText);
@@ -280,7 +294,7 @@ public class OtcEditorUtil {
 			txtBuilder.append("[]");
 			genericType = fieldType.getComponentType();
 			childType = (Class<?>) genericType;
-			partialTxtBuilder.append(childType.getName()); //.append(")");
+			partialTxtBuilder.append(childType.getName());
 		} else if (Collection.class.isAssignableFrom(fieldType)) {
 			genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 			if (genericType instanceof ParameterizedType) {
@@ -288,11 +302,9 @@ public class OtcEditorUtil {
 			}
 			childType = (Class<?>) genericType;
 			partialTxtBuilder.append(fieldType.getName()).append("<").append(childType.getName()).append(">");
-//				.append(")");
 		} else {
 			childType = fieldType;
-			genericType = null;
-			partialTxtBuilder.append(fieldType.getTypeName()); //.append(")");
+			partialTxtBuilder.append(fieldType.getTypeName());
 		}
 		if (!isMap) {
 			txtBuilder.append(" : ");

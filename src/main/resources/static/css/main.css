@@ -13,6 +13,13 @@ html, body {
 	height: 30px;
 }
 
+#otcFramework {
+	position: relative;
+    left: 50x;
+    width:  100px;
+    height: 25px;
+}
+
 #logo {
 	position: relative;
     float: left;

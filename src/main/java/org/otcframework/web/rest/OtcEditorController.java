@@ -1,10 +1,25 @@
 /**
-* Copyright (c) otcframework.org
-*
-* @author  Franklin Abel
-* @version 1.0
-* @since   2020-06-08 
-*/
+ * Copyright (c) otcframework.org
+ *
+ * @author  Franklin J Abel
+ * @version 1.0
+ * @since   2020-06-08
+ *
+ * This file is part of the OTC framework.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package org.otcframework.web.rest;
 
 import java.io.IOException;
@@ -22,7 +37,6 @@ import static org.otcframework.common.OtcConstants.*;
 import org.otcframework.common.config.OtcConfig;
 import org.otcframework.common.dto.otc.OtcFileDto;
 import org.otcframework.common.exception.OtcException;
-import org.otcframework.common.exception.OtcUnsupportedJdkException;
 import org.otcframework.common.util.OtcUtils;
 import org.otcframework.web.CompilerUtil;
 import org.otcframework.web.commons.dto.ClassMetadataDto;
@@ -51,10 +65,7 @@ public class OtcEditorController {
 	public static final String URL_CREATE_OTCFILE ="/createOtcFile";
 	public static final String URL_FLIP_OTC ="/flipOtc";
 	public static final String COMPILE ="/compile";
-
 	public static final CompilerUtil compilerUtil = new CompilerUtil();
-	private static final String OTC_LIB_LOCATION = OtcConfig.getOtcLibLocation();
-	private static final String JDK_VER_CONFLICT_MSG = " Please check jar compatibility of OTC-Editor ver and jars in " + OTC_LIB_LOCATION;
 
 	@GetMapping(value=URL_SHOW_TYPES, produces={"application/json;charset=UTF-8"})
 	public <T> ResponseEntity<T> getFullyQualifiedNames(@RequestParam(name = "pkgName") String pkgName) {
@@ -63,8 +74,7 @@ public class OtcEditorController {
 			clsNames = otcEditorService.findTypeNamesInPackage(pkgName);
 			if (clsNames == null) {
 				return (ResponseEntity<T>) ResponseEntity.unprocessableEntity().body(
-						String.format("Package '%s' not configured in '%s%s' file or could not find types for package",
-								pkgName, OtcConfig.getOtcHomeLocation(), OtcConfig.OTC_CONFIG_FILE));
+						String.format("Could not find types for package '%s'", pkgName));
 			}
 			return (ResponseEntity<T>) ResponseEntity.ok(clsNames);
 		} catch (Exception e) {
@@ -98,8 +108,6 @@ public class OtcEditorController {
 				}
 			}
 			return (ResponseEntity<T>) ResponseEntity.ok(mapJsTreeNodes);
-		} catch (OtcUnsupportedJdkException e) {
-			return (ResponseEntity<T>) ResponseEntity.unprocessableEntity().body(e.getMessage() + JDK_VER_CONFLICT_MSG);
 		} catch (OtcException e) {
 			return (ResponseEntity<T>) ResponseEntity.unprocessableEntity().body(e.getMessage());
 		}
@@ -148,7 +156,7 @@ public class OtcEditorController {
 		    out.flush();
 		    out.close();
 		} catch (IOException e) {
-			LOGGER.error("", e);
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
